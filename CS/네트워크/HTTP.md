@@ -18,3 +18,29 @@
   * DNS (Domain Name System)
     * IP주소는 외우기 어려움, 변경 가능성
     * DNS서버에서 IP 주소를 도메인 이름에 각각 저장하여 요청시 제공하여 위 문제 해결
+  
+  * URI (Uniform Resource Identifier)
+    * URL, URN으로 각각 주소와 이름으로 나타내지만, 주로 URL이 보편화
+    * URL 전체 문법, 구성요소는 프로토콜, 호스트명, 포트 번호, 패스, 쿼리 파라미터
+    * scheme :// [userinfo@] host(도메인명, IP주소) [:port][path(리소스 경로)][?query(key-value형식, ?시작 &추가)][#fragment(html 내부 북마크)]
+
+  * 웹 브라우저 요청 흐름
+    * 웹 브라우저가 HTTP요청 메시지 생성후 SOCKET 라이브러리로 TCP/IP 패킷을 생성하여 데이터 전달, 이후 서버에서 TCP/IP 패킷 속 HTTP요청 메시지를 확인, 같은 방식으로 응답, 웹 브라우저가 이를 받고 렌더링
+
+  * HTTP (Hyper Text Transfer Protocol)
+    * 요즘 서버 간 거의 모든 형태의 데이터를 주고 받을 때 사용
+    * 클라이언트와 서버가 나누어진 구조를 가져, 독립적인 진화가 가능해짐 (클라이언트는 UI와 사용성, 서버는 비즈니스 로직과 데이터)
+    * Statless 프로토콜로 클라이언트 상태 필요 없이 서버 확장성을 높히지만 추가적인 데이터를 연결시 보내야함
+    * 웹 어플리케이션 설계시 최대한 stateless(무상태)로 설계하고, 최소한으로 stateful(상태유지)로 설계
+  
+  * 비연결성 (Connectionless)
+    * HTTP는 기본적으로는 비연결성 모델로 서버자원을 효율적으로 사용
+    * 매 연결시 TCP/IP 연결을 새로 해서 (3way handshake 시간 추가) 시간소모, 웹 브라우저 사이트 요청시 많은 자원 다운 필요
+    * 요즘 HTTP 지속연결 사용, 최적화
+
+  * HTTP 메시지
+    * 구조 - start-line, HTTP헤더, empty-line, message body
+      * start-line - request-line (HTTP 메서드, 요청 메시지, HTTP 버전) / status-line (HTTP 버전, HTTP 상태코드, 이유문구)
+      * HTTP 헤더 - HTTP 전송에 필요한 모든 부가정보, 메시지 바디 제외 필요한 메타 정보가 들어있음
+      * empty-line - 필수
+      * message body - 실제 전송할 데이터, HTML문서, 이미지, 영상 등 byte로 표현할 수 있는 모든 데이터 전송가능
