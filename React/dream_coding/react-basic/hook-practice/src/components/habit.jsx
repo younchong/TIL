@@ -1,12 +1,15 @@
 import React, { memo } from 'react';
 
-const Habit = memo(({habit, onIncrement, onDecrement}) => {
+const Habit = memo(({habit, onIncrement, onDecrement, onRemove}) => {
   
   const handleIncrement = () => {
     onIncrement(habit);
   }
   const handleDecrement = () => {
-    onDecrement(habit)
+    onDecrement(habit);
+  }
+  const handleRemove = () => {
+    onRemove(habit);
   }
   return(
     <div>
@@ -25,6 +28,11 @@ const Habit = memo(({habit, onIncrement, onDecrement}) => {
           <i className="far fa-minus-square"></i>
         </button>
         <span className="habit.count">{habit.count}</span>
+        <button 
+        className="habit-button habit-remove"
+        onClick={handleRemove}>
+          <i className="far fa-trash"></i>
+        </button>
       </li>
     </div>
     

@@ -4,7 +4,8 @@ import Habit from './habit';
 const Habits = ({
     habits,
     onIncrement,
-    onDecrement
+    onDecrement,
+    onRemove
 }) => {
     
     
@@ -16,6 +17,7 @@ const Habits = ({
           habit={habit}
           onIncrement={onIncrement}
           onDecrement={onDecrement}
+          onRemove={onRemove}
           />
           ))}
       </ul>

@@ -49,6 +49,11 @@ const App = () => {
      }))
  })
 
+ const handleRemove = useCallback(habit => {
+   setHabits(habits =>
+    habits.filter(item => item.id !== habit.id))
+ })
+
   return (
     <>
       <NavBar totalCount={habits.filter(item => item.count > 0).length} />
@@ -57,6 +62,7 @@ const App = () => {
       habits={habits}
       onIncrement={handleIncrement}
       onDecrement={handleDecrement}
+      onRemove={handleRemove}
       />
       <button className="reset-button" onClick={handleReset}>Reset</button>
     </>
