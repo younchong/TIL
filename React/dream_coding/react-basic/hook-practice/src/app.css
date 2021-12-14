@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+button {
+  font-size: 1.5rem;
+  color:cornflowerblue;
+  background-color: white;
+}
+
+.nav-bar {
+  text-align: center;
+  font-size: 2rem;
+  height: 3rem;
+  background-color: rgb(23, 128, 248);
+}
+
+.add-form {
+  margin: 1rem;
+}
+
+.add-input {
+  text-align: center;
+  font-size: 2rem;
+  width: 20rem;
+  height: 2rem;
+}
+
+.add-button {
+  width: 4rem;
+  height: 2rem;
+  margin-left: 1rem;
+  border-inline-color: cornflowerblue;
+}
+.habit {
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+.habit-button {
+  margin: 1rem;
+  outline: none;
+  border: 0;
+  cursor: grab;
+}
+
+.reset-button {
+  margin-left: 5rem;
+  border-inline-color: cornflowerblue;
+}
