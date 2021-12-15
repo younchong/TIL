@@ -8,7 +8,10 @@ const App = (props) => {
   return (
     <>
       <Search />
-      <Videos />
+      <ul className="video-list">
+        <Videos />
+      </ul>
+      
     </>
   );
 };

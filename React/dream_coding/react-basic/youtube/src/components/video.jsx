@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Video = (props) => {
-      
+const Video = ({image}) => {
+      console.log(image)
   return (
     <>
       <section className="video-box">
         <article className="video-image">
-          <img src="https://i.ytimg.com/vi/orvFncMjF20/mqdefault.jpg" />
+          <img src={image} />
           <span className="video-info">hi</span>
         </article>
       </section>
