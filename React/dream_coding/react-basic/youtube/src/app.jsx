@@ -1,9 +1,16 @@
 import './app.css';
+import Search from './components/search';
+import Videos from './components/videos';
+import React from 'react';
 
-function App() {
+const App = (props) => {
+  
   return (
-    <h1>Hello :)</h1>
+    <>
+      <Search />
+      <Videos />
+    </>
   );
-}
+};
 
 export default App;
