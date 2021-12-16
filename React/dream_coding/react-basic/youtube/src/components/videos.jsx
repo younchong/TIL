@@ -8,7 +8,7 @@ const [urlList, setUrl] = useState([]);
 const optionParams={
 	q:"bts", //여기에 검색결과 
 	part:"snippet",
-	key:"AIzaSyDIl-W46HdMh54Nkl-bnJXp62k-D7kVIm8",
+	key:"secret",
 	maxResults:2
  };
 
