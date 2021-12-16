@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import info from './info';
+import {api_key, info} from './info';
 import Video from './video';
 
 const Videos = (props) => {
@@ -8,7 +8,7 @@ const [urlList, setUrl] = useState([]);
 const optionParams={
 	q:"bts", //여기에 검색결과 
 	part:"snippet",
-	key:"secret",
+	key:api_key,
 	maxResults:2
  };
 
