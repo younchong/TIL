@@ -1,15 +1,18 @@
 import React from 'react';
 
-const Video = ({image}) => {
-      console.log(image)
+const Video = ({id, title, image}) => {
+    
   return (
     <>
-      <section className="video-box">
-        <article className="video-image">
-          <img src={image} />
-          <span className="video-info">hi</span>
-        </article>
-      </section>
+    <tr>
+    <td className="video-image">
+        <img src={image} />
+      </td>
+      <td className="video-information">
+        <span className="video-title">{title}</span>
+      </td>
+    </tr>
+      
     </>
   );
 };
