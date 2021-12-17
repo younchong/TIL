@@ -1,4 +1,4 @@
-.search-header {
+.search-form {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -20,4 +20,27 @@
 .icon {
   font-size: 1.5rem;
   color: #ffffff;
+}
+
+.video-container {
+  display: grid;
+  margin: 0.5rem 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(20%, 25%));
+  grid-template-rows: repeat(auto-fill, minmax(20%, auto));
+  gap: 1rem 1rem;
+
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.video-article {
+  cursor: pointer;
+}
+.video-thumbnail{
+  width: 100%;
+  height: 15rem;
+}
+
+button {
+  cursor: pointer;
 }

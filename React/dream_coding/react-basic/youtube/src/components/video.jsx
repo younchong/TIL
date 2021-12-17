@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Video = ({id, title, image}) => {
-    
-  return (
-    <>
-    <tr>
-    <td className="video-image">
-        <img src={image} />
-      </td>
-      <td className="video-information">
-        <span className="video-title">{title}</span>
-      </td>
-    </tr>
-      
-    </>
-  );
-};
+class Video extends Component {
+  startPlay = () => {
+    this.props.onPlay(this.props.title)
+  }
+
+  render() {
+    return (
+      <article className="video-article" onClick={this.startPlay}>
+        <img className="video-thumbnail" src={this.props.image} />
+        <div className="video-title">{this.props.title}</div>
+      </article>
+    );
+  }
+}
 
 export default Video;
