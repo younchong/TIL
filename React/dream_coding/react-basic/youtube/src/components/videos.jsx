@@ -8,7 +8,7 @@ class Videos extends PureComponent {
       <>
       {this.props.videos.map(video =>
         <Video
-        key={video.id.videoId}
+        key={video.id.videoId || video.id.chanelId}
         image={video.snippet.thumbnails.high.url}
         title={video.snippet.title}
         onPlay={this.props.onPlay}

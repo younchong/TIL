@@ -33,7 +33,21 @@
   align-content: stretch;
 }
 
-.video-article {
+.video-player {
+  display: flex;
+  flex-direction: row;
+}
+
+#player {
+  margin: 2rem;
+}
+
+.video-box {
+  margin: 0 0 0 auto;
+  width: 20rem;
+}
+
+.video-container .video-article {
   cursor: pointer;
 }
 .video-thumbnail{
