@@ -193,6 +193,7 @@ class App extends Component {
         url={this.state.play} 
         videos={this.state.videos} 
         videoInfomation={this.state.videoInfo[0].snippet}
+        onPlay={this.handlePlay}
        />
     } else {
         return <main className="video-container">

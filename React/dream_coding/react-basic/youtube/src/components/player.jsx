@@ -12,7 +12,7 @@ class Player extends Component {
         </iframe>
         <span className="video-infomation">{this.props.videoInfomation.title}</span>
         <aside className="video-box">
-          <Videos videos={this.props.videos.items} />
+          <Videos videos={this.props.videos.items} onPlay={this.props.onPlay}/>
         </aside>
       </main>
         
