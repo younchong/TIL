@@ -1,10 +1,3 @@
-# 구성
+# 구현 사항
 
----- app component
-
-
----- search component
-
-
-
----- video group
+<img src = "ytb react.gif" />
