@@ -9,11 +9,14 @@ const Search = memo((props) => {
     result && props.onSearch(result);
     formRef.current.reset();
   }
+  const onBack = () => {
+    this.props.onBack();
+  }
   return (
     <>
       <form ref={formRef} className="search-form" onClick={onSubmit}>
         <i className="fas fa-bars icon"></i>
-        <i className="fas fa-arrow-left icon"></i>
+        <i className="fas fa-arrow-left icon back-button" onClick={onBack}></i>
         <img src="../images/logo.png"/>
         <input ref={inputRef} type="text" className="search-input" />
         <button className="search-button">Search</button>

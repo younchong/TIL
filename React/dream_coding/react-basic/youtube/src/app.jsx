@@ -188,7 +188,6 @@ class App extends Component {
 
   manageMain = () => {
     if (this.state.play) {
-        console.log(this.state.videoInfo[0].snippet)
         return <Player 
         url={this.state.play} 
         videos={this.state.videos} 
@@ -223,7 +222,7 @@ class App extends Component {
     .then(response => response.json())
     .then(result => {
         const videos = result;
-        this.setState({videos})
+        this.setState({videos, play: null, videoInfo: null})
     });
     
   
@@ -236,12 +235,17 @@ class App extends Component {
       this.setState({play: url, videoInfo: video});
   }
 
+  handleBackButton = () => {
+      console.log("work");
+  }
+
   render() {
     return (
       <>
       <header>
         <Search 
         onSearch={this.handleSearch}
+        onBack={this.handleBackButton}
         />
       </header>
         {this.manageMain()}

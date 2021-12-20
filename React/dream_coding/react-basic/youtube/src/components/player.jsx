@@ -6,11 +6,14 @@ class Player extends Component {
     return (
       <>
       <main className="video-player">
-        <iframe id="player" type="text/html" width="640" height="360"
-        src={this.props.url}
-        frameBorder="0">
-        </iframe>
-        <span className="video-infomation">{this.props.videoInfomation.title}</span>
+        <main className="video">
+          <iframe id="player" type="text/html" width="640" height="360"
+          src={this.props.url}
+          frameBorder="0">
+          </iframe>
+          <span className="video-infomation">{this.props.videoInfomation.title}</span>
+        </main>
+        
         <aside className="video-box">
           <Videos videos={this.props.videos.items} onPlay={this.props.onPlay}/>
         </aside>

@@ -1,3 +1,7 @@
+body {
+  background-color: rgba(24, 23, 23, 0.952);
+}
+
 .search-form {
   display: flex;
   flex-direction: row;
@@ -23,38 +27,60 @@
 }
 
 .video-container {
-  display: grid;
-  margin: 0.5rem 0.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(20%, 25%));
-  grid-template-rows: repeat(auto-fill, minmax(20%, auto));
-  gap: 1rem 1rem;
-
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
+  margin: 1rem;
 }
 
 .video-player {
   display: flex;
-  flex-direction: row;
+  flex-direction: row
 }
 
 #player {
   margin: 2rem;
 }
 
-.video-box {
-  margin: 0 0 0 auto;
-  width: 20rem;
-}
+
 
 .video-container .video-article {
+  flex-basis: auto;
+  margin: 0 0.7rem;
   cursor: pointer;
 }
 .video-thumbnail{
-  width: 100%;
+  width: 20rem;
   height: 15rem;
 }
+.video-title {
+  width: 20rem;
+  overflow: hidden;
+  font-family: "Roboto","Arial",sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: white;
+}
+.video {
+  display: flex;
+  flex-direction: column;
+}
+.video-infomation {
+  color: white;
+  margin: 0 auto;
+}
 
+.video-box {
+  margin: 0 0 0 auto;
+  cursor: pointer;
+}
 button {
+  cursor: pointer;
+}
+
+.back-button {
   cursor: pointer;
 }
