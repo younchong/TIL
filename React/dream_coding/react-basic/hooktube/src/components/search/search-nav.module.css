@@ -1,0 +1,20 @@
+.form {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  background-color: black;
+
+}
+
+.input {
+  width: 20rem;
+  height: 2rem;
+}
+
+.backButton {
+  border-style: none;
+  color: white;
+  background-color: black;
+  font-size: 100%;
+}
