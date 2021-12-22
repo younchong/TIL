@@ -24,9 +24,6 @@ const SearchNav = ({onSearch}) => {
     console.log("back");
   }
 
-
-  
-
   return (
     
     <div className={styles.form} >

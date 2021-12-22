@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local configuration file
-key.jsx
+#API_key
+env.js
