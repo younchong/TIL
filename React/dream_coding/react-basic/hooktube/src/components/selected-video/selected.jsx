@@ -11,13 +11,20 @@ const Selected = ({selected}) => {
   let url = "https://www.youtube.com/embed/" + id;
   
   return (
-    <>
-       <iframe id="player" type="text/html" width="640" height="360"
-          src={url}
-          frameBorder="0">
-          </iframe>
+    <section className={styles.detail}>
+      <iframe 
+      id="player" 
+      type="text/html" 
+      width="100%" 
+      height="500px"
+      src={url}
+      frameBorder="0"
+      allowFullScreen
+      ></iframe>
       <h1>{selected.snippet.title}</h1>
-    </>
+      <h2>{selected.snippet.channelTitle}</h2>
+      <pre className={styles.description}>{selected.snippet.description}</pre>
+    </section>
     
   )
 }

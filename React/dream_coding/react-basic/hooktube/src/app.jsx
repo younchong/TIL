@@ -11,6 +11,7 @@ function App({youtube}) {
     youtube
     .search(word)
     .then(items => setVideos(items));
+    setSelected(null);
   }
 
   useEffect(() => {
@@ -20,7 +21,6 @@ function App({youtube}) {
   }, [])
 
   const onPlay = (infomation) => {
-    console.log(infomation);
     setSelected(infomation);
   }
 
@@ -28,13 +28,16 @@ function App({youtube}) {
     <>
     <SearchNav onSearch={onSearch}/>
     <div className={styles.videos}>
-      <section className={styles.detail}>
-        {selected && <Selected selected={selected} />}
-      </section>
+      {selected && (
+        <section className={styles.detail}>
+        <Selected selected={selected} />
+       </section>
+      )}
       <section className={styles.list}>
         <VideoList 
         videos={videos}
         onPlay={onPlay}
+        display={selected ? "list" : "grid"}
         />
       </section>
     </div>
