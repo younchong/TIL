@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './video_item.module.css'
 
-const VideoItem = ({video, onPlay, display}) => {
+const VideoItem = memo(({video, onPlay, display}) => {
   const handleClick = () => {
     onPlay(video);
   }
@@ -19,6 +19,6 @@ const VideoItem = ({video, onPlay, display}) => {
         <p className={styles.channel}>{video.snippet.channelTitle}</p>
       </div>
   </li>
-)};
+)});
 
 export default VideoItem;

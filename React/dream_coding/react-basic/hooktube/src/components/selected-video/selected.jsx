@@ -13,7 +13,7 @@ const Selected = ({selected}) => {
   return (
     <section className={styles.detail}>
       <iframe 
-      id="player" 
+      title="youtube player"
       type="text/html" 
       width="100%" 
       height="500px"

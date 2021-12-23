@@ -31,7 +31,7 @@ const SearchNav = ({onSearch}) => {
       <button className={styles.backButton} onClick={onBack}>
         <i className="fas fa-arrow-left icon"></i>
       </button>
-      <img src="../images/logo.png"/>
+      <img src="../images/logo.png" alt="logo"/>
       <input ref={inputRef} type="text" className={styles.input} onKeyPress={onKeyPress} />
       <button className="search-button" onClick={onClick} >Search</button>
       <i className="fas fa-search icon"></i>

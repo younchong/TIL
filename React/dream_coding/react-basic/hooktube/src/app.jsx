@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import VideoList from './components/video-list/video_list';
 import SearchNav from './components/search/search-nav';
 import Selected from './components/selected-video/selected';
@@ -7,18 +7,21 @@ function App({youtube}) {
   const [videos, setVideos] = useState([]);
   const [selected, setSelected] = useState(null);
 
-  const onSearch = (word) => {
-    youtube
-    .search(word)
-    .then(items => setVideos(items));
-    setSelected(null);
-  }
+  const onSearch = useCallback(
+    word => {
+      youtube
+      .search(word)
+      .then(items => setVideos(items));
+      setSelected(null);
+    },
+    [youtube]
+  );
 
   useEffect(() => {
     youtube
     .mostPopular()
     .then(items => setVideos(items))
-  }, [])
+  }, [youtube])
 
   const onPlay = (infomation) => {
     setSelected(infomation);
