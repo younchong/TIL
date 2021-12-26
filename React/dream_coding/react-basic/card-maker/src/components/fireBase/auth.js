@@ -17,13 +17,14 @@ export default class Provider {
       appId: "1:618513089919:web:ed5791f54dbdbe4bf2064a",
       measurementId: "G-2DHTH5PDT7"
     };
-    const provider = this.provider;
+    
+    const provider = this.provider === "google" ? new GoogleAuthProvider() : new GithubAuthProvider();
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
-    let authProvider = this.provider === "google" ? GoogleAuthProvider : GithubAuthProvider;
+    const authProvider = this.provider === "google" ? GoogleAuthProvider : GithubAuthProvider;
 
     const auth = getAuth();
-    return signInWithPopup(auth, provider)
+    signInWithPopup(auth, provider)
     .then((result) => {
     const credential = authProvider.credentialFromResult(result);
     const token = credential.accessToken;
@@ -33,6 +34,8 @@ export default class Provider {
     const errorMessage = error.message;
     const email = error.email;
     const credential = authProvider.credentialFromError(error);
+    console.log(errorMessage)
   });
+  
   }
 }
