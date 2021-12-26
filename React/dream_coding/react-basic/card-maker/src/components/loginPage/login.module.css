@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35rem;
+  height: 25rem;
+  background-color: white;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.headerSpan {
+  font-size: 2.5rem;
+  color: white;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: white;
+  heigth: 5rem;
+}
+
+.log {
+  font-size: 2rem;
+  text-align: center;
+}
+button {
+  height: 2rem;
+  margin: 1rem;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4rem;
+  color: white;
+  background-color: black;
+
+}
