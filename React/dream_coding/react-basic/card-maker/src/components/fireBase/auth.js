@@ -1,7 +1,7 @@
 import fireBaseKey from '../../common/key.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from "firebase/auth";
 
 export default class Provider {
   constructor(name) {
@@ -17,24 +17,26 @@ export default class Provider {
       appId: "1:618513089919:web:ed5791f54dbdbe4bf2064a",
       measurementId: "G-2DHTH5PDT7"
     };
-    
+
     const provider = this.provider === "google" ? new GoogleAuthProvider() : new GithubAuthProvider();
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const authProvider = this.provider === "google" ? GoogleAuthProvider : GithubAuthProvider;
 
     const auth = getAuth();
-    signInWithPopup(auth, provider)
+
+    return signInWithPopup(auth, provider)
     .then((result) => {
     const credential = authProvider.credentialFromResult(result);
     const token = credential.accessToken;
     const user = result.user;
-    }).catch((error) => {
+    return user;
+    })
+    .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     const email = error.email;
     const credential = authProvider.credentialFromError(error);
-    console.log(errorMessage)
   });
   
   }

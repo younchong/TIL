@@ -2,14 +2,24 @@ import React from 'react';
 import Provider from '../fireBase/auth';
 import styles from "./login.module.css"
 
-const Login = (props) => {
-  
+let isLogin = false;
+const Login = ({onLogin}) => {
 
   const handleAuth = (e) => {
+    
     e.preventDefault();
     const name = e.currentTarget.id;
     const AuthProvider = new Provider(name);
-    AuthProvider.getAuth();
+    AuthProvider.getAuth()
+    .then(user => {
+      isLogin = !user.isAnonymous;
+      onLogin(isLogin);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+    
+    
   }
 
   return <>
@@ -40,4 +50,4 @@ const Login = (props) => {
   </>
 }
 
-export default Login;
+export {Login, isLogin};
