@@ -12,8 +12,13 @@ const CardMaker = (props) => {
       </header>
       <main className={styles.main}>
         <section className={styles.cardMaker}>
-          cardMaker
-          <CardTable />
+          <header className={styles.cardMakerHeader}>
+            CardMaker
+          </header>
+          <div className={styles.cardTables}>
+            <CardTable />
+            <CardTable />
+          </div>
         </section>
         <aside className={styles.preview}>
           cardPreview

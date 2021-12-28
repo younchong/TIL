@@ -22,5 +22,24 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  height: 40rem;
+}
+
+.cardMaker {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 55%;
+  height: 40rem;
+}
+
+.cardMakerHeader {
+  margin: 2rem 0;
+}
+
+.cardTables {
+  width: 100%;
+  height: 8rem;
 }
