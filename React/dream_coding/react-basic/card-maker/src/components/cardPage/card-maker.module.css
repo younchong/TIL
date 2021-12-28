@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+  height: 50rem;
+  margin: 0 auto;
+  background-color: white;
+} 
+
+.header,
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #647fd8;
+  color: white;
+  height: 5rem 
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}

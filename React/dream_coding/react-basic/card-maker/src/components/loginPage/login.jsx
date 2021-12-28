@@ -1,12 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Provider from '../fireBase/auth';
-import styles from "./login.module.css"
+import styles from "./login.module.css";
 
 let isLogin = false;
 const Login = ({onLogin}) => {
-
+  const navigate = useNavigate();
   const handleAuth = (e) => {
-    
     e.preventDefault();
     const name = e.currentTarget.id;
     const AuthProvider = new Provider(name);
@@ -14,14 +14,20 @@ const Login = ({onLogin}) => {
     .then(user => {
       isLogin = !user.isAnonymous;
       onLogin(isLogin);
+      move(isLogin)
     })
     .catch(error => {
       console.log(error);
-    })
-    
-    
+    }) 
   }
 
+  function move(result) {
+    if (result) {
+      navigate("/home");
+    } else {
+      navigate("/login")
+    }
+  }
   return <>
     <div className={styles.container}>
       <section className={styles.box}>
