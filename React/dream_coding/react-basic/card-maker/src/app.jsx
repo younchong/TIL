@@ -1,8 +1,8 @@
-import {React, useEffect, useState} from 'react';
+import {React, useState} from 'react';
 import './app.css';
-import {Login, isLogin} from './components/loginPage/login';
+import {Login} from './components/loginPage/login';
 import CardMaker from './components/cardPage/card-maker';
-import { BrowserRouter,Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter,Link, Route, Routes } from 'react-router-dom';
 
 const App = (props) => {
   const [loginState, setState] = useState(false);
@@ -18,6 +18,7 @@ const App = (props) => {
       </nav>
 
       <Routes>
+        <Route path="/" element={<Login onLogin={handleLogin}/>}></Route>
         <Route path="/login" element={<Login onLogin={handleLogin}/>}></Route>
         <Route path="/home" element={loginState && <CardMaker />}></Route>
       </Routes>
