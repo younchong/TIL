@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Provider from '../fireBase/auth';
+import Firebase from '../fireBase/auth';
 import styles from "./login.module.css";
 
 let isLogin = false;
@@ -9,7 +9,7 @@ const Login = ({onLogin}) => {
   const handleAuth = (e) => {
     e.preventDefault();
     const name = e.currentTarget.id;
-    const AuthProvider = new Provider(name);
+    const AuthProvider = new Firebase(name);
     AuthProvider.getAuth()
     .then(user => {
       isLogin = !user.isAnonymous;

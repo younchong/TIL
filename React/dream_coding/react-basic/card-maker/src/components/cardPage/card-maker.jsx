@@ -3,18 +3,25 @@ import React, { useState } from 'react';
 import CardTable from "./card-table";
 import CompleteCard from "./complete-card";
 import { useEffect } from "react/cjs/react.development";
+import Firebase from "../fireBase/auth";
 
 const CardMaker = (props) => {
   const [informations, setInformation] = useState([]);
+  
   const handleInformation = (information) => {
-    const newInfo = [...informations, information];
+    const newInfo = [information, ...informations];
     setInformation(newInfo);
+    const dataStorage = new Firebase();
+    dataStorage.storeData(newInfo);
   }
   const handleDelete = (name) => {
     const filteredInfo = informations.filter(value => value.Name !== name);
     setInformation(filteredInfo);
   }
 
+  useEffect(() => {
+
+  })
 
   return (
     <div className={styles.container}>
