@@ -16,7 +16,7 @@ td {
 .table {
   width: 95%;
   height: 100%;
-  margin-left: 1rem;
+  margin: 0 0 1.5rem 1rem;
   table-layout: fixed;
 }
 
@@ -51,5 +51,15 @@ select {
   border: 3px solid purple;
   padding: 0;
   background-color: purple; 
+  color: white;
+}
+
+.delete {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 3px solid red;
+  padding: 0;
+  background-color: red; 
   color: white;
 }

@@ -2,13 +2,19 @@ import styles from "./card-maker.module.css";
 import React, { useState } from 'react';
 import CardTable from "./card-table";
 import CompleteCard from "./complete-card";
+import { useEffect } from "react/cjs/react.development";
 
 const CardMaker = (props) => {
   const [informations, setInformation] = useState([]);
   const handleInformation = (information) => {
-    setInformation(information);
-    console.log(informations);
+    const newInfo = [...informations, information];
+    setInformation(newInfo);
   }
+  const handleDelete = (name) => {
+    const filteredInfo = informations.filter(value => value.Name !== name);
+    setInformation(filteredInfo);
+  }
+
 
   return (
     <div className={styles.container}>
@@ -22,7 +28,7 @@ const CardMaker = (props) => {
             CardMaker
           </header>
           <div className={styles.cardTables}>
-            {informations.length !== 0 && <CompleteCard information={informations} />}
+            {informations.length !== 0 && informations.map(value => <CompleteCard key={value.Name} information={value} onDelete={handleDelete}/>)}
             <CardTable onHandle={handleInformation}/>
           </div>
         </section>

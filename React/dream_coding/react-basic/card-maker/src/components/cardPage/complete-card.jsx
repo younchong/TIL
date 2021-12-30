@@ -1,7 +1,10 @@
 import styles from "./card-table.module.css";
 import React from 'react';
 
-const CompleteCard = ({information}) => {
+const CompleteCard = ({information, onDelete}) => {
+  const handleDelete = () => {
+    onDelete(information.Name);
+  }
 
   return (
     <table className={styles.table}>
@@ -21,15 +24,15 @@ const CompleteCard = ({information}) => {
       <tbody>
         <tr height={20}>
           <td colSpan={2}>
-            Title
+            {information.Title}
           </td>
           <td colSpan={2}>
-            Email
+            {information.Email}
           </td>
         </tr>
         <tr>
           <td colSpan={4}>
-            Message
+            {information.Message}
           </td>
         </tr>
       </tbody>
@@ -39,7 +42,7 @@ const CompleteCard = ({information}) => {
             name
           </td>
           <td colSpan={2}> 
-            Delete
+            <button className={styles.delete} onClick={handleDelete}>Delete</button>
           </td>
         </tr>
       </tfoot>
