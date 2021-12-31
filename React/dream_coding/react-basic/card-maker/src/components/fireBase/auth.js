@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, set, child, get } from "firebase/database";
+import { getFirestore, collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
 
 export default class Firebase {
   constructor(name) {
@@ -42,29 +43,22 @@ export default class Firebase {
   
   }
   storeData(informations) {
-    const app = initializeApp(this.firebaseConfig);  
-    function writeUserData(userId, data) {
-      const db = getDatabase(app);
-      set(ref(db, "users/" + userId), {
-        data
-      });
-    }
-    
-    writeUserData(this.name, informations);
+    const db = getFirestore();
+    const dataAd = doc(db, "cards/CYFiQqfXonZo69TCb1bm");
+    setDoc(dataAd, {informations});
+
   }
   getData() {
-    const app = initializeApp(this.firebaseConfig);
-    const db = getDatabase(app);
-    const dbRef = ref(db);
-    return get(child(dbRef, `users/${this.name}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-         return snapshot.val();
-      } else {
-        console.log("No data available");
+    const db = getFirestore();
+    const dataAd = doc(db, "cards/CYFiQqfXonZo69TCb1bm");
+    async function readDocument() {
+      const cardList = await getDoc(dataAd);
+      if (cardList.exists()) {
+        const docData = cardList.data();
+        return docData;
       }
-      }).catch((error) => {
-        console.error(error);
-      });
-
+    }
+    
+    return readDocument();
   }
 }

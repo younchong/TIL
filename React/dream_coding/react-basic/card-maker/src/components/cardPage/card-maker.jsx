@@ -26,7 +26,11 @@ const CardMaker = (props) => {
   useEffect(() => {
     const dataStorage = new Firebase("cards");
     dataStorage.getData()
+    .then(result => setInformation(result.informations))
+    /*
+    dataStorage.getData()
     .then(result => console.log(result));
+    */
   })
 
   return (
