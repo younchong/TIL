@@ -4,6 +4,7 @@ import CardTable from "./card-table";
 import CompleteCard from "./complete-card";
 import { useEffect } from "react/cjs/react.development";
 import Firebase from "../fireBase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const CardMaker = (props) => {
   const [informations, setInformation] = useState([]);
@@ -11,8 +12,11 @@ const CardMaker = (props) => {
   const handleInformation = (information) => {
     const newInfo = [information, ...informations];
     setInformation(newInfo);
-    const dataStorage = new Firebase();
+    
+    
+    const dataStorage = new Firebase("cards");
     dataStorage.storeData(newInfo);
+    
   }
   const handleDelete = (name) => {
     const filteredInfo = informations.filter(value => value.Name !== name);
@@ -20,7 +24,9 @@ const CardMaker = (props) => {
   }
 
   useEffect(() => {
-
+    const dataStorage = new Firebase("cards");
+    dataStorage.getData()
+    .then(result => console.log(result));
   })
 
   return (

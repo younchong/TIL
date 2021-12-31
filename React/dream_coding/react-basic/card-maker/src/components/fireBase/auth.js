@@ -17,6 +17,7 @@ export default class Firebase {
       appId: "1:618513089919:web:ed5791f54dbdbe4bf2064a",
       measurementId: "G-2DHTH5PDT7"
     };
+    
   }
   async getAuth() {
     const provider = this.provider === "google" ? new GoogleAuthProvider() : new GithubAuthProvider();
@@ -41,29 +42,29 @@ export default class Firebase {
   
   }
   storeData(informations) {
-    const app = initializeApp(this.firebaseConfig);
-    const database = getDatabase(app);
-
-    function wirteUserData(userId, name, email, imageUrl) {
-      const db = getDatabase();
+    const app = initializeApp(this.firebaseConfig);  
+    function writeUserData(userId, data) {
+      const db = getDatabase(app);
       set(ref(db, "users/" + userId), {
-        informations
-      })
+        data
+      });
     }
-
-    wirteUserData(this.provider);
+    
+    writeUserData(this.name, informations);
   }
   getData() {
-    const db = getDatabase();
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `users/${this.name}`)).then((snapshot) => {
+    const app = initializeApp(this.firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db);
+    return get(child(dbRef, `users/${this.name}`)).then((snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val());
+         return snapshot.val();
       } else {
         console.log("No data available");
       }
       }).catch((error) => {
         console.error(error);
       });
+
   }
 }

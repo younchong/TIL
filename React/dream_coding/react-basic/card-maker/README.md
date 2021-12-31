@@ -9,7 +9,7 @@
     * 메인 창 만들기
 
 * card maker 화면
-  * complete card로 우선 나타냄 (추가로 만들기 state에 배열로 추가)
-  * card에 넣은 정보들 FireBase로 전송
-  * 데이터 받아와서 로그인 정보에 따라 card preview 구성
+  * complete card로 우선 나타냄 (추가로 만들기 state에 배열로 추가) ok
+  * card에 넣은 정보들 FireBase로 전송  ok  
+  * 데이터 받아와서 로그인 정보에 따라 card preview 구성 -> preview 만들기
   * 연동하기 왼쪽과 오른쪽 바로 변경사항 연동해서 나타내기
