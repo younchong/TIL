@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid black;
+  width: 80%;
+  height: 25%;
+}
+
+img {
+  width: 8rem;
+  height: 5rem;
+}
+
+span {
+  display: block;
+}
+
+.information {
+  width: 50%;
+  height: 100%;
+}

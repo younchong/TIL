@@ -19,7 +19,10 @@ const CardTable = ({onHandle}) => {
     onHandle(information)
     formRef.current.reset();
   }
+  const handleImage = (e) => {
+    e.preventDefault();
 
+  }
 
   return (
     <form className={styles.form} ref={formRef}>
@@ -59,7 +62,7 @@ const CardTable = ({onHandle}) => {
       <tfoot>
         <tr>
         <td colSpan={2}>
-          <button className={styles.file}>No File</button>
+          <input type="file" accept="image/png, image/jpeg" className={styles.file} />
         </td>
         <td colSpan={2}> 
           <button className={styles.add} onClick={handleInput}>Add</button>

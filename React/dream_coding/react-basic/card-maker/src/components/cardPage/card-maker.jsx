@@ -5,6 +5,7 @@ import CompleteCard from "./complete-card";
 import { useEffect } from "react/cjs/react.development";
 import Firebase from "../fireBase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import CardPreview from "./card-preview";
 
 const CardMaker = (props) => {
   const [informations, setInformation] = useState([]);
@@ -26,12 +27,10 @@ const CardMaker = (props) => {
   useEffect(() => {
     const dataStorage = new Firebase("cards");
     dataStorage.getData()
-    .then(result => setInformation(result.informations))
-    /*
-    dataStorage.getData()
-    .then(result => console.log(result));
-    */
-  })
+    .then(result => result.informations)
+    .then(informations => setInformation(informations));
+    
+  },[])
 
   return (
     <div className={styles.container}>
@@ -50,7 +49,7 @@ const CardMaker = (props) => {
           </div>
         </section>
         <aside className={styles.preview}>
-          cardPreview
+          {informations.length !== 0 && informations.map(value=> <CardPreview key={value.Name} data={value}/>)}
         </aside>
       </main>
       <footer className={styles.footer}>
