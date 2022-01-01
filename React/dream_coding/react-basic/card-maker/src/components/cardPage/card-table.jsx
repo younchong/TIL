@@ -61,8 +61,12 @@ const CardTable = ({onHandle}) => {
       </tbody>
       <tfoot>
         <tr>
-        <td colSpan={2}>
-          <input type="file" accept="image/png, image/jpeg" className={styles.file} />
+        <td className={styles.label} colSpan={2}>
+          <label>
+            <span>No File</span>
+          <input type="file" name="image_uploads" accept="image/png, image/jpeg" className={styles.file} />
+          </label>
+          
         </td>
         <td colSpan={2}> 
           <button className={styles.add} onClick={handleInput}>Add</button>
