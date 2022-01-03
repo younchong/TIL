@@ -39,9 +39,7 @@ select {
 }
 
 .file {
-  display: inline-block;
-  margin: 0;
-  height: 1;
+  opacity: 0;
 }
 
 .add {

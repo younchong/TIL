@@ -9,27 +9,25 @@ import CardPreview from "./card-preview";
 
 const CardMaker = (props) => {
   const [informations, setInformation] = useState([]);
-  
+  const dataStorage = new Firebase("cards");
+
   const handleInformation = (information) => {
     const newInfo = [information, ...informations];
     setInformation(newInfo);
-    
-    
-    const dataStorage = new Firebase("cards");
     dataStorage.storeData(newInfo);
-    
   }
   const handleDelete = (name) => {
     const filteredInfo = informations.filter(value => value.Name !== name);
     setInformation(filteredInfo);
+    dataStorage.storeData(filteredInfo);
   }
 
   useEffect(() => {
-    const dataStorage = new Firebase("cards");
     dataStorage.getData()
     .then(result => result.informations)
     .then(informations => setInformation(informations));
-    
+    fetch("https://res.cloudinary.com/dv4boiwlx/Elon/fetch/")
+    .then(res => console.log(res));
   },[])
 
   return (

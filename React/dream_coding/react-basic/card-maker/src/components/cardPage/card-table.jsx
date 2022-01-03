@@ -1,4 +1,5 @@
 import React from 'react';
+import storeImage from '../cloudinary/upload';
 import styles from "./card-table.module.css";
 const CardTable = ({onHandle}) => {
   const formRef = React.useRef();
@@ -17,10 +18,20 @@ const CardTable = ({onHandle}) => {
       information[type] = formRef.current[i].value;
     }
     onHandle(information)
-    formRef.current.reset();
-  }
-  const handleImage = (e) => {
-    e.preventDefault();
+    const { files } = document.querySelector(".file");
+    const url = "https://api.cloudinary.com/v1_1/dv4boiwlx/image/upload";
+    const formData = new FormData();
+    formData.append("file", files[0]);
+    formData.append("upload_preset", "qiehg69d");
+    formData.append("public_id", information.Name)
+    return fetch(url, {
+            method: "POST",
+            body: formData
+          })
+    .then((res) => res.json())
+    .then(() => formRef.current.reset())
+    .catch((err) => console.log(err));
+    
 
   }
 
@@ -62,11 +73,7 @@ const CardTable = ({onHandle}) => {
       <tfoot>
         <tr>
         <td className={styles.label} colSpan={2}>
-          <label>
-            <span>No File</span>
-          <input type="file" name="image_uploads" accept="image/png, image/jpeg" className={styles.file} />
-          </label>
-          
+          <input type="file" name="files" accept="image/png, image/jpeg" className="file"/>
         </td>
         <td colSpan={2}> 
           <button className={styles.add} onClick={handleInput}>Add</button>
