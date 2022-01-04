@@ -28,3 +28,4 @@
 
 ### 강의보고 전체 복습 다시하자
 
+<img src="card-maker.gif">
