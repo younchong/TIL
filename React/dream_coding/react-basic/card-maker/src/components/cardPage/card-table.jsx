@@ -1,9 +1,11 @@
 import React from 'react';
+import Upload from '../cloudinary/upload';
 import styles from "./card-table.module.css";
 const CardTable = ({onHandle}) => {
   const formRef = React.useRef();
   const handleInput = (e) => {
     e.preventDefault();
+    const { files } = document.querySelector(".file");
     const information = {
       Name: null,
       Company: null,
@@ -15,30 +17,19 @@ const CardTable = ({onHandle}) => {
     }
     for (let i = 0; i < 7; i++) {
       const type = formRef.current[i].placeholder || formRef.current[i].name 
-      if (type !== "Image")information[type] = formRef.current[i].value;
+      if (type !== "Image") {
+        information[type] = formRef.current[i].value;
+      } else {
+        information[type] = files[0] ? "https://res.cloudinary.com/dv4boiwlx/image/upload/v1641275175/" + files[0].lastModified : null;
+      }
     }
-    const { files } = document.querySelector(".file");
-    if (files[0]) {
-      const imageURL = "https://res.cloudinary.com/dv4boiwlx/image/upload/v1641275175/" + files[0].lastModified;
-      information.Image = imageURL;
-      onHandle(information);
-      const url = "https://api.cloudinary.com/v1_1/dv4boiwlx/image/upload";
-      const formData = new FormData();
-      formData.append("file", files[0]);
-      formData.append("upload_preset", "qiehg69d");
-      formData.append("public_id", files[0].lastModified)
-      formRef.current.reset()
-      return fetch(url, {
-              method: "POST",
-              body: formData
-            })
-      .then((res) => res.json())
-      .catch((err) => console.log(err));  
-    } else {
-      onHandle(information);
-      formRef.current.reset();
-    }
+    onHandle(information);
     
+    if (files[0]) {
+      const imageFile = new Upload(files[0]);
+      imageFile.send();
+    }
+    formRef.current.reset();
   }
 
   return (
