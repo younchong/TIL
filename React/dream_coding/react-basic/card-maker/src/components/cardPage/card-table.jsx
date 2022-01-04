@@ -1,5 +1,4 @@
 import React from 'react';
-import storeImage from '../cloudinary/upload';
 import styles from "./card-table.module.css";
 const CardTable = ({onHandle}) => {
   const formRef = React.useRef();
@@ -11,28 +10,35 @@ const CardTable = ({onHandle}) => {
       Light: null,
       Title: null,
       Email: null,
-      Message: null
+      Message: null,
+      Image: null
     }
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       const type = formRef.current[i].placeholder || formRef.current[i].name 
-      information[type] = formRef.current[i].value;
+      if (type !== "Image")information[type] = formRef.current[i].value;
     }
-    onHandle(information)
     const { files } = document.querySelector(".file");
-    const url = "https://api.cloudinary.com/v1_1/dv4boiwlx/image/upload";
-    const formData = new FormData();
-    formData.append("file", files[0]);
-    formData.append("upload_preset", "qiehg69d");
-    formData.append("public_id", information.Name)
-    return fetch(url, {
-            method: "POST",
-            body: formData
-          })
-    .then((res) => res.json())
-    .then(() => formRef.current.reset())
-    .catch((err) => console.log(err));
+    if (files[0]) {
+      const imageURL = "https://res.cloudinary.com/dv4boiwlx/image/upload/v1641275175/" + files[0].lastModified;
+      information.Image = imageURL;
+      onHandle(information);
+      const url = "https://api.cloudinary.com/v1_1/dv4boiwlx/image/upload";
+      const formData = new FormData();
+      formData.append("file", files[0]);
+      formData.append("upload_preset", "qiehg69d");
+      formData.append("public_id", files[0].lastModified)
+      formRef.current.reset()
+      return fetch(url, {
+              method: "POST",
+              body: formData
+            })
+      .then((res) => res.json())
+      .catch((err) => console.log(err));  
+    } else {
+      onHandle(information);
+      formRef.current.reset();
+    }
     
-
   }
 
   return (
@@ -73,7 +79,7 @@ const CardTable = ({onHandle}) => {
       <tfoot>
         <tr>
         <td className={styles.label} colSpan={2}>
-          <input type="file" name="files" accept="image/png, image/jpeg" className="file"/>
+          <input type="file" name="Image" accept="image/png, image/jpeg" className="file"/>
         </td>
         <td colSpan={2}> 
           <button className={styles.add} onClick={handleInput}>Add</button>

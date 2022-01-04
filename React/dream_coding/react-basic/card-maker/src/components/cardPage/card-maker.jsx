@@ -26,8 +26,6 @@ const CardMaker = (props) => {
     dataStorage.getData()
     .then(result => result.informations)
     .then(informations => setInformation(informations));
-    fetch("https://res.cloudinary.com/dv4boiwlx/Elon/fetch/")
-    .then(res => console.log(res));
   },[])
 
   return (

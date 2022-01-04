@@ -2,11 +2,12 @@ import React from 'react';
 import styles from "./card-preview.module.css"
 
 const CardPreview = ({data}) => {
-  
+
   return (
     <div className={styles.main}>
       <aside className={styles.image}>
-        <img src="../images/default_logo.png" />
+        {data.Image ? <img src={data.Image} /> : <img src="../images/default_logo.png" />}
+        
       </aside>
       <section className={styles.information}>
         <h4>{data.Name}</h4>
