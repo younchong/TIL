@@ -7,8 +7,17 @@ export default class AuthService {
     this.googleProvider = new GoogleAuthProvider();
   }
   login(providerName) {
-    const provider = new GoogleAuthProvider()
-    return signInWithPopup(this.firebaseAuth, this.getProvider(providerName))
+    const provider = this.getProvider(providerName)
+    return signInWithPopup(this.firebaseAuth, provider)
+  }
+
+  logout() {
+    this.firebaseAuth.signOut()
+      .then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err)
+      });
   }
 
   getProvider(providerName) {
