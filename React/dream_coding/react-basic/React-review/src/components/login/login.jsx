@@ -7,7 +7,7 @@ import styles from "./login.module.css"
 const Login = ({authService}) => {
   let navigate = useNavigate();
   const goToMaekr = (user) => {
-    navigate("/maker", {id: user})
+    navigate("/maker", {state: user})
   } 
   
   const onLogin = event => {
