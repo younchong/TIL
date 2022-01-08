@@ -1,5 +1,5 @@
 import {authFirebase} from "./firebase.js"
-import { signInWithPopup, GoogleAuthProvider, getAuth  } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, getAuth, signOut  } from "firebase/auth";
 
 export default class AuthService {
   constructor() {
@@ -11,13 +11,12 @@ export default class AuthService {
     return signInWithPopup(this.firebaseAuth, provider)
   }
 
-  logout() {
-    this.firebaseAuth.signOut()
-      .then((res) => {
-        console.log(res);
-      }).catch((err) => {
-        console.log(err)
-      });
+  async logout() {
+    try {
+      const res = await signOut(this.firebaseAuth);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   getProvider(providerName) {

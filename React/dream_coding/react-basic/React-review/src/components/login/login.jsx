@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Footer from '../footer/footer';
 import Header from '../header/header';
 import styles from "./login.module.css"
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Login = ({authService}) => {
   let navigate = useNavigate();
@@ -12,15 +13,23 @@ const Login = ({authService}) => {
   
   const onLogin = event => {
     event.preventDefault();
-    authService.login(event.currentTarget.textContent)
+    authService
+      .login(event.currentTarget.textContent)
       .then((result) => goToMaekr(result.user.uid))
       .catch((err) => console.log(err));
     
   }
-  const onLogout = event => {
+  const onLogout = () => {
     authService.logout();
   }
-
+  
+  useEffect(() => {
+    onAuthStateChanged(authService.firebaseAuth, (user) => {
+      user && goToMaekr(user.reloadUserInfo.localId)
+    }
+    );
+  })
+  
   return (
     <section className={styles.login}>
       <Header onLogout={onLogout}/>
