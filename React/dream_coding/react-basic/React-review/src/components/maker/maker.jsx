@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Editor from '../editor/editor';
 import Footer from '../footer/footer';
@@ -8,7 +8,42 @@ import styles from "./maker.module.css";
 
 const Maker = ({authService}) => {
   const location = useLocation();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const [cards, setCard] = useState([
+    {
+      id: "1",
+      name: "Elon",
+      company: "Tesla",
+      theme: "Light",
+      title: "CEO",
+      email: "Tesla@gmail.com",
+      message: "Go to Mars",
+      fileName: "Elon",
+      fileURL: "Elon.png"
+    },
+    {
+      id: "2",
+      name: "Steve",
+      company: "Apple",
+      theme: "Dark",
+      title: "CEO",
+      email: "Apple@gmail.com",
+      message: "Stay Hungry",
+      fileName: "Jobs",
+      fileURL: "Jobs.png"
+    },
+    {
+      id: "3",
+      name: "Elon",
+      company: "Tesla",
+      theme: "Light",
+      title: "CEO",
+      email: "Tesla@gmail.com",
+      message: "Go to Mars",
+      fileName: "Elon",
+      fileURL: "Elon.png"
+    }
+  ])
   
   function onLogout() {
     authService.logout()
@@ -18,8 +53,8 @@ const Maker = ({authService}) => {
     <section className={styles.maker}>
       <Header onLogout={onLogout}/>
         <div className={styles.container}>
-          <Editor />
-          <Preview />
+          <Editor cards={cards}/>
+          <Preview cards={cards}/>
         </div>
       <Footer />
     </section>
