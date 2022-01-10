@@ -7,7 +7,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Login = ({authService}) => {
   let navigate = useNavigate();
-  const goToMaekr = (user) => {
+  const goToMaker = (user) => {
     navigate("/maker", {state: user})
   } 
   
@@ -15,7 +15,7 @@ const Login = ({authService}) => {
     event.preventDefault();
     authService
       .login(event.currentTarget.textContent)
-      .then((result) => goToMaekr(result.user.uid))
+      .then((result) => goToMaker(result.user.uid))
       .catch((err) => console.log(err));
     
   }
@@ -25,10 +25,10 @@ const Login = ({authService}) => {
   
   useEffect(() => {
     onAuthStateChanged(authService.firebaseAuth, (user) => {
-      user && goToMaekr(user.reloadUserInfo.localId)
+      user && goToMaker(user.reloadUserInfo.localId)
     }
     );
-  })
+  }, [])
   
   return (
     <section className={styles.login}>

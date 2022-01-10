@@ -7,14 +7,14 @@ import Preview from '../preview/preview';
 import styles from "./maker.module.css";
 
 const Maker = ({authService}) => {
-  const location = useLocation();
+  const location = useLocation(); //uid알 수  있음
   const navigate = useNavigate();
   const [cards, setCard] = useState([
     {
       id: "1",
       name: "Elon",
       company: "Tesla",
-      theme: "Light",
+      theme: "light",
       title: "CEO",
       email: "Tesla@gmail.com",
       message: "Go to Mars",
@@ -25,26 +25,17 @@ const Maker = ({authService}) => {
       id: "2",
       name: "Steve",
       company: "Apple",
-      theme: "Dark",
+      theme: "dark",
       title: "CEO",
       email: "Apple@gmail.com",
       message: "Stay Hungry",
       fileName: "Jobs",
       fileURL: "Jobs.png"
     },
-    {
-      id: "3",
-      name: "Elon",
-      company: "Tesla",
-      theme: "Light",
-      title: "CEO",
-      email: "Tesla@gmail.com",
-      message: "Go to Mars",
-      fileName: "Elon",
-      fileURL: "Elon.png"
-    }
   ])
-  
+  const createOrUpdateCard = (card) => {
+    setCard([card, ...cards]);
+  }
   function onLogout() {
     authService.logout()
     .then(() => {navigate("/")})
@@ -53,7 +44,10 @@ const Maker = ({authService}) => {
     <section className={styles.maker}>
       <Header onLogout={onLogout}/>
         <div className={styles.container}>
-          <Editor cards={cards}/>
+          <Editor 
+            cards={cards} 
+            addCard={createOrUpdateCard}
+          />
           <Preview cards={cards}/>
         </div>
       <Footer />
