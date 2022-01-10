@@ -1,18 +1,25 @@
 import styles from "./image_file_input.module.css";
-
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { useRef } from "react/cjs/react.development";
+import ImageUploader from "../../service/image_uploader";
 
-const ImageFileInput = ({onFileChange}) => {
+const ImageFileInput = memo(({ onFileChange }) => {
   const inputRef = useRef();
-  const [fileName, setFileName] = useState(null);
   const onButtonClick = event => {
     event.preventDefault();
     inputRef.current.click();
   }
+  const imageUploader = new ImageUploader();
+
   const onChange = (e) => {
-    setFileName(e.target.files[0].name);
-    onFileChange(e.target.files[0]);
+    imageUploader.upload(e.target.files[0])
+    .then(res => (
+      onFileChange({
+        name: res.original_filename,
+        url: res.url
+      })
+    ));
+    
   } 
 
   return (
@@ -26,9 +33,10 @@ const ImageFileInput = ({onFileChange}) => {
         onChange={onChange}
       />
       <button className={styles.button} onClick={onButtonClick}>
-        {fileName}
+        "Blank"
       </button>
     </div>
   )
-}
+});
+
 export default ImageFileInput;

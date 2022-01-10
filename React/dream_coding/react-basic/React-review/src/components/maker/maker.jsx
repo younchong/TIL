@@ -9,32 +9,14 @@ import styles from "./maker.module.css";
 const Maker = ({authService}) => {
   const location = useLocation(); //uid알 수  있음
   const navigate = useNavigate();
-  const [cards, setCard] = useState([
-    {
-      id: "1",
-      name: "Elon",
-      company: "Tesla",
-      theme: "light",
-      title: "CEO",
-      email: "Tesla@gmail.com",
-      message: "Go to Mars",
-      fileName: "Elon",
-      fileURL: "Elon.png"
-    },
-    {
-      id: "2",
-      name: "Steve",
-      company: "Apple",
-      theme: "dark",
-      title: "CEO",
-      email: "Apple@gmail.com",
-      message: "Stay Hungry",
-      fileName: "Jobs",
-      fileURL: "Jobs.png"
-    },
-  ])
+  const [cards, setCard] = useState({})
+
   const createOrUpdateCard = (card) => {
-    setCard([card, ...cards]);
+    setCard(cards => {
+      const updated = {...cards};
+      updated[card.id] = card;
+      return updated;
+    });
   }
   function onLogout() {
     authService.logout()
@@ -47,6 +29,7 @@ const Maker = ({authService}) => {
           <Editor 
             cards={cards} 
             addCard={createOrUpdateCard}
+            updateCard={createOrUpdateCard}
           />
           <Preview cards={cards}/>
         </div>

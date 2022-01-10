@@ -13,7 +13,8 @@ const CardAddForm = ({onAdd}) => {
   const emailRef = useRef();
   const messageRef = useRef();
   const [file, setFile] = useState({fileName: null, fileURL: null});
-  const onFileChange = file => {
+  const onFileChange = (file) => {
+    console.log(file)
     setFile({
       fileName: file.name,
       fileURL: file.url
