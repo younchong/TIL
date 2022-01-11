@@ -1,26 +1,24 @@
 import styles from "./image_file_input.module.css";
 import React, { memo, useState } from 'react';
 import { useRef } from "react/cjs/react.development";
-import ImageUploader from "../../service/image_uploader";
 
-const ImageFileInput = memo(({ onFileChange }) => {
+const ImageFileInput = memo(({ name, onFileChange, imageUploader }) => {
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef();
+
   const onButtonClick = event => {
     event.preventDefault();
     inputRef.current.click();
   }
-  const imageUploader = new ImageUploader();
 
   const onChange = (e) => {
-    imageUploader.upload(e.target.files[0])
-    .then(res => (
-      onFileChange({
-        name: res.original_filename,
-        url: res.url
-      })
-    ));
-    
-  } 
+    setLoading(true);
+    imageUploader.upload(e.currentTarget.files[0])
+    .then(file=> {
+      setLoading(false)
+      onFileChange({name: file.original_filename, url: file.url})
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -32,9 +30,15 @@ const ImageFileInput = memo(({ onFileChange }) => {
         name="file"
         onChange={onChange}
       />
-      <button className={styles.button} onClick={onButtonClick}>
-        "Blank"
+      {!loading && (
+      <button 
+        className={styles.button} 
+        onClick={onButtonClick}
+      >
+      {name || "No file"}
       </button>
+      )}
+      {loading && <div className={styles.loading}></div>}
     </div>
   )
 });

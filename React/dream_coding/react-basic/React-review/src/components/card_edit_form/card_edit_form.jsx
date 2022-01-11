@@ -3,7 +3,7 @@ import { React, useRef } from 'react';
 import Button from "../button/button";
 import ImageFileInput from "../image_file_input/image_file_input";
 
-const CardEditForm = ({ card, updateCard }) => {
+const CardEditForm = ({ card, updateCard, imageUploader, deleteCard }) => {
   const nameRef =useRef();
   const companyRef = useRef();
   const themeRef = useRef();
@@ -30,8 +30,9 @@ const CardEditForm = ({ card, updateCard }) => {
       [event.currentTarget.name]: event.currentTarget.value
     });
   }
-  const onSubmit = () => {
-    
+  const onSubmit = (e) => {
+    e.preventDefault();
+    deleteCard(card)
   }
   return (
     <form className={styles.form}>
@@ -86,7 +87,11 @@ const CardEditForm = ({ card, updateCard }) => {
         onChange={onChange} 
       />
       <div className={styles.fileInput}>
-        <ImageFileInput name={fileName} onFileChange={onFileChange} />
+        <ImageFileInput
+          name={fileName}
+          onFileChange={onFileChange}
+          imageUploader={imageUploader}
+        />
       </div>
       <Button name="Delete" onClick={onSubmit} />
     </form>
