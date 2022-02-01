@@ -1,3 +1,4 @@
+/*
 // boj 1644 two - pointer
 
 function twoPointer(target) {
@@ -35,3 +36,40 @@ function twoPointer(target) {
 }
 
 module.exports = twoPointer;
+*/
+// Boj 2470 two - pointer
+
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    5,
+    "-2 4 -99 -1 98"
+  ]
+  const N = input[0] * 1;
+  const liquidList = input[1].split(" ").map(value => +value).sort((a, b) => a - b);
+  let sumMin = Infinity;
+  let start = 0;
+  let end = liquidList.length - 1;
+  let answer;
+  while (start < end) {
+    let sum = Math.abs(liquidList[start] + liquidList[end]);
+    if (sumMin > sum) {
+      sumMin = sum;
+
+      if (sum === 0) {
+        break;
+      }
+      answer = [liquidList[start], liquidList[end]];
+    }
+
+
+    if (sum > 0) {
+      end--;
+    } else {
+      start++;
+    }
+  }
+  
+  return answer;
+}
+module.exports = solution;
