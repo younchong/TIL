@@ -11,3 +11,30 @@
   * 문제를 기록하고 관리할 수 있음 
   * 협업시 도움 많이 됨
   * 깃허브나 깃랩에서 issues 카테고리에 있음
+
+# commit
+
+  * git commit --amend 로 커밋 메시지 수정가능
+
+# Branch
+
+  * branch (name) - branch 만듦
+  * git checkout branch name - branch 이동
+
+# Merge
+
+  * base - 합치려는 것의 공통 조상
+  * 과정
+    1. 우선 주인이 되는 브랜치로 checkout
+    2. git merge (합치려고 하는 브랜치 이름)
+```             
+                -- a -- 
+              /         \
+o -- o -- o -   -- b --  m
+         base             merge commit
+
+```
+
+# Conflict
+
+ 
