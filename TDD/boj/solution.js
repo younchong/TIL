@@ -36,7 +36,7 @@ function twoPointer(target) {
 }
 
 module.exports = twoPointer;
-*/
+
 // Boj 2470 two - pointer
 
 function solution() {
@@ -72,4 +72,36 @@ function solution() {
   
   return answer;
 }
+*/
+
+// 3273 두 수의 합, two - pointer
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    9,
+    "5 12 7 10 9 1 2 3 11",
+    13
+  ];
+  const n = input[0] * 1;
+  const numbers = input[1].split(" ").map(value => parseInt(value)).sort((a, b) => a - b);
+  const target = input[2] * 1;
+
+  let start = 0;
+  let end = numbers.length - 1;
+  let count = 0;
+  while (start < end) {
+    let sum = numbers[start] + numbers[end];
+    if (sum === target) {
+      count++;
+      start++;
+    } else if (sum > target) {
+      end--;
+    } else {
+      start++;
+    }
+  }
+  
+  return count;
+}
+
 module.exports = solution;
