@@ -37,4 +37,30 @@ o -- o -- o -   -- b --  m
 
 # Conflict
 
- 
+  * merge 시 같은 부분을 수정했을 때 생기는 일
+
+# 3 way merge
+
+  * base 브랜치 포함, a, b 브랜치 총 3개가 있을 때
+  * base 기준으로 a나 b브랜치 특정 부분이 바뀌었다면 바뀐 부분으로 3 way merge할 때 바뀜
+  * 셋 다 다르면 그건 사람이 정함
+  * mergetool 이용해서 할 수 있음
+
+# 더 공부해 볼것
+
+  * git flow
+  * rebase - 병합한 효과를 내면서도, 타임라인을 깔끔하게 정리함 (merge처럼 끌어오는 부분 없음)
+
+# detached
+
+  * Head가 branch가 아닌 commit id를 가르키는 상태
+
+# checkout
+
+  * head를 이동시킴, head가 가르키는 branch 바꿈
+
+# reset
+
+  * 브랜치를 바꾸는 것, 브랜치가 가르키는 커밋을 바꾸면 그 커밋 이후에 나오는 링크를 끊음, 삭제가 됨
+  * delete 같은 느낌
+  * reset (commit id) (ex reset 1 이라하면 1이후에 2, 3등의 commit들이 사라지고 브랜치들이 모두 1을 바라봄)
