@@ -146,7 +146,7 @@ function solution() {
 
   return answer.join("\n")
 }
-*/
+
 // BOJ 1049
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -173,5 +173,107 @@ function solution() {
 }
 
 solution();
+*/
 
+// BOJ 1927 Heap
+function solution () {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => parseInt(value));
+  const input = [
+    9,
+    0,
+    12345678,
+    1,
+    2,
+    0,
+    0,
+    0,
+    0,
+    32
+  ];
+  const N = input[0];
+  const heap = new Heap();
+  const answer = [];
+  for (let i = 1; i <= N; i++) {
+    const x = input[i];
+    if (x) {
+      heap.insert(x, x);
+    } else {
+      let root = heap.peak();
+      root ? answer.push(root.value) : answer.push(0);
+      heap.remove();
+    }
+  }
+
+  return answer.join("\n");
+}
+
+class Heap {
+  constructor() {
+    this.heap = [];
+  }
+
+  getLeftChildIndex = (parentIndex) => parentIndex * 2 + 1;
+  getRightChildIndex = (parentIndex) => parentIndex * 2 + 2;
+  getParentIndex = (childIndex) => Math.floor((childIndex - 1) / 2);
+
+  peak = () => this.heap[0];
+
+  insert = (key, value) => {
+    const node = { key, value }
+    this.heap.push(node);
+    this.heapifyUp()
+  }
+
+  heapifyUp = () => {
+    let index = this.heap.length - 1;
+    const lastInsertedNode = this.heap[index];
+
+    while (index > 0) { //루트 노드가 되기 전까지
+      const parentIndex = this.getParentIndex(index);
+
+      // 부모 노드의 key 값이 마지막에 삽입된 노드의 키 값 보다 크면 부모의 자리를 계속해서 아래로 내림
+      if (this.heap[parentIndex].key > lastInsertedNode.key) {
+        this.heap[index] = this.heap[parentIndex];
+        index = parentIndex;
+      } else break;
+    }
+
+    this.heap[index] = lastInsertedNode;
+  }
+
+  remove = () => {
+    const count = this.heap.length;
+    const rootNode = this.heap[0];
+
+    if (count <= 0) return undefined;
+    if (count === 1) this.heap = [];
+    else {
+      this.heap[0] = this.heap.pop(); // 끝에 있는 노드를 부모 노드로 만들고 재구성
+      this.heapifyDown();
+    }
+  }
+
+  heapifyDown = () => {
+    let index = 0;
+    const count = this.heap.length;
+    const rootNode = this.heap[index];
+
+    while (this.getLeftChildIndex(index) < count) {
+      const leftChildIndex = this.getLeftChildIndex(index);
+      const rightChildIndex = this.getRightChildIndex(index);
+
+      const smallerChildIndex = 
+        rightChildIndex < count && this.heap[rightChildIndex].key < this.heap[leftChildeIndex]
+        ? rightChildIndex
+        : leftChildIndex
+
+        if (this.heap[smallerChildIndex].key <= rootNode.key) {
+          this.heap[index] = this.heap[smallerChildIndex];
+          index = smallerChildIndex;
+        } else break;
+    }
+
+    this.heap[index] = rootNode;
+  }
+}
 module.exports = solution;

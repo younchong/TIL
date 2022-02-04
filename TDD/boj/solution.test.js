@@ -30,12 +30,21 @@ describe("Boj 1010", () => {
     expect(solution()).toBe("1\n5\n67863915");
   })
 })
-*/
+
 
 const solution = require("./solution.js");
 
 describe("Boj 1049", () => {
   it("solution", () => {
     expect(solution()).toBe(6);
+  })
+})
+*/
+
+const solution = require("./solution.js");
+
+describe("Boj 1927", () => {
+  it("solution", () => {
+    expect(solution()).toBe("0\n1\n2\n12345678\n0");
   })
 })
