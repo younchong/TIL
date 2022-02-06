@@ -173,7 +173,7 @@ function solution() {
 }
 
 solution();
-*/
+
 
 // BOJ 1927 Heap
 function solution () {
@@ -276,4 +276,95 @@ class Heap {
     this.heap[index] = rootNode;
   }
 }
+*/
+// boj 11286 Heap
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
+  const input = [
+    18,
+1,
+-1,
+0,
+0,
+0,
+1,
+1,
+-1,
+-1,
+2,
+-2,
+0,
+0,
+0,
+0,
+0,
+0,
+0
+  ]
+  
+  const N = input[0];
+  const heap = new Heap();
+  const answer = [];
+  for (let i = 1; i <= N; i++) {
+    const value = input[i];
+    if (value) {
+      heap.add(value);
+    } else {
+      answer.push(heap.remove());
+    }
+    
+  }
+  return answer.join("\n");
+}
+function Heap() {
+  this.heap = [0];
+    
+  this.add = (value) => {
+    this.heap.push(value);
+    let index = this.heap.length - 1;
+    
+    while (index > 1) {
+      if ( Math.abs(this.heap[Math.floor(index / 2)]) > Math.abs(this.heap[index]) || Math.abs(this.heap[Math.floor(index / 2)]) === Math.abs(this.heap[index]) && this.heap[Math.floor(index / 2)] > this.heap[index]) {
+        let temp = this.heap[Math.floor(index / 2)];
+        this.heap[Math.floor(index / 2)] = this.heap[index];
+        this.heap[index] = temp;
+        index = Math.floor(index / 2);
+      } else break;
+    }
+    
+  }
+
+  this.remove = () => {
+    if (this.heap.length - 1 < 1) {
+      return 0;
+    }
+
+    let deleted = this.heap[1];
+    this.heap[1] = this.heap[this.heap.length - 1];
+    this.heap.pop();
+    let index = 1;
+
+    while (index * 2 < this.heap.length) {
+      let minValue = this.heap[index * 2];
+      let minIndex = index * 2;
+      if (index * 2 + 1 < this.heap.length && Math.abs(minValue) > Math.abs(this.heap[index * 2 + 1]) || Math.abs(minValue) === Math.abs(this.heap[index * 2 + 1]) && minValue > this.heap[index * 2 + 1] ) {
+        minValue = this.heap[index * 2 + 1];
+        minIndex = index * 2 + 1;
+      }
+      
+      if (Math.abs(this.heap[index]) < Math.abs(minValue) || Math.abs(this.heap[index]) === Math.abs(minValue) && this.heap[index] < minValue) break;
+      
+      let temp = this.heap[minIndex];
+      this.heap[minIndex] = this.heap[index];
+      this.heap[index] = temp;
+      index = minIndex;
+    }
+
+    return deleted;
+  }
+
+}
+
+solution();
+// 시간초과남 -> function으로 변경 후 add 함수  비교하는 부분 정리 후 통과
 module.exports = solution;
