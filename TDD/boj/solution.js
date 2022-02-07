@@ -276,7 +276,7 @@ class Heap {
     this.heap[index] = rootNode;
   }
 }
-*/
+
 // boj 11286 Heap
 function solution() {
   //const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
@@ -367,4 +367,51 @@ function Heap() {
 
 solution();
 // 시간초과남 -> function으로 변경 후 add 함수  비교하는 부분 정리 후 통과
+*/
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
+  const N = input[0];
+  const heap = new MinHeap();
+  for (let i = 1; i <= N; i++) {
+    const value = input[i];
+    heap.add(value);
+    heap.show();
+  }
+  
+}
+
+function MinHeap() {
+  this.heap = [];
+
+  this.size = () => this.heap.length;
+
+  this.add = (value) => {
+    this.heap.push(value);
+    let index = this.heap.length - 1;
+
+    while (index > 0) {
+      if (this.heap[index] <= this.heap[Math.floor((index - 1) / 2)]) {
+        let temp = this.heap[Math.floor((index - 1) / 2)];
+        this.heap[Math.floor((index - 1) / 2)] = this.heap[index];
+        this.heap[index] = temp;
+        index = Math.floor((index - 1) / 2);
+      } else break;
+    }
+  }
+
+  this.show = () => {
+    console.log(this.heap);
+  }
+}
+
+/*
+maxHeap, minHeap 두개를 이용
+배열의 크기가 maxHeap > minHeap이면 minHeap에 삽입, 그 외엔 maxHeap삽입
+maxHeap의 top 값을 remove
+max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
+
+구현해보기
+ */
+solution();
 module.exports = solution;
