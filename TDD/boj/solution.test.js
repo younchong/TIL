@@ -48,7 +48,7 @@ describe("Boj 1927", () => {
     expect(solution()).toBe("0\n1\n2\n12345678\n0");
   })
 })
-*/
+
 
 const solution = require("./solution.js");
 
@@ -57,3 +57,5 @@ describe("Boj 11286", () => {
     expect(solution()).toBe("-1\n1\n0\n-1\n-1\n1\n1\n-2\n2\n0");
   })
 })
+
+*/

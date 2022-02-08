@@ -367,8 +367,8 @@ function Heap() {
 
 solution();
 // 시간초과남 -> function으로 변경 후 add 함수  비교하는 부분 정리 후 통과
-*/
 
+Heap 문제 아직 못 품
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
   const N = input[0];
@@ -405,13 +405,61 @@ function MinHeap() {
   }
 }
 
-/*
+
 maxHeap, minHeap 두개를 이용
 배열의 크기가 maxHeap > minHeap이면 minHeap에 삽입, 그 외엔 maxHeap삽입
 maxHeap의 top 값을 remove
 max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
 
-구현해보기
- */
+구현해보기 
+
+// 1991 Tree traversal
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = input[0] *1;
+  const tree = {};
+  for (let i = 1; i <= N; i++) {
+    const [node, left, right] = input[i].split(" ");
+    tree[node] = [left, right];
+  }
+
+  let result = "";
+
+  function preOrder(node) {
+    if (node === ".") return;
+    const [lt, rt] = tree[node];
+    result += node;
+    preOrder(lt);
+    preOrder(rt);
+  }
+
+  function inOrder(node) {
+    if (node === ".") return;
+    const [lt, rt] = tree[node];
+    inOrder(lt);
+    result += node;
+    inOrder(rt);
+  }
+
+  function postOrder(node) {
+    if (node === ".") return;
+    const [lt, rt] = tree[node];
+    postOrder(lt);
+    postOrder(rt);
+    result += node;
+  }
+
+  preOrder("A");
+  result += "\n";
+  inOrder("A");
+  result += "\n";
+  postOrder("A");
+
+  console.log(result);
+}
+
 solution();
+*/
+
+
 module.exports = solution;
