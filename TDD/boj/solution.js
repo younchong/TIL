@@ -368,50 +368,6 @@ function Heap() {
 solution();
 // 시간초과남 -> function으로 변경 후 add 함수  비교하는 부분 정리 후 통과
 
-Heap 문제 아직 못 품
-function solution() {
-  const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
-  const N = input[0];
-  const heap = new MinHeap();
-  for (let i = 1; i <= N; i++) {
-    const value = input[i];
-    heap.add(value);
-    heap.show();
-  }
-  
-}
-
-function MinHeap() {
-  this.heap = [];
-
-  this.size = () => this.heap.length;
-
-  this.add = (value) => {
-    this.heap.push(value);
-    let index = this.heap.length - 1;
-
-    while (index > 0) {
-      if (this.heap[index] <= this.heap[Math.floor((index - 1) / 2)]) {
-        let temp = this.heap[Math.floor((index - 1) / 2)];
-        this.heap[Math.floor((index - 1) / 2)] = this.heap[index];
-        this.heap[index] = temp;
-        index = Math.floor((index - 1) / 2);
-      } else break;
-    }
-  }
-
-  this.show = () => {
-    console.log(this.heap);
-  }
-}
-
-
-maxHeap, minHeap 두개를 이용
-배열의 크기가 maxHeap > minHeap이면 minHeap에 삽입, 그 외엔 maxHeap삽입
-maxHeap의 top 값을 remove
-max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
-
-구현해보기 
 
 // 1991 Tree traversal
 function solution() {
@@ -461,5 +417,168 @@ function solution() {
 solution();
 */
 
+//1655
+//Heap 문제 아직 못 품
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(value => +value);
+  const input = [
+    7,
+    1,
+    5,
+    2,
+    10,
+    -99,
+    7,
+    5
+  ];
+  const N = input[0];
+  const minHeap = new MinHeap();
+  const maxHeap = new MaxHeap();
+  const answer = [];
+  for (let i = 1; i <= N; i++) {
+    const value = input[i];
+    
+    if (maxHeap.size() > minHeap.size()) {
+      minHeap.add(value);
+    } else {
+      maxHeap.add(value);
+    }
 
+    if (maxHeap.top() > minHeap.top()) {
+      let maxTop = maxHeap.remove();
+      let minTop = minHeap.remove()
+      maxTop.add(minTop);
+      minTop.add(maxTop);
+      answer.push(maxHeap.top());
+    } else {
+      answer.push(maxHeap.top());
+    }
+
+    
+  }
+  
+
+  return answer.join("\n");
+}
+
+//maxHeap의 top 값을 remove
+//max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
+
+
+function MinHeap() {
+  this.heap = [];
+
+  this.size = () => this.heap.length;
+
+  this.add = (value) => {
+    this.heap.push(value);
+    let index = this.heap.length - 1;
+
+    while (index > 0) {
+      if (Math.floor((index - 1) / 2) >= 0 && this.heap[index] <= this.heap[Math.floor((index - 1) / 2)]) {
+        let temp = this.heap[Math.floor((index - 1) / 2)];
+        this.heap[Math.floor((index - 1) / 2)] = this.heap[index];
+        this.heap[index] = temp;
+        index = Math.floor((index - 1) / 2);
+      } else break;
+    }
+  }
+
+  this.remove = () => {
+    const deleted = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap.pop();
+    let index = 0;
+
+    while (index * 2 + 1 < this.heap.length) {
+      let minValue = this.heap[index * 2 + 1];
+      let minIndex = index * 2 + 1;
+      if (index * 2 + 2 < this.heap.length && this.heap[minIndex] > this.heap[index * 2 + 2]) {
+        minValue = this.heap[index * 2 + 2];
+        minIndex = index * 2 + 2;
+      }
+
+      if (this.heap[index] < minValue) {
+        let temp = this.heap[minIndex];
+        this.heap[minIndex] = this.heap[index];
+        this.heap[index] = temp;
+        index = minIndex;
+      } else break;
+    }
+
+    return deleted;
+  }
+
+  this.top = () => {
+    return this.heap[0];
+  }
+
+  this.show = () => {
+    return this.heap;
+  }
+}
+
+function MaxHeap() {
+  this.heap = [];
+
+  this.size = () => this.heap.length;
+
+  this.add = (value) => {
+    this.heap.push(value);
+    let index = this.heap.length - 1;
+
+    while (index > 0) {
+      if (Math.floor((index - 1) / 2) >= 0 && this.heap[index] >= this.heap[Math.floor((index - 1) / 2)]) {
+        let temp = this.heap[Math.floor((index - 1) / 2)];
+        this.heap[Math.floor((index - 1) / 2)] = this.heap[index];
+        this.heap[index] = temp;
+        index = Math.floor((index - 1) / 2);
+      } else break;
+    }
+  }
+
+  this.remove = () => {
+    const deleted = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap.pop();
+    let index = 0;
+
+    while (index * 2 + 1 < this.heap.length) {
+      let maxValue = this.heap[index * 2 + 1];
+      let maxIndex = index * 2 + 1;
+      if (index * 2 + 2 < this.heap.length && this.heap[maxIndex] < this.heap[index * 2 + 2]) {
+        maxValue = this.heap[index * 2 + 2];
+        maxIndex = index * 2 + 2;
+      }
+
+      if (this.heap[index] > maxValue) {
+        let temp = this.heap[maxIndex];
+        this.heap[maxIndex] = this.heap[index];
+        this.heap[index] = temp;
+        index = maxIndex;
+      } else break;
+    }
+
+    return deleted;
+  }
+
+  this.top = () => {
+    return this.heap[0];
+  }
+
+  this.show = () => {
+    return this.heap;
+  }
+}
+
+
+/*
+maxHeap, minHeap 두개를 이용
+배열의 크기가 maxHeap > minHeap이면 minHeap에 삽입, 그 외엔 maxHeap삽입
+maxHeap의 top 값을 remove
+max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
+
+구현해보기 
+*/
+solution();
 module.exports = solution;
