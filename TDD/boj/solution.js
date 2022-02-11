@@ -415,7 +415,7 @@ function solution() {
 }
 
 solution();
-*/
+
 
 //1655
 //Heap 문제 아직 못 품
@@ -572,13 +572,89 @@ function MaxHeap() {
 }
 
 
-/*
+
 maxHeap, minHeap 두개를 이용
 배열의 크기가 maxHeap > minHeap이면 minHeap에 삽입, 그 외엔 maxHeap삽입
 maxHeap의 top 값을 remove
 max의 top이 min의 top보다 크면 두 값을 바꿔준 후 top값 출력
 
 구현해보기 
+
+solution();
+
+
+// BOJ 11728
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(value => +value);
+  const A = input[1].split(" ").map(value => +value);
+  const B = input[2].split(" ").map(value => +value);
+  const joined = A.concat(B).sort();
+  console.log(joined.join(" "));
+}
+
+solution();
+
+
+function solution() {
+  const input= require("fs").readFileSync("./input.txt").toString().split("\n");
+  const[N, K] = input[0].split(" ").map(value => +value);
+  const numbers = input[1].split(" ").map(value => +value);
+  
+  let max = -Infinity;
+  let interSum = 0;
+  let end = 0;
+  let count = 0;
+
+  for (let start = 0; start < N; start++) {
+    while (count < K && end < N) {
+      interSum += numbers[end];
+      end++;
+      count++;
+    }
+
+    if (max < interSum && count === K) {
+      max = interSum;
+    }
+    interSum -= numbers[start];
+    count--;
+  }
+
+  console.log(max);
+  return max;
+}
+
+solution();
+
 */
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const liquidList = input[1].split(" ").map(value => +value).sort((a, b) => a- b);
+  const answer = [0, 0, 0];
+  let min = Infinity;
+
+  for (let start = 0; start < N - 2; start++) {
+    let mid = start + 1;
+    let end = N - 1;
+    while (mid < end) {
+      let sum = liquidList[start] + liquidList[mid] + liquidList[end];
+      if (Math.abs(sum) < min) {
+        min = Math.abs(sum);
+        answer[0] = liquidList[start];
+        answer[1] = liquidList[mid];
+        answer[2] = liquidList[end];
+      }
+      if (sum >= 0) {
+        end--;
+      } else {
+        mid++;
+      }
+    }
+  }
+
+  console.log(answer);
+}
 solution();
 module.exports = solution;
