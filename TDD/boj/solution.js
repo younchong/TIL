@@ -626,7 +626,7 @@ function solution() {
 
 solution();
 
-*/
+
 
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -656,5 +656,59 @@ function solution() {
 
   console.log(answer);
 }
+solution();
+*/
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(value => +value);
+  let [y, x, d] = input[1].split(" ").map(value => +value);
+  const graph = Array.from(N, () => new Array());
+  for (let i = 0; i < N; i++) {
+    graph[i] = input[2 + i].split(" ").map(value => +value);
+  }
+  let count = 0;
+
+  const my = [-1, 0, 1, 0];
+  const mx = [0, -1, 0, 1];
+  while (true) {
+    let sw = false;
+    if (graph[y][x] === 0) {
+      graph[y][x] = 2;
+      count++;
+    }
+    for (let i = 1; i < 5; i++) {
+      const ny = y + my[(d + i) % 4];
+      const nx = x + mx[(d + i) % 4];
+      if (ny >= 0 && ny < N && nx >= 0 && nx < M) {
+        if (graph[ny][nx] === 0) {
+          d = (d + i + 4) % 4;
+          y = ny;
+          x = nx;
+          sw = true;
+          
+          break;
+        }
+      }
+    }
+
+    if (!sw) {
+      const ny = y - my[d];
+      const nx = x - mx[d];
+      if (ny >= 0 && ny < N && nx >= 0 && nx < M) {
+        if (graph[ny][nx] === 1) {
+          break;
+        } else {
+          y = ny;
+          x = nx;
+        }
+      } else break;
+    }
+
+  }
+
+  console.log(count)
+}
+
 solution();
 module.exports = solution;
