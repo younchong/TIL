@@ -657,8 +657,8 @@ function solution() {
   console.log(answer);
 }
 solution();
-*/
 
+// not yet robot cleaner simulation
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const [N, M] = input[0].split(" ").map(value => +value);
@@ -709,6 +709,53 @@ function solution() {
 
   console.log(count)
 }
+*/
 
+
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    3,
+8,
+"0 0",
+"7 0",
+100,
+"0 0",
+"30 50",
+10,
+"1 1",
+"1 1"
+  ]
+  const T = +input[0];
+  const answer = [];
+  for (let i = 0; i < T; i++) {
+    const I = +input[i* 3 + 1];
+    const curPosition = input[i * 3 + 2].split(" ").map(value => +value);
+    const goalPosition = input[i * 3 + 3].split(" ").map(value => +value);
+    const graph = Array.from(new Array(I), () => new Array(I).fill(0));
+    const queue = [];
+    const mv = [[-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]];
+    queue.push(curPosition);
+    let count = 0;
+    while(queue.length) {
+      const[cy, cx] = queue.shift();
+      if (cy === goalPosition[0] && cx === goalPosition[1])break;
+      for (let i = 0; i < 8; i++) {
+        let my = cy + mv[i][0];
+        let mx = cx + mv[i][1];
+        if (my >= 0 && my < I && mx >= 0 && mx < I) {
+          if (!graph[my][mx]) {
+            graph[my][mx] = graph[cy][cx] + 1;
+            queue.push([my,mx]);
+          }
+        }
+      }
+    }
+    
+    answer.push(graph[goalPosition[0]][goalPosition[1]]);
+  }
+
+  return answer.join("\n");
+}
 solution();
 module.exports = solution;
