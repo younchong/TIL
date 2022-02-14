@@ -709,7 +709,7 @@ function solution() {
 
   console.log(count)
 }
-*/
+
 
 
 function solution() {
@@ -757,5 +757,161 @@ function solution() {
 
   return answer.join("\n");
 }
+solution();
+
+
+class Heap {
+  constructor() {
+    this.heap = [];
+  }
+
+  getLeftChildIndex = (parentIndex) => parentIndex * 2 + 1;
+  getRightChildIndex = (parentIndex) => parentIndex * 2 + 2;
+  getParentIndex = (childIndex) => Math.floor((childIndex - 1) / 2);
+
+  peak = () => this.heap[0];
+
+  insert = (key, value) => {
+    const node = { key, value }
+    this.heap.push(node);
+    this.heapifyUp()
+  }
+
+  heapifyUp = () => {
+    let index = this.heap.length - 1;
+    const lastInsertedNode = this.heap[index];
+
+    while (index > 0) { //루트 노드가 되기 전까지
+      const parentIndex = this.getParentIndex(index);
+
+      // 부모 노드의 key 값이 마지막에 삽입된 노드의 키 값 보다 크면 부모의 자리를 계속해서 아래로 내림
+      if (this.heap[parentIndex].value > lastInsertedNode.value) {
+        this.heap[index] = this.heap[parentIndex];
+        index = parentIndex;
+      } else break;
+    }
+
+    this.heap[index] = lastInsertedNode;
+  }
+
+  remove = () => {
+    const count = this.heap.length;
+    const rootNode = this.heap[0];
+
+    if (count <= 0) return undefined;
+    if (count === 1) this.heap = [];
+    else {
+      this.heap[0] = this.heap.pop(); // 끝에 있는 노드를 부모 노드로 만들고 재구성
+      this.heapifyDown();
+    }
+  }
+
+  heapifyDown = () => {
+    let index = 0;
+    const count = this.heap.length;
+    const rootNode = this.heap[index];
+
+    while (this.getLeftChildIndex(index) < count) {
+      const leftChildIndex = this.getLeftChildIndex(index);
+      const rightChildIndex = this.getRightChildIndex(index);
+
+      const smallerChildIndex = 
+        rightChildIndex < count && this.heap[rightChildIndex].value < this.heap[leftChildIndex].value
+        ? rightChildIndex
+        : leftChildIndex
+
+        if (this.heap[smallerChildIndex].value <= rootNode.value) {
+          this.heap[index] = this.heap[smallerChildIndex];
+          index = smallerChildIndex;
+        } else break;
+    }
+
+    this.heap[index] = rootNode;
+  }
+
+  size = () => this.heap.length;
+}
+
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [V, E] = input[0].split(" ").map(E => +E);
+  const Edges = Array.from(Array(V + 1), () => new Array());
+  const visited = new Array(V + 1).fill(false);
+  let result = 0;
+
+  for (let i = 1; i <= E; i++) {
+    const [start, end, cost] = input[i].split(" ").map(E => +E);
+    Edges[start].push([cost, end]);
+    Edges[end].push([cost, start]);
+  }
+
+  heap.insert(1, 0); //  node,cost
+
+  while (heap.size()) {
+    const node = heap.peak();
+    heap.remove();
+    if (!visited[node.key]) {
+      visited[node.key] = true;
+      result += node.value;
+      for (let next of Edges[node.key]) {
+        if (!visited[next[1]]) heap.insert(next[1], next[0]);
+      }
+    }
+  }
+
+  return result;
+}
+// MST문제인데 JS에선 따로 heap 라이브러리가 없어서 구현하는데 좀 시간 더 걸려서, 다른 방법을 찾아보자. -> union find 이용
+// 우선 개념은 최소힙을 이용해서 간선 비용이 최소인 값이 연결되지 않았을 때 연결시키는 것
+solution();
+*/
+
+function findParent(parent, x) {
+  if (parent[x] !== x) {
+    parent[x] = findParent(parent, parent[x]);
+  }
+
+  return parent[x];
+}
+
+function unionFind(parent, a, b) {
+  a = findParent(parent, a);
+  b = findParent(parent, b);
+  if (a > b) {
+    parent[a] = b;
+  } else {
+    parent[b] = a;
+  }
+
+  return parent;
+}
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [V, E] = input[0].split(" ").map(E => +E);
+  const Edges = [];
+  let parents = new Array(V + 1)
+  let result = 0;
+  for (let i = 0; i <= V; i++) {
+    parents[i] = i;
+  }
+  for (let i = 1; i <= E; i++) {
+    const [start, end, cost] = input[i].split(" ").map(E => +E);
+    Edges.push([start, end, cost]);
+  }
+
+  Edges.sort((a, b) => a[2] - b[2]);
+
+  Edges.forEach(edge => {
+    const [a, b, c] = edge;
+    if (findParent(parents, a) !== findParent(parents, b)) {
+      parents = unionFind(parents, a, b);
+      result += c;
+    }
+  })
+  console.log(result);
+}
+
 solution();
 module.exports = solution;
