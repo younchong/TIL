@@ -865,7 +865,7 @@ function solution() {
 // MST문제인데 JS에선 따로 heap 라이브러리가 없어서 구현하는데 좀 시간 더 걸려서, 다른 방법을 찾아보자. -> union find 이용
 // 우선 개념은 최소힙을 이용해서 간선 비용이 최소인 값이 연결되지 않았을 때 연결시키는 것
 solution();
-*/
+
 
 function findParent(parent, x) {
   if (parent[x] !== x) {
@@ -913,5 +913,55 @@ function solution() {
   console.log(result);
 }
 
+solution();
+*/
+//1922
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const M = +input[1];
+  const edges = [];
+  for (let i = 2; i < M + 2; i++) {
+    edges.push(input[i].split(" ").map(v => +v));
+  }
+  let parents = new Array(N + 1);
+  for (let i = 0; i <= N; i++) {
+    parents[i] = i;
+  }
+  console.log(parents)
+  let result = 0;
+
+  edges.sort((a, b) => a[2] - b[2]);
+  edges.forEach(edge => {
+    const [a, b, c] = edge;
+    if (findParent(parents, a) !== findParent(parents, b)) {
+      parents = unionFind(parents, a, b);
+      result += c;
+      console.log(parents)
+    }
+  })
+
+  console.log(result);
+}
+
+function findParent(parent, x) {
+  if (parent[x] !== x) {
+    parent[x] = findParent(parent, parent[x]);
+  }
+
+  return parent[x];
+}
+
+function unionFind(parent, a, b) {
+  a = findParent(a);
+  b = findParent(b);
+  if (a > b) {
+    parent[a] = b;
+  } else {
+    parent[b] = a;
+  }
+
+  return parent;
+}
 solution();
 module.exports = solution;
