@@ -77,7 +77,7 @@ describe("BOJ 2559", () => {
   })
 })
 
-*/
+
 
 const solution = require("./solution.js");
 
@@ -86,3 +86,12 @@ describe("BOJ 7652", () => {
     expect(solution()).toBe("5\n28\n0");
   })
 })
+
+const solution = require("./solution.js");
+
+describe("BOJ 1922", () => {
+  it ("solution", () => {
+    expect(solution()).toBe(23);
+  })
+})
+*/

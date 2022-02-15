@@ -914,10 +914,23 @@ function solution() {
 }
 
 solution();
-*/
+
 //1922
 function solution() {
-  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    6,
+    9,
+    "1 2 5",
+    "1 3 4",
+    "2 3 2",
+    "2 4 7",
+    "3 4 6",
+    "3 5 11",
+    "4 5 3",
+    "4 6 8",
+    "5 6 8"
+  ]
   const N = +input[0];
   const M = +input[1];
   const edges = [];
@@ -928,16 +941,58 @@ function solution() {
   for (let i = 0; i <= N; i++) {
     parents[i] = i;
   }
-  console.log(parents)
   let result = 0;
 
   edges.sort((a, b) => a[2] - b[2]);
   edges.forEach(edge => {
     const [a, b, c] = edge;
     if (findParent(parents, a) !== findParent(parents, b)) {
-      parents = unionFind(parents, a, b);
+      unionFind(parents, a, b);
       result += c;
-      console.log(parents)
+    }
+  })
+
+  return result;
+}
+
+function findParent(parent, x) {
+  if (parent[x] !== x) {
+    parent[x] = findParent(parent, parent[x]);
+  }
+
+  return parent[x];
+}
+
+function unionFind(parent, a, b) {
+  a = findParent(parent, a);
+  b = findParent(parent, b);
+  if (a > b) {
+    parent[a] = b;
+  } else {
+    parent[b] = a;
+  }
+  return parent;
+}
+*/
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [V, E] = input[0].split(" ").map(v => +v);
+  const edges = [];
+  for (let i = 1; i < E + 1; i++) {
+    edges.push(input[i].split(" ").map(v => +v));
+  }
+  edges.sort((a, b) => a[2] - b[2]);
+  let parent = new Array(V + 1);
+  for (let i = 0; i <= V; i++) {
+    parent[i] = i;
+  }
+  let result = 0;
+
+  edges.forEach(edge => {
+    const [a, b, c] = edge;
+    if (findParent(parent, a) !== findParent(parent, b)) {
+      unionParent(parent, a, b);
+      result += c;
     }
   })
 
@@ -952,9 +1007,9 @@ function findParent(parent, x) {
   return parent[x];
 }
 
-function unionFind(parent, a, b) {
-  a = findParent(a);
-  b = findParent(b);
+function unionParent(parent, a, b) {
+  a = findParent(parent, a);
+  b = findParent(parent, b);
   if (a > b) {
     parent[a] = b;
   } else {
