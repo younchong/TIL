@@ -973,7 +973,8 @@ function unionFind(parent, a, b) {
   }
   return parent;
 }
-*/
+
+// 못품 원숭이 마을 연결
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const [V, E] = input[0].split(" ").map(v => +v);
@@ -1018,5 +1019,105 @@ function unionParent(parent, a, b) {
 
   return parent;
 }
+solution();
+
+//2864 greedy
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split(" ").map(v => +v);
+  const [A, B] = input;
+  const answer = [];
+  let stringA = A.toString();
+  let stringB = B.toString();
+  
+  if (stringA.includes(6) || stringB.includes(6)) {
+    while (stringA.includes(6) || stringB.includes(6)) {
+      stringA = stringA.replace("6", "5");
+      stringB = stringB.replace("6", "5")
+    } 
+    answer.push(stringA * 1 + stringB * 1);
+  } else {
+    answer.push(A + B)
+  }
+
+  if (stringA.includes(5) || stringB.includes(5)) {
+    while (stringA.includes(5) || stringB.includes(5)) {
+      stringA = stringA.replace("5", "6");
+      stringB = stringB.replace("5", "6")
+    } 
+    answer.push(stringA * 1 + stringB * 1);
+  } else {
+    answer.push(A + B)
+  }
+  // 최솟값은 둘다 5로 보는것이고, 최댓값은 둘다 6으로 보는것
+  console.log(answer.join(" "));
+
+}
+solution();
+*/
+//15686BOJ
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    "q",
+"1 2 0 2 1",
+"1 2 0 2 1",
+"1 2 0 2 1",
+"1 2 0 2 1",
+"1 2 0 2 1"
+  ]
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const graph = Array.from(new Array(N), () => new Array());
+  for (let i = 0; i < N; i++) {
+    graph[i] = input[i + 1].split(" ").map(v => +v);
+  }
+  // graph 0 index없이 구현, 그래서 각 좌표에서 1씩 빼줘야됨
+  const BBQ = [];
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (graph[y][x] === 2) {
+        BBQ.push([y, x]);
+      }
+    }
+  }
+  const getCombinations = function (arr, selectNumber) {
+    const results = [];
+    if (selectNumber === 1) return arr.map((value) => [value]); // 1개씩 택할 때, 바로 모든 배열의 원소 return
+  
+    arr.forEach((fixed, index, origin) => {
+      const rest = origin.slice(index + 1); // 해당하는 fixed를 제외한 나머지 뒤
+      const combinations = getCombinations(rest, selectNumber - 1); // 나머지에 대해서 조합을 구한다.
+      const attached = combinations.map((combination) => [fixed, ...combination]); //  돌아온 조합에 떼 놓은(fixed) 값 붙이기
+      results.push(...attached); // 배열 spread syntax 로 모두다 push
+    });
+  
+    return results; // 결과 담긴 results return
+  }
+  // 여기서 M곳을 선택해서 거리 계산
+  const selectedBBQ = getCombinations(BBQ, M);
+  let answer = Infinity;
+  while(selectedBBQ.length) {
+    const selected = selectedBBQ.pop();
+    let result = 0;
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        if (graph[y][x] === 1) {
+          let min = Infinity;
+          selected.forEach(solo => {
+            min = Math.min(min, getDistance(solo, [y, x]));
+          })
+          result += min;
+        }
+      }
+    }
+    answer = Math.min(answer, result);
+  }
+  return answer;
+}
+
+function getDistance(a, b) {
+  return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
+
+
 solution();
 module.exports = solution;

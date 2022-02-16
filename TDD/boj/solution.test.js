@@ -95,3 +95,10 @@ describe("BOJ 1922", () => {
   })
 })
 */
+const solution = require("./solution.js");
+
+describe("BOJ 15686", () => {
+  it ("solution", () => {
+    expect(solution()).toBe(32);
+  })
+})
