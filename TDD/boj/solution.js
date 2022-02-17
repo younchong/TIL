@@ -1053,7 +1053,7 @@ function solution() {
 
 }
 solution();
-*/
+
 //15686BOJ
 function solution() {
   //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -1120,4 +1120,61 @@ function getDistance(a, b) {
 
 
 solution();
+
+// boj 2579 DP
+function solution() {
+  const input =require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+  const N = input[0];
+  const stairs = input;
+  const dp = new Array(N + 1).fill(0);
+  dp[1] = [stairs[1], 0];
+  dp[2] = [dp[1][0] + stairs[2], stairs[2]];
+  for (let i = 3; i <=N; i++) {
+    dp[i] = [dp[i - 1][1]+ stairs[i], Math.max(...dp[i - 2]) + stairs[i]]
+  }
+  console.log(Math.max(...dp[N]));
+}
+
+solution();
+
+// boj tomato 시간초과
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [M, N] = input[0].split(" ").map(value => +value);
+  const graph = Array.from(new Array(N), () => new Array());
+  const queue = [];
+  for (let i = 1; i <= N; i++) {
+    graph[i - 1] = input[i].split(" ").map(v => +v);
+    let index = -1;
+    while(true) {
+      index = graph[i - 1].indexOf(1, index + 1);
+      if (index === - 1)break;
+      queue.push([i - 1, index]);
+    }
+  }
+  const my = [1, -1, 0, 0];
+  const mx = [0, 0, 1, -1];
+  let result = 0;
+
+  while(queue.length) {
+    const [qy, qx] = queue.shift();
+    for (let i = 0; i < 4; i++) {
+      const ny = qy + my[i];
+      const nx = qx + mx[i];
+      if (ny >= 0 && ny < N && nx >= 0 && nx < M) {
+        if (graph[ny][nx] === 0) {
+          graph[ny][nx] = graph[qy][qx] + 1;
+          queue.push([ny, nx]);
+          result = graph[ny][nx] - 1;
+        }
+      }
+    }
+  }
+
+  graph.forEach(row => row.find(el => el === 0 ? result = -1 : result));
+  console.log(result)
+}
+solution();
+*/
+
 module.exports = solution;
