@@ -1175,6 +1175,151 @@ function solution() {
   console.log(result)
 }
 solution();
-*/
 
+// boj 4963 20% 틀림
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  let index = 0;
+  while (true) {
+    const [N, M] = input[index].split(" ").map(value => +value);
+    if (N === 0 || M === 0) break;
+    const graph = Array.from(new Array(M), () => new Array());
+    const visited = Array.from(new Array(M), () => new Array(N).fill(false));
+    
+    for (let i = 0; i < M; i++) {
+      graph[i] = input[index + i + 1].split(" ").map(v => +v);
+    }
+
+    let count = 0;
+    for (let y = 0; y < M; y++) {
+      for (let x = 0; x < N; x++) {
+        if (graph[y][x] === 1 && !visited[y][x]) {
+          count++;
+          bfs(y, x);
+        }
+      }
+    }
+
+    function bfs(y, x) {
+      const queue = [];
+      queue.push([y, x]);
+      visited[y][x] = true;
+
+      const mx = [1, -1, 0, 0, 1, -1, 1, -1];
+      const my = [0, 0, 1, -1, 1, 1, -1, 1];
+
+      while (queue.length) {
+        const [qy, qx] = queue.shift();
+        for (let i = 0; i < 8; i++) {
+          const ny = qy + my[i];
+          const nx = qx + mx[i];
+          if (ny >= 0 && ny < M && nx >= 0 && nx < N) {
+            if (graph[ny][nx] === 1 && !visited[ny][nx]) {
+              visited[ny][nx] = true;
+              queue.push([ny, nx]);
+            }
+          }
+        }
+      }
+    }
+    index += M + 1;
+  }
+
+}
+
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().trim().split("\n").map(v => v.split(" ").map(x => +x));
+  const dir = [
+    [-1,0],
+    [-1,1],
+    [0,1],
+    [1,1],
+    [1,0],
+    [1,-1],
+    [0,-1],
+    [-1,-1]
+  ];
+  let answer = [];
+
+  for (let i = 0; i < input.length - 1; i++) {
+    const [N, M] = input[i];
+    const map = [];
+    for (let j = 1; j <= M; j++) {
+      map.push(input[j + i]);
+    }
+    i += M;
+
+    let count = 0;
+    for (let y = 0; y < M; y++) {
+      for (let x = 0; x < N; x++) {
+        if (map[y][x] === 1) {
+          count++;
+          let queue = [[y, x]];
+          while (queue.length) {
+            const [qy, qx] = queue.shift();
+            dir.forEach(v => {
+              const ny = qy + v[0];
+              const nx = qx + v[1];
+              if (ny >= 0 && ny < M && nx >= 0 && nx < N && map[ny][nx] === 1) {
+                map[ny][nx] = 0;
+                queue.push([ny, nx]);
+              }
+            })
+          }
+        }
+      }
+    }
+    answer.push(count);
+  }
+console.log(answer.join("\n"));
+}
+*/
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+let index = 0;
+  while (true) {
+    const [N, M] = input[index].split(" ").map(value => +value);
+    if (N === 0 || M === 0) break;
+    const graph = Array.from(new Array(M), () => new Array());
+ 
+    for (let i = 0; i < M; i++) {
+      graph[i] = input[index + i + 1].split(" ").map(v => +v);
+    }
+    let count = 0;
+    for (let y = 0; y < M; y++) {
+      for (let x = 0; x < N; x++) {
+        if (graph[y][x] === 1) {
+          count++;
+          bfs(y, x);
+        }
+      }
+    }
+
+    function bfs(y, x) {
+      const queue = [];
+      queue.push([y, x]);
+
+      const mx = [1, -1, 0, 0, 1, -1, 1, -1];
+      const my = [0, 0, 1, -1, 1, 1, -1, 1];
+
+      while (queue.length) {
+        const [qy, qx] = queue.shift();
+        for (let i = 0; i < 8; i++) {
+          const ny = qy + my[i];
+          const nx = qx + mx[i];
+          if (ny >= 0 && ny < M && nx >= 0 && nx < N && graph[ny][nx] === 1) {
+            queue.push([ny, nx]);
+            graph[ny][nx] = 0;
+          }
+        }
+      }
+    }
+      
+    console.log(count);
+    index += M + 1;
+  }
+
+}
+solution();
 module.exports = solution;
