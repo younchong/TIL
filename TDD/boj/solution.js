@@ -1274,7 +1274,6 @@ function solution() {
   }
 console.log(answer.join("\n"));
 }
-*/
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
 let index = 0;
@@ -1322,4 +1321,95 @@ let index = 0;
 
 }
 solution();
+
+// boj 1789
+function solution() {
+  const S = 200;
+  let cur = 1;
+  let interSum = 1;
+while (interSum <= S) {
+    cur++
+    interSum += cur;
+}
+
+console.log(cur - 1)
+}
+
+//1449 boj
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n")
+  const [N, L] = input[0].split(" ").map(v => +v);
+  const locations = input[1].split(" ").map(v => +v).sort((a, b) => a - b);
+  let count = 0;
+  let fix = 0;
+  for (let i = 0; i < N; i++) {
+    if (fix < locations[i]) {
+      count++;
+      fix = locations[i] + L - 1;
+    }
+
+  }
+
+  console.log(count);
+}
+solution();
+
+
+// boj 2583
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [M, N, K] = input[0].split(" ").map(v => +v);
+  const graph = Array.from(new Array(M), () => new Array(N).fill(0));
+  for (let i = 1; i <= K; i++) {
+    const location = input[i].split(" ").map(v => +v);
+    const leftBottom = [location[0], location[1]]; //x, y
+    const rightTop = [location[2] - 1, location[3] - 1];
+    for (let y = leftBottom[1]; y <= rightTop[1]; y++) {
+      for (let  x = leftBottom[0]; x <= rightTop[0]; x++) {
+        graph[y][x] = 1;
+      }
+    }
+  }
+  let count = 0;
+  let area = [];
+  for (let y = 0; y < M; y++) {
+    for (let x = 0; x < N; x++) {
+      if (graph[y][x] === 0) {
+        count++;
+        area.push(dfs(y, x));
+      }
+    }
+  }
+  console.log(count);
+  console.log(area.sort((a, b) => a - b).join(" "));
+
+  function dfs(y, x) {
+    const stack = [[y, x]];
+    graph[y][x] = 1;
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    let area = 1;
+    while (stack.length) {
+      const [qy, qx] = stack.pop();
+      
+      for (let i = 0; i < 4; i++) {
+        const ny = qy + move[i][0];
+        const nx = qx + move[i][1];
+        if (ny >= 0 && ny < M && nx >= 0 && nx < N) {
+          if (!graph[ny][nx]) {
+            area++;
+            stack.push([ny, nx]);
+            graph[ny][nx] = area;
+          }
+          
+        }
+      }
+    }
+    return area;
+  }
+
+}
+
+solution();
+*/
 module.exports = solution;
+
