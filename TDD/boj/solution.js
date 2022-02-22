@@ -1410,6 +1410,96 @@ function solution() {
 }
 
 solution();
-*/
-module.exports = solution;
 
+// 1057 brute force
+function solution() {
+  let [N, A, B] = [23781,15127, 15461];
+  let round = 0
+  while (A !== B) {
+    A = Math.round(A / 2);
+    B = Math.round(B / 2);
+    round++;
+  }
+  return round;
+}
+
+solution();
+
+
+// 4849  boj
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const answer = [];
+
+  for (let i = 0; i < input.length; i++) {
+    const sentence = input[i];
+    if (sentence === ".") break;
+    const stack = [];
+    let isBalanced = "yes";
+    for (let j = 0; j < sentence.length; j++) {
+      const letter = sentence[j];
+      if (letter === "(" || letter === "[") {
+        stack.push(letter);
+      } else if (letter === ")") {
+        if (stack.pop() === "(") {
+          isBalanced = "yes";
+        } else {
+          isBalanced = "no";
+          break;
+        }
+        
+      } else if (letter === "]") {
+        if (stack.pop() === "[") {
+          isBalanced = "yes";
+        } else {
+          isBalanced = "no";
+          break;
+        }
+      }
+    }
+    if (stack.length) isBalanced = "no";
+    answer.push(isBalanced);
+  }
+
+  console.log(answer.join("\n"));
+}
+
+solution();
+*/
+
+// boj 2644
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = input[0] * 1;
+  const target = input[1].split(" ").map(v => +v);
+  const m = input[2] * 1;
+  const relations = Array.from(new Array(N + 1), () => new Array(N + 1).fill(0));
+  const visited = new Array(N + 1).fill(false);
+  const queue = [];
+  for (let i = 3; i < m + 3; i++) {
+    const [x, y] = input[i].split(" ").map(v => +v);
+    relations[x][y] = 1;
+    relations[y][x] = 1;
+  }
+  queue.push([target[0], 0]);
+  visited[target[0]] = true;
+  
+  while (queue.length) {
+    const [start, count] = queue.shift();
+    const row = relations[start];
+    for (let i = 1; i < row.length; i++) {
+      if (row[i] === 1 && !visited[i]) {
+        visited[i] = count + 1;
+        if (i === target[1]) {
+          break;
+        }
+        queue.push([i, count + 1]);
+      }
+    }
+  }
+
+console.log(visited[target[1]] ? visited[target[1]] : -1);
+}
+
+solution();
+module.exports = solution;
