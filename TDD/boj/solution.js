@@ -1465,7 +1465,7 @@ function solution() {
 }
 
 solution();
-*/
+
 
 // boj 2644
 function solution() {
@@ -1499,6 +1499,229 @@ function solution() {
   }
 
 console.log(visited[target[1]] ? visited[target[1]] : -1);
+}
+
+solution();
+
+// 1753 레퍼런스 에러 나옴
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+const [V, E] = input[0].split(" ").map(v => +v);
+const startNode = +input[1];
+
+const Node = function (vertex, weight = 0) {
+    this.vertex = vertex;
+    this.weight = weight;
+    this.link = null;
+} 
+
+const Graph = function(size) {
+    this.graph = Array.from({length: size}, (e, i) => new Node(i));
+    
+    const insertNode = (v1, v2, w) => {
+        const v1Node = new Node(v1, w);
+        const v2Node = new Node(v2, w);
+        let graph1 = this.graph[v1];
+        
+        if (graph1.link === null) {
+            graph1.link = v2Node;
+        } else {
+            while (graph1.link !== null) {
+                graph1 = graph1.link
+            }
+            graph1.link = v2Node;
+        }
+        
+        return;
+    }
+    
+    Graph.prototype.insertEdge = function(v1, v2, w) {
+        insertNode(v1, v2, w);
+    }
+    
+    Graph.prototype.getGraph = function() {
+        return this.graph;
+    }
+}
+
+const heapPush = (h, g, move, isVisited) => {
+    while(g.link !== null) {
+        g = g.link;
+        
+        let idx = g.vertex;
+        
+        if (!isVisited[idx]) {
+            if (!h.length) h.push({v: g.vertex, w: g.weight + move});
+            else {
+                if (h[0].w > g.weight) {
+                    let temp = h[0];
+                    h[0] = {v: g.vertex, w: g.weight + move};
+                    h.push(temp);
+                } else {
+                    h.push({v: g.vertex, w: g.weight + move});
+                }
+            }
+        }
+    }
+}
+
+const heapPop = (h) => {
+    const item = h[0];
+    const lastItem = h.pop();
+    let idx = 0;
+    
+    if (!h.length) return item;
+    
+    h[0] = lastItem;
+    
+    while (h[idx * 2 + 1] || h[idx * 2 + 2]) {
+        let temp = 0;
+        
+        if (h[0].w > h[idx * 2 + 1].w) {
+            temp = h[0];
+            h[0] = h[idx * 2 + 1];
+            h[idx * 2 + 1] = temp;
+            idx = idx * 2 + 1;
+        } else if (h[0].w > h[index * 2 + 2].w) {
+            temp = h[0];
+            h[0] = h[idx * 2 + 2];
+            h[idx * 2 + 2] = temp;
+            idx = idx * 2 + 2;
+        } else idx++;
+    }
+    return item;
+}
+
+const dijkstra = (start, graph) => {
+    const size = graph.length;
+    const isVisited = new Array(size).fill(false);
+    const dist = [];
+    const heap = [];
+    let move = 0;
+    let idx = start;
+    let g = graph[idx];
+    heap.push({v:g.vertex, w:g.weight});
+    
+    while (heap.length) {
+        g = heapPop(heap);
+        idx = g.v;
+        
+        if (!isVisited[idx]) {
+            isVisited[idx] = true;
+            move = g.w;
+            dist[idx] = move;
+            heapPush(heap, graph[idx], move, isVisited);
+        }
+    }
+    
+    for (let i = 1; i <= V; i++) {
+        console.log(dist[i] || dist[i] === 0 ? dist[i] : "INF");
+    }
+}
+
+const main = (function() {
+    const graph = new Graph(E);
+    for (let i = 2; i < 2 + E; i++) {
+        const [a, b, w] = input[i].split(" ").map(v => +v);
+        graph.insertEdge(a, b, w);
+    }
+    
+    dijkstra(startNode, graph.getGraph());
+}());
+}
+solution();
+*/
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  class minHeap {
+    constructor() {
+      this.heap = [];
+    }
+
+    size() {
+      return this.heap.length;
+    }
+
+    swap(a, b) {
+        [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    } 
+    
+    add([vertex, weight]) {
+      this.heap.push([vertex, weight]);
+      let index = this.heap.length - 1;
+
+      while (index > 0) {
+        if (Math.floor((index - 1) / 2) >= 0 && this.heap[index][1] < this.heap[Math.floor((index - 1) / 2)][1]) {
+          this.swap(index, Math.floor((index - 1) / 2));
+          index = Math.floor((index - 1) / 2)
+        } else break;
+      }
+    }
+
+    remove() {
+      
+      this.swap(0, this.heap.length - 1);
+      const deleted = this.heap.pop();
+      let index = 0;
+
+      while (index * 2 + 1 < this.heap.length) {
+        let minIndex = index * 2 + 1;
+        let minValue = this.heap[index * 2 + 1];
+        if (index * 2 + 2 < this.heap.length && this.heap[index * 2 + 2][1] < this.heap[minIndex][1]) {
+          minIndex = index * 2 + 2;
+          minValue = this.heap[index * 2 + 2];
+        }
+
+        if (this.heap[index][1] > this.heap[minIndex][1]) {
+          this.swap(index, minIndex);
+          index = minIndex;
+        } else break;
+      }
+
+      return deleted;
+    }
+
+  } // heap end
+
+  const [V, E] = input[0].split(" ").map(v => +v);
+  const K = +input[1];
+  const graph = Array.from({length: V + 1}, () => []);
+  const isVisited = new Array(V + 1).fill(false);
+  const heap = new minHeap();
+  const dist = Array.from({length: V + 1}, () => Infinity);
+  for  (let i = 2; i < E + 2; i++) {
+    const [src, dst, weight] = input[i].split(" ").map(v => +v);
+    graph[src].push([dst, weight]);
+  }
+
+  heap.add([K, 0]);
+  dist[K] = 0;
+
+  while(heap.size()) {
+    const [vertex, weight] = heap.remove();
+
+    graph[vertex].forEach((v) => {
+      const [dst, weight] = v;
+      if (!isVisited[dst] && dist[dst] > dist[vertex] + weight) {
+        dist[dst] = dist[vertex] + weight;
+        heap.add([dst, dist[dst]]);
+      }
+    });
+    isVisited[vertex] = true;
+  }
+
+  const answer = [];
+
+  dist.forEach((v, k) => {
+    if (k) {
+      if(v === Infinity) {
+        answer.push("INF");
+      } else {
+        answer.push(v);
+      }
+    }
+  })
+  console.log(answer.join("\n"));
 }
 
 solution();
