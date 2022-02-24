@@ -1630,7 +1630,7 @@ const main = (function() {
 }());
 }
 solution();
-*/
+
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   class minHeap {
@@ -1722,6 +1722,177 @@ function solution() {
     }
   })
   console.log(answer.join("\n"));
+}
+
+solution();
+
+
+// boj 18532 시간초과, 다익스트라 사용
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M, K, X] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: N + 1}, () => new Array());
+  const dist = new Array(N + 1).fill(Infinity);
+  const isVisited = new Array(N + 1).fill(false);
+  const heap = [];
+  for (let i = 1; i < M + 1; i++) {
+    const [A, B] = input[i].split(" ").map(v => +v);
+    graph[A].push([B, 1]);
+  }
+
+  heap.push([X, 0]);
+  dist[X] = 0;
+
+  while(heap.length) {
+    const [origin, weight] = heap.shift();
+
+    graph[origin].forEach(v => {
+      const [dst, w] = v;
+      
+      if (!isVisited[dst] && dist[dst] > dist[origin] + w) {
+        dist[dst] = dist[origin] + w;
+        heap.push([dst, dist[dst]]);
+      }
+    })
+    isVisited[origin] = true;
+  }
+
+  const answer = []
+  dist.filter((v, i) => {
+    if (v === K) {
+      answer.push(i);
+    }
+  });
+  console.log(answer.length ? answer.join("\n") : -1);
+}
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M, K, X] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: N + 1}, () => new Array());
+  const dist = new Array(N + 1).fill(Infinity);
+  const isVisited = new Array(N + 1).fill(false);
+  for (let i = 1; i < M + 1; i++) {
+    const [A, B] = input[i].split(" ").map(v => +v);
+    graph[A].push(B);
+  }
+  const queue = [X];
+  dist[X] = 0;
+
+  while (queue.length) {
+    const vertex = queue.shift();
+    graph[vertex].forEach(v => {
+      if (!isVisited[v] && dist[v] > dist[vertex] + 1) {
+        dist[v] = dist[vertex] + 1;
+        queue.push(v);
+      }
+    })
+    isVisited[vertex] = true;
+  }
+  const answer = [];
+  dist.forEach((v, i) => {
+    if (v === K) {
+      answer.push(i);
+    }
+  })
+  console.log(answer)
+}
+solution();
+*/
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  let index = 0;
+
+  class MinHeap {
+    constructor() {
+      this.heap = [];
+    }
+
+    show() {
+      console.log(this.heap);
+    }
+
+    size() {
+      return this.heap.length;
+    }
+
+    swap(a, b) {
+        [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    } 
+    
+    add([vertex, weight]) {
+      this.heap.push([vertex, weight]);
+      let index = this.heap.length - 1;
+
+      while (index > 0) {
+        if (Math.floor((index - 1) / 2) >= 0 && this.heap[index][1] < this.heap[Math.floor((index - 1) / 2)][1]) {
+          this.swap(index, Math.floor((index - 1) / 2));
+          index = Math.floor((index - 1) / 2)
+        } else break;
+      }
+    }
+
+    remove() {
+      
+      this.swap(0, this.heap.length - 1);
+      const deleted = this.heap.pop();
+      let index = 0;
+
+      while (index * 2 + 1 < this.heap.length) {
+        let minIndex = index * 2 + 1;
+        let minValue = this.heap[index * 2 + 1];
+        if (index * 2 + 2 < this.heap.length && this.heap[index * 2 + 2][1] < this.heap[minIndex][1]) {
+          minIndex = index * 2 + 2;
+          minValue = this.heap[index * 2 + 2];
+        }
+
+        if (this.heap[index][1] > this.heap[minIndex][1]) {
+          this.swap(index, minIndex);
+          index = minIndex;
+        } else break;
+      }
+
+      return deleted;
+    }
+  } 
+  let solNum = 1;
+  const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  while (parseInt(input[index]) !== 0) {
+    const N = parseInt(input[index])
+    const graph = [];
+    const dist = Array.from({length: N}, () => new Array(N).fill(Infinity));
+    const isVisited = Array.from({length: N}, () => new Array(N).fill(false));
+    const heap = new MinHeap();
+    for (let i = index + 1; i <= index + N; i++ ) {
+      graph.push(input[i].split(" ").map(v => +v));
+    }
+    heap.add([[0, 0], graph[0][0]]);
+    dist[0][0] = graph[0][0];
+
+    while (heap.size()) {
+      const [position, weight] = heap.remove();
+      //console.log(position)
+      for (let i = 0 ; i < 4; i++) {
+        const [ny, nx] = [position[0] + move[i][0], position[1] + move[i][1]];
+        
+        if (ny >= 0 && ny < N && nx >= 0 && nx < N && !isVisited[ny][nx]) {
+          if (dist[ny][nx] > dist[position[0]][position[1]] + graph[ny][nx]) {
+            dist[ny][nx] = dist[position[0]][position[1]] + graph[ny][nx];
+            //console.log(dist);
+            heap.add([[ny, nx], dist[ny][nx]]);
+          }
+        }
+      }
+      
+      isVisited[position[0]][position[1]] = true;
+    }
+    console.log(`Problem ${solNum}: ${dist[N -1][N -1]}`);
+
+
+    index += N + 1;
+    solNum++;
+  } 
 }
 
 solution();
