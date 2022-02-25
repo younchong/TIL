@@ -1798,7 +1798,7 @@ function solution() {
   console.log(answer)
 }
 solution();
-*/
+
 
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -1893,6 +1893,189 @@ function solution() {
     index += N + 1;
     solNum++;
   } 
+}
+
+
+//boj 1238 dijkstra 
+// 답은 나오는데 reference error
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M, X] = input[0].split(" ").map(v => +v);
+  const graph = Array.from(new Array(N + 1), () => new Array());
+  const result = new Array(N + 1).fill(0);
+
+  for (let i = 1; i <= M; i++) {
+    const [A, B, T] = input[i].split(" ").map(v => +v);
+    graph[A].push([B, T])
+  }
+  // 각자의 dist 구해서 비교
+  let index = 1;
+  while (index <= N) {
+    let isVisited = new Array(N + 1).fill(false);
+    let heap = new MinHeap();
+    let dist = new Array(N + 1).fill(Infinity);
+    heap.add([index, 0]);
+    dist[index] = 0;
+    while (heap.size()) {
+      const [vertex, weight] = heap.remove();
+      
+      graph[vertex].forEach(v => {
+        const [dst, w] = v;
+        if (dist[dst] > dist[vertex] + w && !isVisited[dst]) {
+          dist[dst] = dist[vertex] + w;
+          heap.add([dst, dist[dst]]);
+        }
+      })
+      isVisited[vertex] = true;
+      
+    }
+    
+    if (index === X) {
+      result.forEach((v, i) => result[i] += dist[i]);
+    } else {
+      result[index] += dist[X];
+    }
+    index++;
+  }
+  result.shift()
+  console.log(Math.max(...result));
+}
+
+function MinHeap() {
+  this.heap = [];
+
+  this.size = () => this.heap.length;
+
+  this.swap = (a, b) => {
+    [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+  }
+
+  this.add = ([vertex, weight]) => {
+    this.heap.push([vertex, weight]);
+    let index = this.heap.length - 1;
+    while (index > 0) {
+      if (Math.floor((index - 1) / 2) > 0 && this.heap[Math.floor((index - 1) / 2)][1] > this.heap[index][1]) {
+        swap(index, Math.floor((index - 1) / 2));
+        index = Math.floor((index - 1) / 2);
+      } else break;
+    }
+  }
+
+  this.remove = () => {
+    const deleted = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap.pop();
+    let index = 0;
+
+    while(index * 2 + 1 < this.heap.length) {
+      let minValue = this.heap[index * 2 + 1][1];
+      let minIndex = index * 2 + 1;
+      if (index * 2 + 2 < this.heap.length && minValue > this.heap[index * 2 + 2][1]) {
+        minValue = this.heap[index * 2 + 2][1];
+        minIndex = index * 2 + 2;
+      }
+
+      if (minValue > this.heap[index][1]) {
+        swap(index, minIndex);
+        index = minIndex;
+      } else break;
+    }
+
+    return deleted;
+  }
+}
+solution();
+*/
+
+//boj dijkstra 1916
+function solution() {
+  //const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const input = [
+    5,
+8,
+"1 2 2",
+"1 3 3",
+"1 4 1",
+"1 5 10",
+"2 4 2",
+"3 4 1",
+"3 5 1",
+"4 5 3",
+"1 5"
+  ]
+  const N = +input[0];
+  const M = +input[1];
+  const [start, destination] = input[M + 2].split(" ").map(v => +v) ;
+  const graph = Array.from({length: N + 1}, () => []);
+  for (let i = 2; i < M + 2; i++) {
+    const [A, B, W] = input[i].split(" ").map(v => +v);
+    graph[A].push([B, W]);
+  }
+  const heap = new MinHeap();
+  const dist = new Array(N + 1).fill(Infinity);
+  const isVisited = new Array(N + 1).fill(false);
+
+  heap.add([start, 0]);
+  dist[start] = 0;
+
+  while (heap.size()) {
+    const [vertex, weight] = heap.remove();
+
+    graph[vertex].forEach(v => {
+      const [dst, w] = v;
+      if (dist[dst] > dist[vertex] + w) {
+        dist[dst] = dist[vertex] + w;
+        heap.add([dst, dist[dst]]);
+      }
+    })
+    isVisited[vertex] = true;
+  }
+
+  return(dist[destination]);
+}
+
+function MinHeap() {
+  this.heap = [];
+
+  this.size = () => this.heap.length;
+
+  this.swap = (a, b) => {
+    [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+  }
+
+  this.add = ([vertex, weight]) => {
+    this.heap.push([vertex, weight]);
+    let index = this.heap.length - 1;
+    while (index > 0) {
+      if (Math.floor((index - 1) / 2) > 0 && this.heap[Math.floor((index - 1) / 2)][1] > this.heap[index][1]) {
+        this.swap(index, Math.floor((index - 1) / 2));
+        index = Math.floor((index - 1) / 2);
+      } else break;
+    }
+  }
+
+  this.remove = () => {
+    const deleted = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap.pop();
+    let index = 0;
+
+    while(index * 2 + 1 < this.heap.length) {
+      let minValue = this.heap[index * 2 + 1][1];
+      let minIndex = index * 2 + 1;
+      if (index * 2 + 2 < this.heap.length && minValue > this.heap[index * 2 + 2][1]) {
+        minValue = this.heap[index * 2 + 2][1];
+        minIndex = index * 2 + 2;
+      }
+
+      if (minValue > this.heap[index][1]) {
+        this.swap(index, minIndex);
+        index = minIndex;
+      } else break;
+    }
+
+    return deleted;
+  }
 }
 
 solution();
