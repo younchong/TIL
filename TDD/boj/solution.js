@@ -1985,7 +1985,7 @@ function MinHeap() {
   }
 }
 solution();
-*/
+
 
 //boj dijkstra 1916
 function solution() {
@@ -2076,6 +2076,37 @@ function MinHeap() {
 
     return deleted;
   }
+}
+
+solution();
+*/
+// boj 1543 greedy
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const origin = input[0].split("");
+  const target = input[1].split("");
+  let count = 0;
+
+  for (let i = 0; i < origin.length - target.length + 1; i++) {
+    if (origin[i] === target[0]) {
+      let index = 0;
+      let isSame = true;
+      while (index < target.length) {
+        if (origin[i + index] === target[index]) {
+          index++;
+        } else {
+          isSame = false;
+          break;
+        }
+      }
+      
+      if (isSame) {
+        i += target.length - 1;
+        count++;
+      }
+    }
+  }
+  console.log(count);
 }
 
 solution();
