@@ -2079,7 +2079,7 @@ function MinHeap() {
 }
 
 solution();
-*/
+
 // boj 1543 greedy
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -2110,4 +2110,103 @@ function solution() {
 }
 
 solution();
+
+// boj 1389
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: N + 1}, () => new Array());
+  for (let i = 1; i <= M; i++) {
+    const [a, b] = input[i].split(" ").map(v => +v);
+    graph[a].push(b);
+    graph[b].push(a);
+  }
+  let minValue = Infinity;
+  let minIndex = null;
+  for (let i = 1; i <= N; i++) {
+    const queue = [i];
+    const visited = new Array(N + 1).fill(0);
+    while (queue.length) {
+      const start = queue.shift();
+      for (let i = 0; i < graph[start].length; i++) {
+        const next = graph[start][i];
+        if (!visited[next]) {
+          visited[next] = visited[start] + 1;
+          queue.push(next);
+        }
+        
+      }
+    }
+
+    if (minValue > visited.reduce((a, c) => a + c)) {
+      minIndex = i
+      minValue = visited.reduce((a, c) => a + c)
+    }
+  }
+  console.log(minIndex);
+}
+//clear
+solution();
+
+
+// boj 1325 unsolved, don't know reason
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: N + 1}, () => new Array());
+  for (let i = 1; i <= M; i++) {
+    const [A, B] = input[i].split(" ").map(v => +v);
+    graph[B].push(A);
+  }
+  let maxValue= 0;
+  const result = [];
+  for (let i = 1 ; i <= N; i++) {
+    const queue = [i];
+    const visited = new Array(N + 1).fill(0);
+    let count = 0;
+    while (queue.length) {
+      const start = queue.shift();
+      for (let i = 0; i < graph[start].length; i++) {
+        const next = graph[start][i];
+        if (!visited[next]) {
+          visited[next] = visited[start] + 1;
+          queue.push(next);
+        }
+        
+      }
+      // graph[start].forEach((v) => {
+      //   if (!visited[v]) {
+      //     visited[v] = visited[start] + 1;
+      //     queue.push(v);
+      //   }
+      // })
+    }
+    result.push(Math.max(...visited));
+    maxValue <= Math.max(...visited) ? maxValue = Math.max(...visited) : 0;
+  }
+  const answer = result.map((v, i) => {
+      if (v === maxValue) {
+          return i + 1;
+      }
+  })
+  console.log(answer.sort((a, b) => a - b).join(" "));
+}
+
+solution();
+
+*/
+// boj 2251, 케이스 다 나눠서 풀어야함... 아직 잘 모르겠다.
+function solution() {
+  const [A, B, C] = require("fs").readFileSync("./input.txt").toString().split(" ").map(v => +v);
+  const bottle = new Array(3).fill(0);
+  bottle[2] = C;
+  const answer = [];
+
+  while (true) {
+    //b에 가득 채우는 방법
+    // a에 채우고 비로 옮기는 방법
+    // b 거치는 방법
+    // a 거치는 방법
+  }
+}
 module.exports = solution;
