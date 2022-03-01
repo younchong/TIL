@@ -2194,8 +2194,8 @@ function solution() {
 
 solution();
 
-*/
-// boj 2251, 케이스 다 나눠서 풀어야함... 아직 잘 모르겠다.
+
+// boj 2251, 케이스 다 나눠서 풀어야함... 아직 잘 모르겠다. unsolved
 function solution() {
   const [A, B, C] = require("fs").readFileSync("./input.txt").toString().split(" ").map(v => +v);
   const bottle = new Array(3).fill(0);
@@ -2209,4 +2209,87 @@ function solution() {
     // a 거치는 방법
   }
 }
+
+
+
+// boj 16198  backtracking pass
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const marbles = input[1].split(" ").map(v => +v);
+  const visited = new Array(N).fill(false);
+  let max = 0;
+  const output = []
+  const result = [];
+
+  function recur (num) {
+    if (num === marbles.length - 2) {
+      result.push([...output]);
+      return;
+    }
+
+    for (let i = 1; i < marbles.length - 1; i++) {
+      if (visited[i])continue;
+      visited[i] = true;
+      output.push(i);
+      recur(num + 1);
+      output.pop();
+      visited[i] = false;
+    }
+  }
+  
+  recur(0);
+
+  while (result.length) {
+    const order = result.pop();
+    const visited = new Array(marbles.length).fill(false);
+    let sum = 0;
+    order.forEach(selecIndex => {
+      visited[selecIndex] = true;
+      let prevIndex = selecIndex - 1;
+      let nextIndex = selecIndex + 1;
+      while (visited[prevIndex]) {
+        prevIndex--;
+      }
+      while (visited[nextIndex]) {
+        nextIndex++;
+      }
+      
+      sum += marbles[prevIndex] * marbles[nextIndex];
+    })
+
+    max = Math.max(max, sum);
+  }
+  
+  console.log(max);
+}
+
+solution();
+*/
+
+// 1940 boj two poiner pass
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const M = +input[1];
+  const materials = input[2].split(" ").map(v => +v).sort((a, b) => a - b);
+  let count = 0;
+  let left = 0;
+  let right = N - 1;
+  while (left < right) {
+    let sum = materials[left] + materials[right];
+    if (sum === M) {
+      count++;
+      left++;
+    } else if (sum < M) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+
+  console.log(count);
+}
+
+solution();
 module.exports = solution;
