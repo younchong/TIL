@@ -2265,7 +2265,7 @@ function solution() {
 }
 
 solution();
-*/
+
 
 // 1940 boj two poiner pass
 function solution() {
@@ -2291,5 +2291,130 @@ function solution() {
   console.log(count);
 }
 
+solution();
+
+
+// boj 11404 플로이드 pass
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const M = +input[1];
+  const result = Array.from({length: N + 1}, () => new Array(N + 1).fill(Infinity));
+  for (let i = 1; i <= N; i++) {
+    result[i][i] = 0;
+  }
+
+  for (let i = 2; i < 2 + M; i++) {
+    const [start, destination, cost] = input[i].split(" ").map(v => +v);
+    result[start][destination] = Math.min(result[start][destination], cost);
+  }
+
+  for (let k = 1; k < N + 1; k++) {
+    for (let j = 1; j < N + 1; j++) {
+      for (let i = 1; i < N + 1; i++) {
+        if (result[j][i] > result[j][k] + result[k][i]) {
+          result[j][i] = result[j][k] + result[k][i];
+        }
+      }
+    }
+  }
+let answer = "";
+  for (let i = 1; i < N + 1; i++) {
+    for (let j = 1; j < N + 1; j++) {
+      if (result[i][j] === Infinity) {
+        result[i][j] = 0;
+      }
+      answer += `${result[i][j]} `
+    }
+    answer += "\n";
+  }
+  console.log(answer);
+}
+
+solution();
+
+// boj 11403 pass
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const result = Array.from({length: N}, () => new Array(N).fill(Infinity));
+  
+
+  for (let start = 1; start < N + 1; start++) {
+    const destinations = input[start].split(" ").map(v => +v);
+    destinations.forEach((value, destination) => {
+      if (value) {
+        result[start - 1][destination] = 1;
+      }
+    })
+  }
+
+  for (let k = 0; k < N; k++) {
+    for (let j = 0; j < N; j++) {
+      for (let i = 0; i < N; i++) {
+        if (result[j][i] === Infinity && result[j][k] + result[k][i] !== Infinity) {
+          result[j][i] = 1;
+        }
+      }
+    }
+  }
+  let answer = "";
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      if (result[i][j] === Infinity) {
+        result[i][j] = 0;
+      }
+      answer += `${result[i][j]} `;
+    }
+    answer += "\n";
+  }
+  console.log(answer);
+}
+
+
+// boj 1058 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const relations = Array.from({length: N}, () => new Array(N).fill(0));
+  for (let i = 1; i < N + 1; i++) {
+    const relation = input[i].split("");
+    relation.forEach((v, index) => {
+      if (v === "Y") {
+        relations[i - 1][index] = 1;
+      }
+    })
+  }
+
+  console.log(relations);
+}
+// 플로이드 와샬과 BFS라고 생각...  아직 모르겟음
+*/
+
+// boj 10159 unsolved 모르겠음
+function solution() {
+  const input =require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const M = +input[1];
+  const result = Array.from({length: N + 1}, () => new Array(N + 1).fill(0));
+  
+  for (let i = 2; i < 2 + M; i++) {
+    const [a, b] = input[i].split(" ").map(v => +v);
+    result[a][b] = 1;
+  }
+
+  for (let k = 1; k < N + 1; k++) {
+    for (let j = 1; j < N + 1; j++) {
+      for (let i = 1; i < N + 1; i++) {
+        if (!result[j][i] && result[j][k] && result[k][i]) {
+          result[j][i] = Math.max(result[j][i], result[j][k] + result[k][i]);
+        }
+        
+      }
+    }
+  }
+
+  console.log(result.join("\n"));
+}
 solution();
 module.exports = solution;
