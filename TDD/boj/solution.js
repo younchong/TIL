@@ -2371,6 +2371,167 @@ function solution() {
   console.log(answer);
 }
 
+// boj 10159 unsolved 모르겠음
+function solution() {
+  const input =require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const M = +input[1];
+  const result = Array.from({length: N + 1}, () => new Array(N + 1).fill(Infinity));
+  
+  for (let i = 2; i < 2 + M; i++) {
+    const [a, b] = input[i].split(" ").map(v => +v);
+    result[a][b] = 1;
+  }
+
+  for (let k = 1; k < N + 1; k++) {
+    for (let j = 1; j < N + 1; j++) {
+      for (let i = 1; i < N + 1; i++) {
+        if (result[j][i] > result[j][k] +result[k][i]) {
+          result[j][i] = Math.min(result[j][i], result[j][k] + result[k][i]);
+        }
+        
+      }
+    }
+  }
+
+  console.log(result.join("\n"));
+}
+
+// boj 11265 solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const road = Array.from({length: N}, () => new Array());
+  for (let i = 1; i < N + 1; i++) {
+    road[i - 1] = input[i].split(" ").map(v => +v);
+  }
+  
+  for (let k = 0; k < N; k++) {
+    for (let j = 0; j < N; j++) {
+      for (let i = 0; i < N; i++) {
+        if (road[j][i] > road[j][k] + road[k][i]) {
+          road[j][i] = road[j][k] + road[k][i];
+        }
+      }
+    }
+  }
+  
+  for (let i = N + 1; i < N + 1 + M; i++) {
+    const [now, next, time] = input[i].split(" ").map(v => +v);
+    if (road[now - 1][next - 1] <= time) {
+      console.log("Enjoy other party")
+    } else {
+      console.log("Stay here");
+    }
+  }
+
+}
+
+
+// boj 18243 solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, K] = input[0].split(" ").map(v => +v);
+  const relation = Array.from({length: N + 1}, () => new Array(N + 1).fill(Infinity));
+  for (let i = 1; i < K + 1; i++) {
+    const [a, b] = input[i].split(" ").map(v => +v);
+    relation[a][b] = 1;
+    relation[b][a] = 1;
+  }
+
+  for (let k = 1; k < N + 1; k++) {
+    for (let j = 1; j < N + 1; j++) {
+      for (let i = 1; i < N + 1; i++) {
+        if (relation[j][i] > relation[j][k] && relation[k][i]) {
+          relation[j][i] = Math.min(relation[j][i], relation[j][k] + relation[k][i]); 
+        }
+      }
+    }
+  }
+
+  for (let i = 1; i < N + 1; i++) {
+    for (let j = 1; j < N + 1; j++) {
+      if (relation[i][j] > 6 || relation[i][j] === Infinity) {
+        console.log("Big World!");
+        return;
+      } 
+    }
+  }
+
+  console.log("Small World!")
+}
+
+// boj 11581 solved pass ,자기 자신으로 돌아오는 길과 처음 1에서 출발해서 도착하는지를 확인해야 됨
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const road = Array.from({length: N + 1}, () => new Array(N + 1).fill(Infinity));
+  for (let i = 1; i <= (N - 1) * 2; i = i + 2) {
+    const nodeCount = +input[i];
+    const intersection = input[i + 1].split(" ").map(v => +v);
+    for (let j = 0; j < nodeCount; j++) {
+      const node = intersection[j];
+      road[Math.floor(i / 2) + 1][node] = 1;
+    }
+  }
+
+  for (let k = 1; k < N + 1; k++) {
+    for (let j = 1; j < N + 1; j++) {
+      for (let i = 1; i < N + 1; i++) {
+        road[j][i] = Math.min(road[j][i], road[j][k] + road[k][i]);
+      }
+      
+    }
+  }
+  console.log(road);
+  for (let i = 1; i < N; i++) {
+    if (road[i][i] !== Infinity && road[1][i] !== Infinity) {
+      console.log("CYCLE");
+      return;
+    }
+  }
+
+  console.log("NO CYCLE");
+}
+
+// boj 2458 
+function solution() {
+  // 비교결과가 전부다 있으면 자신의 위치 알 수 있음
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const students = Array.from({length: N + 1}, () => new Array(N + 1).fill(Infinity));
+  for (let i = 1; i < M + 1; i++) {
+    const [smaller, bigger] = input[i].split(" ").map(v => +v);
+    students[smaller][bigger] = 1;
+  }
+
+  for (let k = 1 ; k < N + 1; k++) {
+    for (let j = 1 ; j < N + 1; j++) {
+      for (let i = 1 ; i < N + 1; i++) {
+        if (students[j][i] > students[j][k] + students[k][i] && i !== j) {
+          students[j][i] =  students[j][k] + students[k][i];
+        }
+      }
+    }
+  }
+  console.log(students.join("\n"))
+let count = 0;
+  for (let i = 1; i < N + 1; i++) {
+    let flag = 0;
+    for (let j = 1; j < N + 1; j++) {
+      if (students[i][j] === Infinity && students[j][i] === Infinity && i !== j) {
+        flag = 1;
+      }
+    }
+    if (!flag)count++;
+  }
+
+  console.log(count);
+}
+// 끝에서 컨트롤 
+
+*/
+
 
 // boj 1058 
 function solution() {
@@ -2389,32 +2550,6 @@ function solution() {
   console.log(relations);
 }
 // 플로이드 와샬과 BFS라고 생각...  아직 모르겟음
-*/
-
-// boj 10159 unsolved 모르겠음
-function solution() {
-  const input =require("fs").readFileSync("./input.txt").toString().split("\n");
-  const N = +input[0];
-  const M = +input[1];
-  const result = Array.from({length: N + 1}, () => new Array(N + 1).fill(0));
-  
-  for (let i = 2; i < 2 + M; i++) {
-    const [a, b] = input[i].split(" ").map(v => +v);
-    result[a][b] = 1;
-  }
-
-  for (let k = 1; k < N + 1; k++) {
-    for (let j = 1; j < N + 1; j++) {
-      for (let i = 1; i < N + 1; i++) {
-        if (!result[j][i] && result[j][k] && result[k][i]) {
-          result[j][i] = Math.max(result[j][i], result[j][k] + result[k][i]);
-        }
-        
-      }
-    }
-  }
-
-  console.log(result.join("\n"));
-}
+// 내일 재도전
 solution();
 module.exports = solution;
