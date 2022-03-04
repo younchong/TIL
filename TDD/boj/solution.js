@@ -2515,7 +2515,7 @@ function solution() {
     }
   }
   console.log(students.join("\n"))
-let count = 0;
+  let count = 0;
   for (let i = 1; i < N + 1; i++) {
     let flag = 0;
     for (let j = 1; j < N + 1; j++) {
@@ -2530,26 +2530,102 @@ let count = 0;
 }
 // 끝에서 컨트롤 
 
-*/
-
-
 // boj 1058 
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const N = +input[0];
-  const relations = Array.from({length: N}, () => new Array(N).fill(0));
+  const relations = Array.from({length: N}, () => new Array(N).fill(Infinity));
   for (let i = 1; i < N + 1; i++) {
     const relation = input[i].split("");
     relation.forEach((v, index) => {
       if (v === "Y") {
         relations[i - 1][index] = 1;
+        if (i - 1 === index) {
+          relations[i - 1][index] = 0;
+        }
       }
     })
   }
 
-  console.log(relations);
+  for (let k = 0; k < N; k++) {
+    for (let j = 0; j < N; j++) {
+      for (let i = 0; i < N; i++) {
+        if (relations[j][i] > relations[j][k] + relations[k][i]) {
+          relations[j][i] = relations[j][k] + relations[k][i]
+        }
+      }
+    }
+  }
+  let max = 0;
+  for (let i = 0; i < N; i++) {
+    let count = 0;
+    for (let j = 0; j < N; j++) {
+      if (relations[i][j] <= 2 && i !== j) {
+        count++;
+      }
+    }
+    max = Math.max(max, count);
+  }
+  console.log(max)
 }
 // 플로이드 와샬과 BFS라고 생각...  아직 모르겟음
 // 내일 재도전
+// 처음 relations 설정할 때 친구관계 아닐때 0으로 설정한게 오류였다. 관계 없을 땐 Infinity, 플로이드와샬이라서 꼭 그러기 보단. 식의 관계
+// 그래프에서 관계 없을 땐 Infinity!
+
+
+function solution() {
+  const [X, Y] = require("fs").readFileSync("./input.txt").toString().split(" ").map(v => +v);
+  const Z = Math.floor(100 * Y / X);
+  if (Z >= 99) {
+    console.log(-1);
+    return;
+  }
+  let count = 0;
+  while (true) {
+    count++;
+    if (Math.floor(100 * (Y + count) / (X + count)) !== Z) {
+      console.log(count);
+      return;
+    }
+  }
+}
+*/
+
+// boj 1966
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  for (let i = 1; i <= N * 2; i = i + 2) {
+    const [N, M] = input[i].split(" ").map(v => +v); // 문서의 갯수와 타겟 문서
+    let priorities = input[i + 1].split(" ").map(v => +v); // 이걸 애초에 객체로 만들어서 index로 구분
+    const chart = {};
+    for (let j = 0; j < priorities.length; j++) {
+      chart[j] = priorities[j];
+    }
+    const target = priorities[M];
+    console.log(Object.values(chart).indexOf(target));
+    let priority = Math.max(...priorities);
+    let count = 0;
+    let isFind = true;
+    console.log(`${i}번째 ${target}`)
+
+    // target change target을 중요도 같은 것과 구분지어줄 새로운 배열로 만들어야 된다고 생각 고민
+    while (isFind) {
+      let out = priorities.shift();
+      if (out === target && out === priority) {
+        count++;
+        console.log(count);
+        isFind = false;
+        break;
+      } else if (out === priority ) {
+        count++;
+        priority = Math.max(...priorities);
+      } else {
+        priorities.push(out);
+      }
+    }
+  }
+}
 solution();
 module.exports = solution;
