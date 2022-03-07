@@ -2590,42 +2590,134 @@ function solution() {
     }
   }
 }
-*/
 
-// boj 1966
+// boj 1966 solved
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const N = +input[0];
   for (let i = 1; i <= N * 2; i = i + 2) {
     const [N, M] = input[i].split(" ").map(v => +v); // 문서의 갯수와 타겟 문서
     let priorities = input[i + 1].split(" ").map(v => +v); // 이걸 애초에 객체로 만들어서 index로 구분
-    const chart = {};
-    for (let j = 0; j < priorities.length; j++) {
-      chart[j] = priorities[j];
+    const orders = [];
+    for (let j = 0; j < N; j++) {
+      orders[j] = j;
     }
+
     const target = priorities[M];
-    console.log(Object.values(chart).indexOf(target));
     let priority = Math.max(...priorities);
     let count = 0;
-    let isFind = true;
+    let isFind = false;
     console.log(`${i}번째 ${target}`)
 
     // target change target을 중요도 같은 것과 구분지어줄 새로운 배열로 만들어야 된다고 생각 고민
-    while (isFind) {
+    while (!isFind) {
       let out = priorities.shift();
-      if (out === target && out === priority) {
+      let order = orders.shift();
+      if (out === target && out === priority && order === M) {
         count++;
         console.log(count);
-        isFind = false;
+        isFind = true;
         break;
       } else if (out === priority ) {
         count++;
         priority = Math.max(...priorities);
       } else {
         priorities.push(out);
+        orders.push(order)
       }
     }
   }
 }
+
+
+
+// boj 7576 shift로 시간초과 문제 계속 발생... but solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [M, N] = input[0].split(" ").map(v => +v);
+  const graph = [];
+  for (let i = 0; i < N; i++) {
+    graph.push(input[i + 1].split(" ").map(v => +v));
+  }
+  const visited = Array.from({length: N}, () => new Array(M).fill(false));
+  const queue = [];
+  let count = M * N;
+  let time;
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < M; x++) {
+      if (graph[y][x] === 1) {
+        queue.push([y, x, 0]);
+        visited[y][x] = true;
+        count--;
+        continue;
+      } 
+      if (graph[y][x] === -1) {
+        count--;
+        visited[y][x] = true;
+        continue;
+      }
+    }
+  }
+
+  const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  let prevIdx = 0;
+  let day = 0;
+  while (true) {
+    const curIdx = queue.length;
+    let change = 0;
+    for (let i = prevIdx; i < curIdx; i++) {
+      const [qy, qx] = queue[i];
+      for (let j = 0; j < 4; j++) {
+        const [my, mx] = [qy + move[j][0], qx + move[j][1]];
+        if (0 <= my && my < N && 0 <= mx && mx < M && !visited[my][mx]) {
+          count--;
+          change = 1;
+          visited[my][mx] = true;
+          queue.push([my, mx]);
+        }
+      }
+    }
+    if (!change) break;
+    day++;
+    prevIdx = curIdx;
+  }
+
+  if (count) {
+    console.log(-1);
+  } else {
+    console.log(day);
+  }
+
+}
+*/
+
+// boj 1946 입력방식에서 문제있었음 그래도 solved 풀이 방법은 맞음 ==> sort문제였음.  그냥 sort하면 시간초과남
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  let T = +input[0];
+  let index = 1;
+  while (T) {
+    const N = +input[index];
+    const scoreList = [];
+    let count = 1;
+    for (let i = 0; i < N; i++) {
+      scoreList.push(input[i + index + 1].split(" ").map(v => +v));
+    }
+    scoreList.sort((a, b) => a[0] - b[0]);
+    let min = scoreList[0][1];
+    for (let i = 0; i < scoreList.length; i++) {
+      if (scoreList[i][1] < min) {
+        count++;
+        min = scoreList[i][1];
+      }
+    }
+
+    console.log(count);
+    index += N + 1;
+    T--;
+  }
+}
+// 모두와 비교했을 때 둘다 뒤쳐지면 안됨, 하나라도 우수해야 합격
 solution();
+
 module.exports = solution;
