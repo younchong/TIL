@@ -2689,7 +2689,6 @@ function solution() {
   }
 
 }
-*/
 
 // boj 1946 입력방식에서 문제있었음 그래도 solved 풀이 방법은 맞음 ==> sort문제였음.  그냥 sort하면 시간초과남
 function solution() {
@@ -2718,6 +2717,89 @@ function solution() {
   }
 }
 // 모두와 비교했을 때 둘다 뒤쳐지면 안됨, 하나라도 우수해야 합격
+
+
+//boj 2210 DFS => backtracking 문제였다... 검색도움 solved
+function solution() {
+  const input =require("fs").readFileSync("./input.txt").toString().split("\n");
+  const graph = Array.from({length: 5}, () => new Array());
+  for (let i = 0; i < 5; i++) {
+    graph[i] = input[i].split(" ").map(v => +v);
+  }
+  const answer = [];
+  for (let y = 0; y < 5; y++) {
+    for (let x = 0; x < 5; x++) {
+      backtracking(y, x, graph[y][x].toString());
+    }
+  }
+console.log(answer.length);
+
+  function backtracking(y, x, str) {
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    if (str.length === 6) {
+      if (!answer.includes(str)) {
+        answer.push(str);
+      }
+
+      return answer;
+    }
+    for (let i = 0; i < 4; i++) {
+      const [ny, nx] = [y + move[i][0], x + move[i][1]];
+      if (0 <= ny && ny < 5 && 0 <= nx && nx < 5) {
+        backtracking(ny, nx, str + graph[ny][nx]);
+      }
+    }
+  }
+}
+
+//boj 3184 예제는 다 맞는데 어디서 틀린지를 모르겠음 나중에 다시....
+function solution() {
+  const input =require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [R, C] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: R}, () => new Array());
+  for (let i = 1; i <= R; i++) {
+    graph[i - 1] = input[i].split(""); 
+  }
+  const visited = Array.from({length: R}, () => new Array(C).fill(false));
+  const fence = "#";
+  const sheep = "o";
+  const wolf = "v";
+  let w = 0;
+  let s = 0;
+  let answer = [0, 0];
+  for (let y = 0; y < R; y++) {
+    for (let x = 0; x < C; x++) {
+      if (graph[y][x] === wolf && !visited[y][x]) {
+        w++;
+        DFS(y, x);
+        w >= s ? answer[1] += w : answer[0] += s;
+        w = 0;
+        s = 0;
+      }
+    }
+  }
+
+  console.log(answer.join(" "))
+  function DFS(y, x) {
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    visited[y][x] = true;
+    
+    for (let i = 0; i < 4; i++) {
+      const [my, mx] = [y + move[i][0], x + move[i][1]];
+      if (0 <= my && my < R && 0 <= mx && mx < C && !visited[my][mx]) {
+        if (graph[my][mx] !== fence) {
+          if (graph[my][mx] === wolf) w++;
+          if (graph[my][mx] === sheep) s++;
+          DFS(my, mx)
+        }
+      }
+    }
+  }
+}
+
+*/
+
+
 solution();
 
 module.exports = solution;
