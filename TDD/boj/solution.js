@@ -2797,9 +2797,75 @@ function solution() {
   }
 }
 
+
+// 12015 boj binary search solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const numbers = input[1].split(" ").map(v => +v);
+  const answer = [numbers[0]];
+  for (let i = 1; i < numbers.length; i++) {
+    if (numbers[i] > answer[answer.length - 1]) {
+      answer.push(numbers[i]);
+    } else {
+      let left = 0;
+      let right = answer.length - 1;
+      while (left < right) {
+        const mid = Math.floor((left + right) / 2);
+        if (answer[mid] < numbers[i]) {
+          left = mid + 1;
+        } else if (answer[mid] > numbers[i]) {
+          right = mid;
+        } else {
+          answer[mid] = numbers[i];
+          break;
+        }
+      }
+      if (left >= right) {
+        answer[right] = numbers[i];
+      }
+    }
+
+  }
+
+  console.log(answer);
+}
+
+
+// boj 1300 binarySearch 모르겠음 어디서 bs가 사용되는지
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const k = +input[1];
+  const array = Array.from({length: N}, ()=> new Array(N).fill(0));
+  const B = [];
+  for (let y = 0; y < N; y++) {
+    array[y] = array[y].map((_, i) => (y + 1) * (i + 1));
+    B.push(...array[y]);
+  }
+  B.sort((a, b) => a - b);
+  //k target
+  console.log(B[k]);
+}
 */
 
+// boj 1446 dijkstra
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, D] = input[0].split(" ").map(v => +v);
+  const graph = new Array(D + 1).fill(0).map((v, i) => v + i);
+  for (let i = 1; i <= N; i++) {
+    const [start, end, cost] = input[i].split(" ").map(v => +v);
+    if (end - start > cost) {
+      graph[end] = Math.min(cost + graph[start], graph[end]);
+    } 
+  }
 
+  for (let i = 1; i <= D; i++) {
+    graph[i] = graph[i] > graph[i - 1] + 1 ? graph[i - 1] + 1 : graph[i];
+  }
+  console.log(graph[899])
+}
 solution();
-
+// 432 나와야됨
 module.exports = solution;
