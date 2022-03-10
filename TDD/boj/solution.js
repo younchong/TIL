@@ -2847,7 +2847,6 @@ function solution() {
   //k target
   console.log(B[k]);
 }
-*/
 
 // boj 1446 dijkstra
 function solution() {
@@ -2868,4 +2867,106 @@ function solution() {
 }
 solution();
 // 432 나와야됨
+
+//boj 1504 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, E] = input[0].split(" ").map(v => +v);
+  const graph = Array.from({length: N + 1}, () => new Array());
+  for (let i  = 1; i <= E; i++) {
+    const [start, destination, cost] = input[i].split(" ").map(v => +v);
+    graph[start].push([destination, cost]);
+    graph[destination].push([start, cost]);
+  }
+
+
+  class minHeap {
+    constructor() {
+      this.heap = [];
+    }
+
+    size() {
+      return this.heap.length;
+    }
+
+    swap(a, b) {
+      [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    }
+
+    add(value) {
+      this.heap.push(value);
+      let index = this.heap.length - 1;
+
+      while(index > 0) {
+        if (Math.floor((index - 1) / 2) >= 0 && this.heap[Math.floor((index - 1) / 2)][1] > this.heap[index][1]) {
+          this.swap(Math.floor((index - 1) / 2), index);
+          index = Math.floor((index - 1) / 2);
+        } else break;
+      }
+    }
+
+    remove() {
+      this.swap(0, this.heap.length - 1);
+      const deleted = this.heap.pop();
+      let index = 0;
+      while (index * 2 + 1 < this.heap.length) {
+        let minIndex = index * 2 + 1;
+        let minValue = this.heap[minIndex][1];
+        if (index * 2 + 2 < this.heap.length && this.heap[index * 2 + 2][1] < minValue) {
+          minIndex = index * 2 + 2;
+          minValue = this.heap[index * 2 + 2][1];
+        }
+
+        if (minValue < this.heap[index]) {
+          this.swap(minIndex, index);
+          index = minIndex;
+        } else break;
+      }
+
+      return deleted;
+    }
+
+  }//heap end
+
+  const [a, b] = input[E + 1].split(" ").map(v => +v);
+  const path1 = route(1, a) + route(a, b) + route(b, N);
+  const path2 = route(1, b) + route(b, a) + route(a,  N);
+  
+  function route(start, next) {
+    const heap = new minHeap();
+    const dist = Array.from({length: N + 1}, () => Infinity);
+    heap.add([start, 0]);
+    dist[start] = 0;
+  
+    while (heap.size()) {
+      const [vertex, weight] = heap.remove();
+  
+      graph[vertex].forEach((v) => {
+        const [dst, w] = v;
+        if (dist[dst] > dist[vertex] + w) {
+          dist[dst] = dist[vertex] + w;
+          heap.add([dst, dist[dst]]);
+        }
+      });
+    }
+
+    return dist[next];
+  }
+  const answer = Math.min(path1, path2);
+  if (answer !== Infinity) {
+    console.log(answer);
+  } else {
+    console.log(-1);
+  }
+}
+// visited를 넣어두면 안됨, 똑같은 길 갈 수 있으니까
+solution();
+*/
+// boj 13549
+function solution() {
+  const [N, K] = require("fs").readFileSync("./input.txt").toString().split(" ");
+  // cost 1의 앞 뒤 이동 or cost 0의 순간이동
+}
+
+solution();
 module.exports = solution;
