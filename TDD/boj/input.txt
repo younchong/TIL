@@ -1,7 +1,8 @@
-6 6
-001111
-010000
-001111
-110001
-011010
-100010
+3 4
+ohhenrie
+charlie
+baesangwook
+obama
+baesangwook
+ohhenrie
+clinton

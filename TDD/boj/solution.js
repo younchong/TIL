@@ -2961,12 +2961,112 @@ function solution() {
 }
 // visited를 넣어두면 안됨, 똑같은 길 갈 수 있으니까
 solution();
-*/
+
 // boj 13549
 function solution() {
   const [N, K] = require("fs").readFileSync("./input.txt").toString().split(" ");
   // cost 1의 앞 뒤 이동 or cost 0의 순간이동
 }
 
+// boj 10026 solved dfs
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const painting = Array.from({length: N}, ()=> new Array());
+  const rbPainting = Array.from({length: N}, ()=> new Array());
+  for (let i = 1; i <= N; i++) {
+    painting[i - 1] = input[i].split("");
+    rbPainting[i - 1] = input[i].split("").map(v => {
+      if (v === "G") return "R";
+      return v;
+    })
+  }
+  const answer = [];
+  let visited = Array.from({length: N}, ()=> new Array(N).fill(false));
+  let rCount = 0;
+  let gCount = 0;
+  let bCount = 0;
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (painting[y][x] === "R" && !visited[y][x]) {
+        dfs(y, x, painting, "R");
+        rCount++;
+      } else if (painting[y][x] === "G" && !visited[y][x]) {
+        dfs(y, x, painting, "G");
+        gCount++;
+      } else if (painting[y][x] === "B" && !visited[y][x]) {
+        dfs(y, x, painting, "B");
+        bCount++;
+      }
+    }
+  }
+  answer.push(rCount + gCount + bCount);
+  visited = Array.from({length: N}, ()=> new Array(N).fill(false));
+  rCount = 0;
+  bCount = 0;
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (rbPainting[y][x] === "R" && !visited[y][x]) {
+        dfs(y, x, rbPainting, "R");
+        rCount++;
+      } else if (rbPainting[y][x] === "B" && !visited[y][x]) {
+        dfs(y, x, rbPainting, "B");
+        bCount++;
+      }
+    }
+  }
+  answer.push(rCount + bCount);
+
+  function dfs(y, x, graph, condition) {
+    visited[y][x] = true;
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    for (let i = 0; i < 4; i++) {
+      const [my, mx] = [y + move[i][0], x + move[i][1]];
+      if (0 <= my && my < N && 0 <= mx && mx < N) {
+        if (graph[my][mx] === condition && !visited[my][mx]) {
+          dfs(my, mx, graph, condition);
+        }
+      }
+    }
+  }
+  console.log(answer.join(" "));
+}
+*/
+
+// boj 시간초과
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const cantSeeHear = [];
+  const real = [];
+  for (let i = 1; i <= N; i++) {
+    cantSeeHear.push(input[i]);
+  }
+  cantSeeHear.sort();
+  for (let i = N + 1; i <= N + M; i++) {
+    if (cantSeeHear.includes(input[i])) {
+      binarySearch(cantSeeHear, input[i])
+    } 
+  }
+  
+  console.log(real.length);
+  console.log(real.join("\n"))
+
+  function binarySearch(arr, target) {
+    let start = 0;
+    let end = arr.length - 1;
+    while (start <= end) {
+      let mid = parseInt((start + end) / 2);
+      if (arr[mid] === target) {
+        real.push(target);
+        break;
+      } else if (arr[mid] < target) {
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+    }
+  }
+}
 solution();
 module.exports = solution;
