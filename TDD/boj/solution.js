@@ -3031,7 +3031,6 @@ function solution() {
   }
   console.log(answer.join(" "));
 }
-*/
 
 // boj 시간초과
 function solution() {
@@ -3067,6 +3066,134 @@ function solution() {
       }
     }
   }
+}
+// 14888 boj backtracking solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const numbList = input[1].split(" ").map(v => +v);
+  const operatorList = input[2].split(" ").map(v => +v); //+ - x /
+  let operators = "";
+  operatorList.forEach((v, i) => {
+    if (v) {
+      if (i === 0) {
+        operators += "+".repeat(v);
+      } else if (i === 1) {
+        operators += "-".repeat(v);
+      } else if (i === 2) {
+        operators += "*".repeat(v);
+      } else {
+        operators += "/".repeat(v);
+      }
+    }
+  })
+  const easy = operators.split("");
+  const M = easy.length;
+  let max = -Infinity;
+  let min = Infinity;
+  const output = [];
+  const result = [];
+  const visited = new Array(N).fill(false);
+  function recur(num) {
+    if (num === M) {
+      result.push([...output]);
+      return;
+    }
+
+    for (let i = 0; i < M; i++) {
+      if (visited[i]) continue;
+      visited[i] = true;
+      output.push(easy[i]);
+      recur(num + 1);
+      visited[i] = false;
+      output.pop();
+    }
+  }
+
+  recur(0);
+
+  for (let i = 0; i < result.length; i++) {
+    const ex = result[i];
+    let sum =0;
+    for (let j = 0; j < numbList.length - 1; j++) {
+      const operator = ex[j];
+      if (j === 0) {
+        if (operator === "+") {
+          sum += numbList[j] + numbList[j + 1];
+        } else if (operator === "-") {
+          sum += numbList[j] - numbList[j + 1];
+        } else if (operator === "*") {
+          sum += numbList[j] * numbList[j + 1];
+        } else {
+          sum += parseInt(numbList[j] / numbList[j + 1]);
+        }
+      } else {
+        if (operator === "+") {
+          sum = sum + numbList[j + 1];
+        } else if (operator === "-") {
+          sum = sum - numbList[j + 1];
+        } else if (operator === "*") {
+          sum = sum * numbList[j + 1];
+        } else {
+          if (sum < 0) {
+            let temp = sum * -1;
+            sum = parseInt(temp / numbList[j + 1]) * -1;
+          } else {
+            sum = parseInt(sum / numbList[j + 1]);
+          }
+          
+        }
+      }
+      
+    }
+    max = Math.max(max, sum);
+    min = Math.min(min, sum);
+  }
+  console.log(max ? max : 0);
+  console.log(min)
+}
+*/
+// 같은 문제 refac
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const numbList = input[1].split(" ").map(v => +v);
+  const operatorList = input[2].split(" ").map(v => +v);
+
+  let max = -Infinity;
+  let min = Infinity;
+
+  function operation(num1, num2, operator) {
+    switch(operator) {
+      case 0:
+        return num1 + num2;
+      case 1:
+        return num1 - num2;
+      case 2:
+        return num1 * num2;
+      case 3:
+        const result = num1 > 0 ? parseInt(num1 / num2) : -parseInt(-num1 / num2);
+        return result;
+    }
+  }
+
+  function recur(index, result, operator) {
+    if (index === numbList.length) {
+      max = Math.max(max, result);
+      min = Math.min(min, result);
+    }
+
+    for (let i = 0; i < 4; i++) {
+      if (operator[i]) {
+        const newOpers = JSON.parse(JSON.stringify(operator));
+        newOpers[i]--;
+        recur(index + 1, operation(result, numbList[index], i), newOpers);
+      }
+    }
+  }
+  recur(1, numbList[0], operatorList)
+  console.log(max ? max : 0)
+  console.log(min ? min : 0)
 }
 solution();
 module.exports = solution;
