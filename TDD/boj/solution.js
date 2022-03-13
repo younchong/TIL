@@ -3152,7 +3152,6 @@ function solution() {
   console.log(max ? max : 0);
   console.log(min)
 }
-*/
 // 같은 문제 refac
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -3195,5 +3194,32 @@ function solution() {
   console.log(max ? max : 0)
   console.log(min ? min : 0)
 }
+*/
+
+// boj 2531 two pointer solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, d, k, c] = input[0].split(" ").map(v => +v);
+  const dishes = [];
+  for (let i = 1; i <= N; i++) {
+    dishes.push(+input[i]);
+  }
+  let selected = [];
+  let max = -Infinity;
+  let end = 0;
+  for (let start = 0; start < N; start++) {
+    while(selected.length !== k) {
+      selected.push(dishes[end]);
+      end = end + 1 === N ? 0 : end + 1;
+    } 
+
+    let size = [... new Set(selected)].length;
+
+    max = !selected.includes(c) ? Math.max(max, size + 1) : Math.max(max, size);
+    selected.shift();
+  }
+  console.log(max);
+}
+// two pointer 구현 앞 뒤도 중요하지만, 계속 같은 과정 반복하지 않도록 끝과정 잘  처리하는 것도 중요!!
 solution();
 module.exports = solution;
