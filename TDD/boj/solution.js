@@ -3194,7 +3194,6 @@ function solution() {
   console.log(max ? max : 0)
   console.log(min ? min : 0)
 }
-*/
 
 // boj 2531 two pointer solved
 function solution() {
@@ -3221,5 +3220,58 @@ function solution() {
   console.log(max);
 }
 // two pointer 구현 앞 뒤도 중요하지만, 계속 같은 과정 반복하지 않도록 끝과정 잘  처리하는 것도 중요!!
+
+
+// boj 9461 DP solved easy
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+  const N = input[0];
+  const maxNumber = Math.max(...input);
+  // 1 1 1 2(1, 1) 2 (2) 3(1, 2) 4(1, 3) 5(1, 4) 7(2, 5) 9(2, 7) 12(3, 9) 16 (4, 12) 21 (5, 16)
+  const dp = [1, 1, 1, 2, 2]
+  for (let i = 5; i <= maxNumber; i++) {
+    dp[i] = dp[i - 1] + dp[i - 5];
+  }
+  for (let i = 1; i < N + 1; i++) {
+    console.log(dp[input[i] - 1]);
+  }
+}
+*/
+// boj 9251 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const value = input[0].split("");
+  const other = input[1].split("");
+  const dp = Array.from({length: other.length}, () => new Array(value.length).fill(0));
+  dp[0][0] = 0;
+  for (let i = 0 ; i < other.length; i++) {
+    for (let j = 0; j < value.length; j++) {
+      const str = value[j];
+      const oStr = other[i];
+      if (str === oStr) {
+        if (i && j) {
+          dp[i][j] = dp[i - 1][j -1] + 1;
+        } else {
+          dp[i][j] = 1;
+        } 
+      } else {
+        if (i === 0 && j === 0) {
+          dp[i][j] = 0;
+          continue;
+        }
+
+        if (i && j) {
+          dp[i][j] = Math.max(dp[i -1][j], dp[i][j -1]);
+        } else if (i === 0) {
+          dp[i][j] = dp[i][j - 1];
+        } else {
+          dp[i][j] = dp[i - 1][j];
+        }
+        
+      }
+    }
+  }
+  console.log(dp[other.length - 1][value.length - 1]);
+}
 solution();
 module.exports = solution;
