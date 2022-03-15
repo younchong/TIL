@@ -3236,7 +3236,6 @@ function solution() {
     console.log(dp[input[i] - 1]);
   }
 }
-*/
 // boj 9251 
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
@@ -3273,5 +3272,126 @@ function solution() {
   }
   console.log(dp[other.length - 1][value.length - 1]);
 }
+
+// boj 9205 graph theory bfs solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  let t = +input[0];
+  let index = 1;
+  // n
+  // 집
+  // 편의점 n개
+  // festival
+  while (t > 0) {
+    const n = +input[index];
+    const position = [];
+    
+    let leftBeer = 20;
+    let isHappy = false;
+
+    for (let i = index + 1; i < index + n + 3; i++) {
+      position.push(input[i].split(" ").map(v => +v));
+    }
+    const visited = new Array(position.length).fill(false);
+    const queue = [position[0]];
+    visited[0] = true;
+    while (queue.length) {
+      const [x, y] = queue.shift();
+      if (x === position[position.length - 1][0] && y === position[position.length - 1][1]) isHappy = true;
+      for (let i = 1; i < position.length; i++) {
+        const nextPosition = position[i];
+        const nextX = nextPosition[0];
+        const nextY = nextPosition[1];
+        if (!visited[i]) {
+          if (Math.abs(x - nextX) + Math.abs(y - nextY) <= 1000) {
+            queue.push(nextPosition);
+            visited[i] = true;
+          }
+        }
+        
+      }
+    }
+    
+    
+
+    isHappy ? console.log("happy") : console.log("sad");
+    index += n + 3;
+    t--;
+  }
+}
+*/
+
+// boj 1766 priority queue 틀림 이유 모르겠음
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [n, m] = input[0].split(" ").map(v => +v);
+  const cards = input[1].split(" ").map(v => +v);
+  
+  class minHeap{
+    constructor() {
+      this.heap = [];
+    }
+    show() {
+      console.log(this.heap)
+    }
+    result() {
+      return this.heap.reduce((acc, cur) => acc + cur);
+    }
+    isEmpty() {
+      return this.heap.length === 0;
+    }
+
+    swap(a, b) {
+      [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    }
+
+    enqueue(value) {
+      this.heap.push(value);
+      let index = this.heap.length - 1;
+      while (index > 0) {
+        if (Math.floor((index - 1) / 2) >= 0 && this.heap[index] < this.heap[Math.floor((index - 1) / 2)]) {
+          this.swap(index, Math.floor((index - 1) / 2));
+          index = Math.floor((index - 1) / 2);
+        } else break;
+      }
+    }
+
+    dequeue() {
+      const deleted = this.heap[0];
+      this.swap(0, this.heap.length - 1);
+      this.heap.pop();
+      let index = 0;
+      while(index * 2 + 1 < this.heap.length) {
+        let minIndex = index * 2 + 1;
+        let minValue = this.heap[minIndex];
+        if (index * 2 + 2 < this.heap.length && minValue > this.heap[index * 2 + 2]) {
+          minIndex = index * 2 + 2;
+          minValue = this.heap[minIndex];
+        }
+
+        if (this.heap[index] > minValue) {
+          this.swap(index, minIndex);
+          index = minIndex;
+        } else break;
+      }
+
+      return deleted
+    }
+    
+  }
+  const heap = new minHeap();
+  for (let i = 0; i < n; i++) {
+    heap.enqueue(cards[i]);
+  }
+  for (let i = 0; i < m; i++) {
+    const a = heap.dequeue();
+    const b = heap.dequeue();
+    const sum = a + b;
+    heap.enqueue(sum);
+    heap.enqueue(sum);
+  }
+  console.log(heap.result())
+}
+  
 solution();
 module.exports = solution;
