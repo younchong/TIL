@@ -3319,7 +3319,6 @@ function solution() {
     t--;
   }
 }
-*/
 
 // boj 1766 priority queue 틀림 이유 모르겠음
 function solution() {
@@ -3392,6 +3391,56 @@ function solution() {
   }
   console.log(heap.result())
 }
-  
+
+// boj 10825 sort 한번에 sort로 오름차순, 내림차순 하는 방식
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const studentsInfo = [];
+  for (let i = 1; i <= N; i++) {
+    studentsInfo.push(input[i].split(" ").map((v, i) => i ? +v : v));
+  }
+  const answer = [];
+  studentsInfo.sort((a, b) => {
+    const aScore = (100 - a[1])*10**6 + a[2]*10**3 + (100 - a[3]);
+    const bScore = (100 - b[1])*10**6 + b[2]*10**3 + (100 - b[3]);
+    if (aScore === bScore) {
+      if (a[0] > b[0]) return 1;
+      else if (a[0] < b[0]) return -1;
+      else return 0;
+    } else {
+      return aScore - bScore;
+    }
+  }).forEach(student => answer.push(student[0]))
+  console.log(answer.join("\n"));
+}
+*/
+
+// boj 1300 binarySearch
+// 코드는 간단하지만, 이분탐색을 어떻게 적용해야 될지 어려운 문제, 아직 완벽히 이해하지 못한것 같다.
+// count 안에 k가 들어가면 범위를 줄이고, count가 더 작으면 범위를 넓히는 게 이분탐색의 기본이고 핵심아이디어
+
+function solution() {
+  const [N, k] = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+  let left = 1;
+  let right = N * N;
+  let result = 0;
+  while (left <= right) {
+    const mid = parseInt((left + right) / 2);
+    let count = 0;
+
+    for (let i = 1; i<= N; i++) {
+      count += Math.min(N, parseInt(mid / i));
+    }
+
+    if (count >= k) {
+      result = mid;
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+  console.log(result);
+}
 solution();
 module.exports = solution;
