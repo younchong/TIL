@@ -3414,7 +3414,6 @@ function solution() {
   }).forEach(student => answer.push(student[0]))
   console.log(answer.join("\n"));
 }
-*/
 
 // boj 1300 binarySearch
 // 코드는 간단하지만, 이분탐색을 어떻게 적용해야 될지 어려운 문제, 아직 완벽히 이해하지 못한것 같다.
@@ -3442,5 +3441,78 @@ function solution() {
   }
   console.log(result);
 }
+*/
+
+// boj 14502 bfs
+function solution() {
+  // backtracking으로 3곳 찍은 뒤에 1로 변환 후, bfs로 안전 구역 확인 하기  copy map 반복하면서 최대값 구하기
+  // 현재 아이디어
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const map = new Array(N);
+  let answer = -Infinity;
+  for (let i = 1; i <= N; i++) {
+    map[i - 1] = input[i].split(" ").map(v => +v);
+  }
+  function backtracking(num) {
+    if (num === 3) {
+      answer = Math.max(answer, bfs(map));
+      return;
+    }
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < M; x++) {
+        if (map[y][x] === 0) {
+          map[y][x] = 1;
+          backtracking(num + 1);
+          map[y][x] = 0;
+        }
+      }
+    }
+  }
+  backtracking(0);
+  console.log(answer);
+
+  function bfs(arr) {
+    const queue = [];
+    let copiedMap = Array.from({length: N}, () => new Array(M));
+    //let copiedMap = arr 이렇게 하면 참조값이 복사돼서 값이 제대로 안나옴
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < M; x++) {
+        copiedMap[y][x] = map[y][x]
+        if (copiedMap[y][x] === 2) {
+          queue.push([y, x]);
+        }
+      }
+    }
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    while(queue.length) {
+      const [qy, qx] = queue.shift();
+      for (let i = 0; i < 4; i++) {
+        const [my, mx] = [qy + move[i][0], qx + move[i][1]];
+        if (0 <= my && my < N && 0 <= mx && mx < M) {
+          if (copiedMap[my][mx] === 0 ) {
+            copiedMap[my][mx] = 2;
+            queue.push([my, mx]);
+          }
+        }
+      }
+    }
+
+    let safeZone = 0;
+    copiedMap.forEach(row => {
+      let count = 0;
+      if (row.includes(0)) {
+        row.forEach(el => {
+          if (el === 0) count++;
+        })
+        safeZone += count;
+      }
+    })
+
+  return safeZone;
+  }
+}
+// 아이디어는 맞았는데, 구현할 때 깊은 복사로 안해서 결과값이 구하는데 헤맸다.
 solution();
+
 module.exports = solution;
