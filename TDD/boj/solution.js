@@ -3441,7 +3441,6 @@ function solution() {
   }
   console.log(result);
 }
-*/
 
 // boj 14502 bfs
 function solution() {
@@ -3513,6 +3512,57 @@ function solution() {
   }
 }
 // 아이디어는 맞았는데, 구현할 때 깊은 복사로 안해서 결과값이 구하는데 헤맸다.
+*/
+
+// boj 14503 simulation
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  let [nowY, nowX, dIndex] = input[1].split(" ").map(v => +v);
+  const map = []
+  for (let i = 2; i < N + 2; i++) {
+    map.push(input[i].split(" ").map(v => +v));
+  }
+  const direction = [[-1, 0], [0, 1], [1, 0], [0, -1]]; // [y, x] rotate left
+  let currentDirection = direction[dIndex];
+  let count = 0;
+  while (true) {
+    let sw = false;
+    if (map[nowY][nowX] === 0) { // cleaning current position
+      count++; 
+      map[nowY][nowX] = 2;
+    }
+    
+    for (let i = 1; i <= 4; i++) { // rotate
+      let temp = dIndex - i;
+      temp = temp < 0 ? temp + 4 : temp; // 이부분 로직이 매끄럽지 못한 것 같다.
+      const ny = nowY + direction[temp][0];
+      const nx = nowX + direction[temp][1];
+      if (0 <= ny && ny < N && 0 <= nx && nx < M && !map[ny][nx]) {
+        dIndex = temp;
+        currentDirection = direction[dIndex];
+        nowY = ny;
+        nowX = nx;
+        sw = true;
+        break;
+      }
+    }
+
+    if (!sw) { //rotate fail, then backward
+      const by = nowY - currentDirection[0];
+      const bx = nowX - currentDirection[1];
+      if (0 <= by && by < N && 0 <= bx && bx < M) {
+        if (map[by][bx] === 1) {  //wall then break
+          break;
+        } else {
+          nowX = bx;
+          nowY = by;
+        }
+      } else break; //beyond the map then break;
+    } 
+  }
+  console.log(count);
+}
 solution();
 
 module.exports = solution;
