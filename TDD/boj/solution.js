@@ -3512,7 +3512,7 @@ function solution() {
   }
 }
 // 아이디어는 맞았는데, 구현할 때 깊은 복사로 안해서 결과값이 구하는데 헤맸다.
-*/
+
 
 // boj 14503 simulation
 function solution() {
@@ -3562,6 +3562,17 @@ function solution() {
     } 
   }
   console.log(count);
+}
+*/
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [M, N] = input[0].split(" ").map(v => +v);
+  const map = [];
+  for (let i = 1; i <= M; i++) {
+    map.push(input[i].split(" ").map(v => +v));
+  }
+  
 }
 solution();
 
