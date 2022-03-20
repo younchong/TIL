@@ -3565,6 +3565,7 @@ function solution() {
 }
 */
 
+// boj 1520 dfs and dp
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const [M, N] = input[0].split(" ").map(v => +v);
@@ -3572,8 +3573,36 @@ function solution() {
   for (let i = 1; i <= M; i++) {
     map.push(input[i].split(" ").map(v => +v));
   }
-  
+  const visited = Array.from({length: M}, () => new Array(N).fill(-1));
+  // visited last count++;
+  let answer = 0;
+  function dfs(y, x) {
+    if (y === M - 1 && x === N - 1) {
+      return 1;
+    }
+    if (visited[y][x] !== -1) {
+      return visited[y][x];
+    }
+    visited[y][x] = 0;
+
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+    for (let i = 0; i < 4; i++) {
+      const [my, mx] = [y + move[i][0], x + move[i][1]];
+      if (0 <= my && my < M && 0 <= mx && mx < N) {
+        if (map[y][x] > map[my][mx]) {
+           visited[y][x] += dfs(my, mx);
+        }
+      }
+    }
+
+    return visited[y][x];
+  }
+  console.log(dfs(0, 0));
+  console.log(visited)
 }
+// 처음에 단순 dfs로만 풀려다가 시간초과, dp를 이용해서 통과
+
 solution();
 
 module.exports = solution;
