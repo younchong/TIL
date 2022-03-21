@@ -3563,7 +3563,6 @@ function solution() {
   }
   console.log(count);
 }
-*/
 
 // boj 1520 dfs and dp
 function solution() {
@@ -3591,7 +3590,7 @@ function solution() {
       const [my, mx] = [y + move[i][0], x + move[i][1]];
       if (0 <= my && my < M && 0 <= mx && mx < N) {
         if (map[y][x] > map[my][mx]) {
-           visited[y][x] += dfs(my, mx);
+            visited[y][x] += dfs(my, mx);
         }
       }
     }
@@ -3603,6 +3602,142 @@ function solution() {
 }
 // 처음에 단순 dfs로만 풀려다가 시간초과, dp를 이용해서 통과
 
+
+// boj 2665 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const map = [];
+  for (let i = 1; i <= N; i++) {
+    map.push(input[i].split("").map(v => +v));
+  }
+  const visited = Array.from({length: N}, () =>  new Array(N).fill(Infinity));
+  function dijkstra() {
+    const queue = [[0, 0]];
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    visited[0][0] = 0;
+
+    while (queue.length) {
+      const [qy, qx] = queue.shift();
+
+      for (let i = 0; i < 4; i++) {
+        const [my, mx] = [qy + move[i][0], qx + move[i][1]];
+        if (0 <= my && my < N && 0 <= mx && mx < N) {
+          if (map[my][mx] === 1) {
+            if (visited[my][mx] > visited[qy][qx]) {
+              visited[my][mx] = visited[qy][qx];
+              queue.push([my, mx]);
+            }
+          } else {
+            if (visited[my][mx] > visited[qy][qx] + 1) {
+              visited[my][mx] = visited[qy][qx] + 1;
+              queue.push([my, mx]);
+            }
+          }
+        }
+        
+      }
+    }
+    
+  }
+  dijkstra();
+  console.log(visited[N - 1][N - 1]);
+  // 우선 기본 bfs로 끝점에 도달 가능한지 확인
+  // 불가능하면 하나씩 추가하는 방향으로 벽없애기. 이전에 풀었던 문제 같이. 0 검은 방, 1 흰 방
+  // 우선 조금 러프하게 하나씩 해보기.
+
+}
+// 처음엔 backtracking으로 하나씩 경우의수에 맞게 bfs적용해서 조건 성립시, 리턴했는데, 시간초과 나옴
+// dp와 bfs를 이용해서 풀었고, 처음에 마지막 지점 도달시 탈출하는 로직때문에 틀렸다. (생각해보니, 처음 도착하자마자 탈출할 수 도 있어서, 모든 경우의 수가 계산되지 않는다. 그렇게 탈출하면)
+*/
+
+// boj 9663
+function solution() {
+  const N = 8;
+  const board = Array.from({length: N}, () => new Array(N).fill(0));
+  const visited = Array.from({length: N}, () => new Array(N).fill(false))
+  let count = 0;
+
+  recur(0, 0)
+  function recur(num, sy) {
+    if (num === N) {
+      const result = checker(board);
+      if (result) {
+        console.log(board.join("\n"));
+        console.log("------")
+        count++;
+        return;
+      }
+      return;
+      // 결과 확인
+    }
+
+    for (let y = sy; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        if (!board[y][x] && !visited[y][x]) {
+          board[y][x] = 1;
+          visited[y][x] = true
+          recur(num + 1, y);
+          visited[y][x] = false
+          board[y][x] = 0;
+        }
+      }
+    }
+  }
+
+  function checker(map) {
+    let isOk = true;
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        if (map[y][x] === 1) {
+          let counter = 1;
+          while(counter < N) {
+            if (0 > y - counter && y + counter >= N && 0 > x - counter && x + counter >= N) break;
+            if (0 <= y - counter && map[y - counter][x] === 1) isOk = false;
+            if (y + counter < N && map[y + counter][x] === 1) isOk = false;
+            if (0 <= x - counter && map[y][x - counter] === 1) isOk = false;
+            if (x + counter < N && map[y][x + counter] === 1) isOk = false;
+            if (0 <= y - counter && 0 <= x - counter && map[y - counter][x - counter] === 1) isOk = false
+            if (0 <= y - counter && x + counter < N && map[y - counter][x + counter] === 1) isOk = false       
+            if (y + counter < N && 0 <= x - counter && map[y + counter][x - counter] === 1) isOk = false
+            if (y + counter < N && x + counter < N && map[y + counter][x + counter] === 1) isOk = false
+            if (!isOk) break;
+            counter++;
+          }
+
+          // map[y].forEach((el, idx) => {
+          //   if (el === 1 && idx !== x) isOk = false;
+          // })
+          // if (!isOk) break;
+          // // x축 확인
+          // let temp = 0;
+          // while (temp < N) {
+          //   if (map[temp][x] === 1 && temp !== y) {
+          //     isOk = false;
+          //     break;
+          //   }
+          //   temp++;
+          // }
+          // if (!isOk) break;
+          // // y축 확인
+          // let counter = 1;
+          // while(counter < N) {
+          //   if (0 <= y - counter && 0 <= x - counter && map[y - counter][x - counter] === 1) isOk = false
+          //   if (0 <= y - counter && x + counter < N && map[y - counter][x + counter] === 1) isOk = false       
+          //   if (y + counter < N && 0 <= x - counter && map[y + counter][x - counter] === 1) isOk = false
+          //   if (y + counter < N && x + counter < N && map[y + counter][x + counter] === 1) isOk = false
+          //   if (!isOk) break;
+          //   counter++;
+          // }
+        } 
+      }
+    }
+    return isOk;
+  }
+  console.log(count)
+}
+// backtracking으로 숫자 들어갈 수 있는 경우 구하고, 각 경우에서 조건에 맞는 지 확인, 조건 맞다면, count 추가 하는 방식으로 구현해봄 시간초과
+// 내일 다시 고민
 solution();
 
 module.exports = solution;
