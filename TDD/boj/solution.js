@@ -3651,93 +3651,42 @@ function solution() {
 // dp와 bfs를 이용해서 풀었고, 처음에 마지막 지점 도달시 탈출하는 로직때문에 틀렸다. (생각해보니, 처음 도착하자마자 탈출할 수 도 있어서, 모든 경우의 수가 계산되지 않는다. 그렇게 탈출하면)
 */
 
-// boj 9663
+// boj 9663 backtracking
 function solution() {
   const N = 8;
-  const board = Array.from({length: N}, () => new Array(N).fill(0));
-  const visited = Array.from({length: N}, () => new Array(N).fill(false))
+  const visited = new Array(N).fill(0);
   let count = 0;
 
-  recur(0, 0)
-  function recur(num, sy) {
+  recur(0)
+  function recur(num) {
     if (num === N) {
-      const result = checker(board);
-      if (result) {
-        console.log(board.join("\n"));
-        console.log("------")
-        count++;
-        return;
-      }
+      count++;
       return;
       // 결과 확인
     }
 
-    for (let y = sy; y < N; y++) {
-      for (let x = 0; x < N; x++) {
-        if (!board[y][x] && !visited[y][x]) {
-          board[y][x] = 1;
-          visited[y][x] = true
-          recur(num + 1, y);
-          visited[y][x] = false
-          board[y][x] = 0;
-        }
-      }
+    for (let i = 0; i < N; i++) {
+      if (visited[num]) continue;
+      visited[num] = i;
+      if (checker(num)) recur(num + 1);
+      visited[num] = 0;
     }
   }
 
-  function checker(map) {
-    let isOk = true;
-    for (let y = 0; y < N; y++) {
-      for (let x = 0; x < N; x++) {
-        if (map[y][x] === 1) {
-          let counter = 1;
-          while(counter < N) {
-            if (0 > y - counter && y + counter >= N && 0 > x - counter && x + counter >= N) break;
-            if (0 <= y - counter && map[y - counter][x] === 1) isOk = false;
-            if (y + counter < N && map[y + counter][x] === 1) isOk = false;
-            if (0 <= x - counter && map[y][x - counter] === 1) isOk = false;
-            if (x + counter < N && map[y][x + counter] === 1) isOk = false;
-            if (0 <= y - counter && 0 <= x - counter && map[y - counter][x - counter] === 1) isOk = false
-            if (0 <= y - counter && x + counter < N && map[y - counter][x + counter] === 1) isOk = false       
-            if (y + counter < N && 0 <= x - counter && map[y + counter][x - counter] === 1) isOk = false
-            if (y + counter < N && x + counter < N && map[y + counter][x + counter] === 1) isOk = false
-            if (!isOk) break;
-            counter++;
-          }
-
-          // map[y].forEach((el, idx) => {
-          //   if (el === 1 && idx !== x) isOk = false;
-          // })
-          // if (!isOk) break;
-          // // x축 확인
-          // let temp = 0;
-          // while (temp < N) {
-          //   if (map[temp][x] === 1 && temp !== y) {
-          //     isOk = false;
-          //     break;
-          //   }
-          //   temp++;
-          // }
-          // if (!isOk) break;
-          // // y축 확인
-          // let counter = 1;
-          // while(counter < N) {
-          //   if (0 <= y - counter && 0 <= x - counter && map[y - counter][x - counter] === 1) isOk = false
-          //   if (0 <= y - counter && x + counter < N && map[y - counter][x + counter] === 1) isOk = false       
-          //   if (y + counter < N && 0 <= x - counter && map[y + counter][x - counter] === 1) isOk = false
-          //   if (y + counter < N && x + counter < N && map[y + counter][x + counter] === 1) isOk = false
-          //   if (!isOk) break;
-          //   counter++;
-          // }
-        } 
-      }
+  function checker(x) {
+    for (let i = 0; i < x; i++) {
+      if (visited[x] === visited[i]) return false; // column compare
+      if (Math.abs(visited[x] - visited[i]) === x - i) return false // 기울기
     }
-    return isOk;
+    return true;
   }
   console.log(count)
 }
 // backtracking으로 숫자 들어갈 수 있는 경우 구하고, 각 경우에서 조건에 맞는 지 확인, 조건 맞다면, count 추가 하는 방식으로 구현해봄 시간초과
 // 내일 다시 고민
+// 고민 후 칠해지는 위치만 배열로 모아서 서로 비교 => 시간초과
+// 인터넷 도움, 똑같이 N * N 배열 만들어서 비교하지 말고, 1차원 배열로  index가 열 역할을 하게 해서, 들어갈때 마다 가능한지
+// 확인해서 넣어준다. 어렵게 생각했던 대각선 위치 파악또한, 기울기로 해결할 수 있다. 배움
 solution();
 
 module.exports = solution;
