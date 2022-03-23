@@ -3649,7 +3649,7 @@ function solution() {
 }
 // 처음엔 backtracking으로 하나씩 경우의수에 맞게 bfs적용해서 조건 성립시, 리턴했는데, 시간초과 나옴
 // dp와 bfs를 이용해서 풀었고, 처음에 마지막 지점 도달시 탈출하는 로직때문에 틀렸다. (생각해보니, 처음 도착하자마자 탈출할 수 도 있어서, 모든 경우의 수가 계산되지 않는다. 그렇게 탈출하면)
-*/
+
 
 // boj 9663 backtracking
 function solution() {
@@ -3687,6 +3687,127 @@ function solution() {
 // 고민 후 칠해지는 위치만 배열로 모아서 서로 비교 => 시간초과
 // 인터넷 도움, 똑같이 N * N 배열 만들어서 비교하지 말고, 1차원 배열로  index가 열 역할을 하게 해서, 들어갈때 마다 가능한지
 // 확인해서 넣어준다. 어렵게 생각했던 대각선 위치 파악또한, 기울기로 해결할 수 있다. 배움
+
+
+// boj 14235 priority queue
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  
+  class maxHeap {
+    constructor() {
+      this.heap = [];
+    }
+
+    size() {
+      return this.heap.length;
+    }
+
+    swap(a, b) {
+      [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    }
+
+    add(value) {
+      this.heap.push(value);
+      let index = this.heap.length - 1;
+
+      while (parseInt((index - 1) / 2) >= 0) {
+        let maxIndex = parseInt((index - 1) / 2);
+        let maxValue = this.heap[maxIndex];
+
+        if (maxValue < this.heap[index]) {
+          this.swap(maxIndex, index);
+          index = maxIndex
+        } else break;
+      }
+    }
+
+    remove() {
+      let deleted = this.heap[0];
+      this.swap(0, this.heap.length - 1);
+      this.heap.pop();
+      let index = 0;
+      
+      while ((index * 2) + 1 < this.heap.length) {
+        let maxIndex = (index * 2) + 1;
+        let maxValue = this.heap[maxIndex];
+        if (index * 2 + 2 < this.heap.length && maxValue < this.heap[index * 2 + 2]) {
+          maxIndex = index * 2 + 2;
+          maxValue = this.heap[maxIndex];
+        }
+
+        if (this.heap[index] < this.heap[maxIndex]) {
+          this.swap(index, maxIndex);
+          index = maxIndex;
+        } else break;
+      }
+
+      return deleted;
+    }
+    show() {
+      console.log(this.heap);
+    }
+  }
+
+  
+  const heap = new maxHeap();
+  for (let i = 1; i <= N; i++) {
+    const elements = input[i].split(" ").map(v => +v);
+    for (let j = 0; j < elements.length; j++) {
+        const element = elements[j];
+        if (element === 0) {
+            const out = heap.remove();
+            if (!out) {
+                console.log(-1);
+            } else {
+                console.log(out);
+            }
+        } else {
+            if (j === 0) continue;
+            heap.add(element);
+        }
+    }
+    
+  }
+}
+//  출력초과 이유 모르겠음
+*/
+
+// boj two pointer
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const liquids = input[1].split(" ").map(v => +v);
+  let lLi = null;
+  let rLi = null;
+  let min = Infinity;
+
+  for (let i = 0; i < N; i++) {
+    let left = i + 1;
+    let right = N - 1;
+    while (left <= right) {
+      let mid = parseInt((left + right) / 2)
+      let sum = liquids[left] + liquids[mid];
+      if (Math.abs(sum) < min) {
+        lLi = liquids[left];
+        rLi = liquids[mid];
+        min = Math.abs(sum);
+      } 
+
+      if (sum < 0) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+
+    }
+
+  }
+
+
+  console.log([lLi, rLi].join(" "));
+}
+// two pointer 시간초과, two pointer + binary Search 틀림 이유 모르겠음
 solution();
 
 module.exports = solution;
