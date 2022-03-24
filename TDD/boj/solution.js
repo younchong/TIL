@@ -3771,7 +3771,6 @@ function solution() {
   }
 }
 //  출력초과 이유 모르겠음
-*/
 
 // boj two pointer
 function solution() {
@@ -3808,6 +3807,71 @@ function solution() {
   console.log([lLi, rLi].join(" "));
 }
 // two pointer 시간초과, two pointer + binary Search 틀림 이유 모르겠음
+
+
+// boj 12865 dp 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, K] = input[0].split(" ").map(v => +v);
+  const info = [];
+  for (let i = 1; i <= N; i++) {
+    const [W, V] = input[i].split(" ").map(v => +v);
+    info.push([W, V]);
+  }
+  const dp = Array.from({length: N}, () => new Array(2).fill(0));
+  dp[0] = [info[0][0], info[0][1]];
+  for (let i = 1; i < N; i++) {
+    for (let j = 0; j < i; j++) {
+      if (dp[j][0] + info[i][0] <= K) {
+        dp[i] = dp[j][1] + info[i][1] > dp[i][1] ? [dp[j][0] + info[i][0] ,dp[j][1] + info[i][1]] : dp[i];
+      } else {
+        dp[i] = [info[i][0], info[i][1]]
+      }
+    }
+  }
+  console.log(dp)
+}
+// 모르겠음, 남의 풀이 보고 푸는게 의미없다고 생각해서 나중에 풀자
+
+
+// boj 2293 dp solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const map = new Array(N);
+  for (let i = 1; i <= N; i++) {
+    map[i - 1] = input[i].split(" ").map(v => +v);
+  }
+  const dp = Array.from({length: N}, () => new Array(M).fill(0));
+  const visited = Array.from({length: N}, () => new Array(M).fill(false));
+  dp[0][0] = map[0][0];
+  const move = [[1, 0], [0, 1], [1, 1]];
+  const queue = [[0, 0]];
+
+  while (queue.length) {
+    const [qy, qx] = queue.shift();
+    for (let i = 0 ; i < 3; i++) {
+      const [my, mx] = [qy + move[i][0], qx + move[i][1]];
+      if (0 <= my && my < N && 0 <= mx && mx < M) {
+        if (!visited[my][mx]) {
+          visited[my][mx] = true;
+          dp[my][mx] = dp[qy][qx] + map[my][mx]
+          queue.push([my, mx]);
+        } else if (dp[my][mx] < dp[qy][qx] + map[my][mx]) {
+          dp[my][mx] = dp[qy][qx] + map[my][mx];
+          queue.push([my, mx]);
+        }
+          
+      }
+    }
+  }
+
+  console.log(dp[N - 1][M - 1]);
+}
+// 마지막 끝에 처리때문에 96퍼에서 틀렸습니다 나왔다가, visited를 넣어서 통과했다.
+// visited없이 그냥 이전 + 현재위치 가 더 큰경우만 값이 들어간다면, 0일때 값이 제대로 측정안된다.
+*/
+
 solution();
 
 module.exports = solution;
