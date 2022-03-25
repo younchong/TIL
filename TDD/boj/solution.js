@@ -3872,6 +3872,68 @@ function solution() {
 // visited없이 그냥 이전 + 현재위치 가 더 큰경우만 값이 들어간다면, 0일때 값이 제대로 측정안된다.
 */
 
+// boj 7569 graph theory
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [M, N, H] = input[0].split(" ").map(v => +v);
+  const visited = Array.from({length: H}, () => Array.from({length: N}, () => new Array(M).fill(false)));
+  const map = [];
+  const queue = [];
+  let count = M * N * H;
+
+  for (let i = 0 ; i < H; i++) {
+    const floor = [];
+    for (let j = 1 + i * N; j <= N * (1 + i); j++) {
+      const row = input[j].split(" ").map(v => +v);
+      let index = 0;
+      while (row.indexOf(1, index) !== -1) {
+        queue.push([i, (j - 1) % N, row.indexOf(1, index)]);
+        visited[i][(j - 1) % N][row.indexOf(1, index)] = true;
+        index = row.indexOf(1, index) + 1;
+        count--;
+      }
+      index = 0;
+      while (row.indexOf(-1, index) !== -1) {
+        visited[i][(j - 1) % N][row.indexOf(1, index)] = true;
+        index = row.indexOf(-1, index) + 1;
+        count--;
+      }
+
+      floor.push(row);
+    }
+    map.push(floor)
+  }
+  let day = 0;
+  let prevIdx = 0;
+  const move =[[0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1], [1, 0, 0], [-1, 0, 0]];
+  while(true) {
+    const curIdx = queue.length;
+    let change = 0;
+    for (let i = prevIdx; i < curIdx; i++) {
+      const [qf, qy, qx] = queue[i];
+      for (let i = 0; i < 6; i++) {
+        const [mf, my, mx] = [qf + move[i][0], qy + move[i][1], qx + move[i][2]];
+        if (0 <= mf && mf < H && 0 <= my && my < N && 0 <= mx && mx < M && !visited[mf][my][mx]) {
+          if (map[mf][my][mx] === 0) {
+            count--;
+            change = 1;
+            map[mf][my][mx] = true;
+            queue.push([mf, my, mx]);
+            map[mf][my][mx] = 1
+          }
+        }
+      }
+    }
+    if (!change)break;
+    day++;
+    prevIdx = curIdx;
+  }
+
+  count ? console.log(-1) : console.log(day);
+}
+// 첫번째 도전 시간초과
+// 두번째도 시간초과, 처음 map만들때 동시에 queue를 구성해봄
+// 세번째 도전, 이전 토마토 문제 참고해서, queue에서 시간복잡도 줄이는 방식으로 구현 성공, (shift사용 없애기)
 solution();
 
 module.exports = solution;
