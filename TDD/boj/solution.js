@@ -3870,7 +3870,7 @@ function solution() {
 }
 // 마지막 끝에 처리때문에 96퍼에서 틀렸습니다 나왔다가, visited를 넣어서 통과했다.
 // visited없이 그냥 이전 + 현재위치 가 더 큰경우만 값이 들어간다면, 0일때 값이 제대로 측정안된다.
-*/
+
 
 // boj 7569 graph theory
 function solution() {
@@ -3934,6 +3934,23 @@ function solution() {
 // 첫번째 도전 시간초과
 // 두번째도 시간초과, 처음 map만들때 동시에 queue를 구성해봄
 // 세번째 도전, 이전 토마토 문제 참고해서, queue에서 시간복잡도 줄이는 방식으로 구현 성공, (shift사용 없애기)
+*/
+
+// boj 2437 greedy solved
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input[0];
+  const list = input[1].split(" ").map(v => +v).sort((a, b) => a - b);
+  let sum = 0;
+  for (let i = 0; i < N; i++) {
+    if (sum + 1 >= list[i]) {
+      sum += list[i]
+    } else break;
+  }
+
+  console.log(sum + 1);
+}
+// 누적합 + 1보다 추의 무게가 같거나 작다면 누적합 + 1무게까지 커버가능하지만, 크다면 불가능, 이 수학적 지식이 있어야 풀 수 있는 문제였다... 모든 경우의수 아님
 solution();
 
 module.exports = solution;
