@@ -3934,7 +3934,7 @@ function solution() {
 // 첫번째 도전 시간초과
 // 두번째도 시간초과, 처음 map만들때 동시에 queue를 구성해봄
 // 세번째 도전, 이전 토마토 문제 참고해서, queue에서 시간복잡도 줄이는 방식으로 구현 성공, (shift사용 없애기)
-*/
+
 
 // boj 2437 greedy solved
 function solution() {
@@ -3951,6 +3951,29 @@ function solution() {
   console.log(sum + 1);
 }
 // 누적합 + 1보다 추의 무게가 같거나 작다면 누적합 + 1무게까지 커버가능하지만, 크다면 불가능, 이 수학적 지식이 있어야 풀 수 있는 문제였다... 모든 경우의수 아님
+*/
+
+// boj 1120
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split(" ");
+  const A = input[0];
+  const B = input[1];
+  let min = Infinity;
+  for (let i = 0; i <= B.length - A.length; i++) {
+    let count = 0;
+    let index = 0;
+    while(index < A.length) {
+      if (B[i + index] !== A[index]) {
+        count++;
+      }
+      index++;
+    }
+    min = Math.min(min, count);
+  }
+
+  console.log(min)
+}
+// 22%에서 틀림
 solution();
 
 module.exports = solution;
