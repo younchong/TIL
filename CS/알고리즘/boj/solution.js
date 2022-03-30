@@ -3951,14 +3951,14 @@ function solution() {
   console.log(sum + 1);
 }
 // 누적합 + 1보다 추의 무게가 같거나 작다면 누적합 + 1무게까지 커버가능하지만, 크다면 불가능, 이 수학적 지식이 있어야 풀 수 있는 문제였다... 모든 경우의수 아님
-*/
+
 
 // boj 1120
 function solution() {
-  const input = require("fs").readFileSync("./input.txt").toString().split(" ");
+  const input = require("fs").readFileSync("./input.txt").toString().trim().split(" ");
   const A = input[0];
   const B = input[1];
-  let min = Infinity;
+  let min = A.length;
   for (let i = 0; i <= B.length - A.length; i++) {
     let count = 0;
     let index = 0;
@@ -3974,6 +3974,55 @@ function solution() {
   console.log(min)
 }
 // 22%에서 틀림
+// trim때문인지, default min value 때문인지 모르지만 통과했다. logic자체는 맞다
+*/
+
+// boj 2206 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const map = [];
+  for (let i = 1; i <= N; i++) {
+    map.push(input[i].split("").map(v => +v));
+  }
+  let min = Infinity;
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < M; x++) {
+      if (map[y][x] === 1) {
+        map[y][x] = 0;
+        min = Math.min(min, bfs(0, 0, map));
+        map[y][x] = 1;
+      }
+    }
+  }
+
+  function bfs(y, x, map) {
+    const copied = Array.from({length: N}, () => new Array(M).fill(0));
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < M; x++) {
+        copied[y][x] = map[y][x];
+      }
+    }
+    const queue = [[y, x]];
+    while (queue.length) {
+      const [qy, qx] = queue.shift();
+      const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+      for (let i = 0; i < 4; i++) {
+        const [my, mx] = [qy + move[i][0], qx + move[i][1]];
+        if (0 <= my && my < N && 0 <= mx && mx < M) {
+          if (!copied[my][mx]) {
+            copied[my][mx] = copied[qy][qx] + 1;
+            queue.push([my, mx]);
+          }
+        }
+      }
+    }
+    return copied[N - 1][M - 1] ? copied[N - 1][M - 1] + 1 : Infinity;
+  }
+
+  min === Infinity ? console.log(-1) : console.log(min);
+}
+// 시간초과
 solution();
 
 module.exports = solution;
