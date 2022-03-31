@@ -3995,9 +3995,10 @@ function solution() {
       }
     }
   }
-
+  //O(N^2)
   function bfs(y, x, map) {
     const copied = Array.from({length: N}, () => new Array(M).fill(0));
+    const visited = Array.from({length: N}, () => new Array(M).fill(false))
     for (let y = 0; y < N; y++) {
       for (let x = 0; x < M; x++) {
         copied[y][x] = map[y][x];
@@ -4006,18 +4007,19 @@ function solution() {
     const queue = [[y, x]];
     while (queue.length) {
       const [qy, qx] = queue.shift();
+      visited[qy][qx] = true;
       const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
       for (let i = 0; i < 4; i++) {
         const [my, mx] = [qy + move[i][0], qx + move[i][1]];
-        if (0 <= my && my < N && 0 <= mx && mx < M) {
-          if (!copied[my][mx]) {
+        if (0 <= my && my < N && 0 <= mx && mx < M ) {
+          if (!copied[my][mx] && !visited[my][mx]) {
             copied[my][mx] = copied[qy][qx] + 1;
             queue.push([my, mx]);
           }
         }
       }
     }
-    return copied[N - 1][M - 1] ? copied[N - 1][M - 1] + 1 : Infinity;
+    return copied[N - 1][M - 1] !== map[N - 1][M - 1] ? copied[N - 1][M - 1] + 1 : Infinity;
   }
 
   min === Infinity ? console.log(-1) : console.log(min);
