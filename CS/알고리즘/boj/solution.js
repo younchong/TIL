@@ -3985,44 +3985,42 @@ function solution() {
   for (let i = 1; i <= N; i++) {
     map.push(input[i].split("").map(v => +v));
   }
-  let min = Infinity;
-  for (let y = 0; y < N; y++) {
-    for (let x = 0; x < M; x++) {
-      if (map[y][x] === 1) {
-        map[y][x] = 0;
-        min = Math.min(min, bfs(0, 0, map));
-        map[y][x] = 1;
-      }
-    }
-  }
-  //O(N^2)
-  function bfs(y, x, map) {
-    const copied = Array.from({length: N}, () => new Array(M).fill(0));
-    const visited = Array.from({length: N}, () => new Array(M).fill(false))
+  let min = bfs();
+
+  function bfs() {
+    const visited = Array.from({length: N}, () => new Array(M).fill(new Array()));
+    
     for (let y = 0; y < N; y++) {
       for (let x = 0; x < M; x++) {
-        copied[y][x] = map[y][x];
+        visited[y][x][0] = visited[y][x][1] = -1;
       }
     }
-    const queue = [[y, x]];
+    visited[0][0][0] = visited[0][0][1] = 1;
+    const queue = [[0, 0, 0]];
     while (queue.length) {
-      const [qy, qx] = queue.shift();
-      visited[qy][qx] = true;
+      const [qy, qx, broken] = queue.shift();
+      if (qy === N - 1 && qx === M - 1) return visited[qy][qx][broken];
+
       const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
       for (let i = 0; i < 4; i++) {
         const [my, mx] = [qy + move[i][0], qx + move[i][1]];
-        if (0 <= my && my < N && 0 <= mx && mx < M ) {
-          if (!copied[my][mx] && !visited[my][mx]) {
-            copied[my][mx] = copied[qy][qx] + 1;
-            queue.push([my, mx]);
+        if (0 <= my && my < N && 0 <= mx && mx < M) {
+          if (map[my][mx] === 1 && !broken && visited[my][mx][broken] === -1) {
+            visited[my][mx][1] = visited[qy][qx][broken] + 1;
+            queue.push([my, mx, 1]);
+          }
+          if (map[my][mx] === 0 && visited[my][mx][broken] === -1) {
+            visited[my][mx][broken] = visited[qy][qx][broken] + 1;
+            queue.push([my, mx, broken]);
           }
         }
       }
     }
-    return copied[N - 1][M - 1] !== map[N - 1][M - 1] ? copied[N - 1][M - 1] + 1 : Infinity;
+
+    return -1;
   }
 
-  min === Infinity ? console.log(-1) : console.log(min);
+  console.log(min);
 }
 // 시간초과
 solution();
