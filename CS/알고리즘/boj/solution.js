@@ -3986,16 +3986,12 @@ function solution() {
     map.push(input[i].split("").map(v => +v));
   }
   let min = bfs();
-
+  
   function bfs() {
-    const visited = Array.from({length: N}, () => new Array(M).fill(new Array()));
-    
-    for (let y = 0; y < N; y++) {
-      for (let x = 0; x < M; x++) {
-        visited[y][x][0] = visited[y][x][1] = -1;
-      }
-    }
-    visited[0][0][0] = visited[0][0][1] = 1;
+    const visited = Array.from({length: N}, () => new Array(M).fill(new Array(2).fill(0)));
+    visited[0][0][0] = 1; 
+    // 이해가 안됨
+    console.log(visited);
     const queue = [[0, 0, 0]];
     while (queue.length) {
       const [qy, qx, broken] = queue.shift();
@@ -4005,24 +4001,26 @@ function solution() {
       for (let i = 0; i < 4; i++) {
         const [my, mx] = [qy + move[i][0], qx + move[i][1]];
         if (0 <= my && my < N && 0 <= mx && mx < M) {
-          if (map[my][mx] === 1 && !broken && visited[my][mx][broken] === -1) {
-            visited[my][mx][1] = visited[qy][qx][broken] + 1;
-            queue.push([my, mx, 1]);
-          }
-          if (map[my][mx] === 0 && visited[my][mx][broken] === -1) {
+          if (map[my][mx] === 0 && visited[my][mx][broken] === 0) {
             visited[my][mx][broken] = visited[qy][qx][broken] + 1;
             queue.push([my, mx, broken]);
+          }
+
+          if (map[my][mx] === 1 && !broken && visited[my][mx][broken + 1] === 0) {
+            visited[my][mx][broken + 1] = visited[qy][qx][broken] + 1;
+            queue.push([my, mx, broken + 1]);
           }
         }
       }
     }
-
+    //console.log(visited)
     return -1;
   }
 
   console.log(min);
 }
 // 시간초과
+// 초기 visited 왜 생각한 대로 안되는지 이해가 안됨 나중에 풀기
 solution();
 
 module.exports = solution;
