@@ -24,3 +24,4 @@
 
   * Component는 항상 대문자로 시작, 소문자로 시작하면 React가 DOM태그로 처리함
   * Component를 작게 나누는 것을 두려워하지 말자. (Component를 적절히 추출해서 재사용성을 높히자.)
+  * Component내 state위치는 리렌더링을 최소화할 수 있는 곳으로 (공통 조상 중 가장 하위로)
