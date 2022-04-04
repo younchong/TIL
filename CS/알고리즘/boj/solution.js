@@ -3975,7 +3975,7 @@ function solution() {
 }
 // 22%에서 틀림
 // trim때문인지, default min value 때문인지 모르지만 통과했다. logic자체는 맞다
-*/
+
 
 // boj 2206 
 function solution() {
@@ -4021,6 +4021,15 @@ function solution() {
 }
 // 시간초과
 // 초기 visited 왜 생각한 대로 안되는지 이해가 안됨 나중에 풀기
+*/
+
+// boj 1783
+function solution() {
+  const [N, M] = require("fs").readFileSync("./input.txt").toString().split(" ").map(v => +v);
+  const move = [[2, 1], [1, 2], [-2, 1], [-1, 2]];
+  // bfs 이용해서 풀이했었으나 시간 복잡도가 맞지않음. 그런데 단순 greedy로?
+
+}
 solution();
 
 module.exports = solution;
