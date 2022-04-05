@@ -4021,7 +4021,6 @@ function solution() {
 }
 // 시간초과
 // 초기 visited 왜 생각한 대로 안되는지 이해가 안됨 나중에 풀기
-*/
 
 // boj 1783
 function solution() {
@@ -4029,6 +4028,26 @@ function solution() {
   const move = [[2, 1], [1, 2], [-2, 1], [-1, 2]];
   // bfs 이용해서 풀이했었으나 시간 복잡도가 맞지않음. 그런데 단순 greedy로?
 
+}
+*/
+
+// boj 2847
+function solution() {
+  const numbers = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+  const N = numbers.shift();
+  // 뒤에서 부터 숫자가 감소되는지 확인
+  let count = 0;
+  for (let i = numbers.length - 1; i > 0; i--) {
+    const curElem = numbers[i];
+    const prevElem = numbers[i - 1];
+    if (curElem <= prevElem) {
+      const sub = prevElem - (curElem - 1);
+      numbers[i - 1] = curElem - 1;
+      count += sub;
+    }
+  }
+
+  console.log(count);
 }
 solution();
 
