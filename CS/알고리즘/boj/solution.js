@@ -4034,19 +4034,15 @@ function solution() {
 // boj 2847
 function solution() {
   const numbers = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
-  const N = numbers.shift();
   // 뒤에서 부터 숫자가 감소되는지 확인
   let count = 0;
-  for (let i = numbers.length - 1; i > 0; i--) {
-    const curElem = numbers[i];
-    const prevElem = numbers[i - 1];
-    if (curElem <= prevElem) {
-      const sub = prevElem - (curElem - 1);
-      numbers[i - 1] = curElem - 1;
-      count += sub;
-    }
+  for (let i = 1; i < numbers.length - 1; i++) {
+    let curElem = numbers[i];
+    const nextElem = numbers[i + 1];
+    if (curElem < nextElem) continue;
+    numbers[i] = nextElem - 1;
+    count += curElem - nextElem + 1;
   }
-
   console.log(count);
 }
 solution();
