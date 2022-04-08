@@ -12,8 +12,13 @@
   * state는 반드시 UI에 보여지는 내용과 연관된 데이터이어야한다.
   * state is reserved only for interactivity. 
   * setState는 컴포넌트의 state의 즉각적인 갱신을 보장하지 않는다. 
-    * 여러 변경사항을 일괄적으로 갱신하거나 나중으로 미룰 수 있음. (이벤트 핸들러내에서 비동기적)
+    * 여러 변경사항을 일괄적으로 갱신하거나 나중으로 미룰 수 있음. (이벤트 핸들러내에서 비동기적 => 이벤트 핸들러 내에서 배칭이 일어난다.)
     * no matter how many setState() calls in how many components you do inside a React event handler, they will produce only a single re-render at the end of the event.
+    * app에서 관리하는 전체 state에 대해서 대략 200ms동안 batching된다.
+    * 이벤트 핸들러 내에서 비동기 처리방식으로 처리될 경우 배칭이 발생하지 않는다. (React 18부터는 배칭됨)
+      * React가 브라우저 이벤트가 발생하는 동안에 batch update를 함 (18이전 기준, 18이후부터는 event가 handling된 이후부터 state update하기 때문에 batching됨)
+      * This is because React used to only batch updates during a browser event(like click), but here we're updating the state after the event has already been handled (in fetch callback)
+      * promise, setTimeout, native event handler등 다른 이벤트에서는 batching이 일어나지 않는다.
     * componentDidUpdate나 setState의 updater을 사용하면 갱신이 적용된 뒤 실행이 되는 것이 보장됨. (updater의 매개변수인 state와 props는 최신값이 보장됨)
   * state는 컴포넌트의 복잡성을 높히고, 예측하기 힘들게 한다. (Component without state is preferable)
 
