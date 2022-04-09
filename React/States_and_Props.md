@@ -41,3 +41,26 @@
 * 불필요한 re-rendering을 줄여서 성능향상에 도움이 된다.
 * Batch가 일어나는 조건은 React에서 event handler내에서 batching이 일어납니다. (browser event가 끝날 때 batching이 일어남)
 * setState 비동기적으로 작동한다 => 순서가 보장되지 않는다. => 한꺼번에 작동된다, batching에 대한 설명
+
+## 질문 (헷갈렸던 부분)
+const handleClickAsync = async () => {
+    await setCounter1(counter1 + 1);
+    setCounter2(counter2 + 1);
+    setCounter1(counter1 + 1);
+    setCounter3(counter3 + 1);
+    setCounter1(counter1 + 1);
+  }
+
+  * 예시 
+  Object.assign(
+  previousState,
+  {quantity: state.quantity + 1},
+  {quantity: state.quantity + 1},
+  ...
+  )
+
+  * 위 코드에서 rendering이 3번일어나고, counter1이 초기값 + 1만 되는게 이해가지 않았다.
+  * 해결 키워드
+    * stale closure란, Here the stale closure is simply a function that captures variables that have outdated values.
+    * handleClickAsync 함수가 실행될 때의 counter값을 capture해와서 내부 함수들이 작동되는 것이기 때문에 초기값 + 1만 된다.
+    * 같은 주기에 여러번 호출된다면 일괄적으로 처리됨 (공식문서 표현), 예시와 같은 결과
