@@ -4029,7 +4029,6 @@ function solution() {
   // bfs 이용해서 풀이했었으나 시간 복잡도가 맞지않음. 그런데 단순 greedy로?
 
 }
-*/
 
 // boj 2847
 function solution() {
@@ -4045,6 +4044,45 @@ function solution() {
   }
   console.log(count);
 }
+// fail
+*/
+
+// boj 16236
+
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const N = +input.shift();
+  const map = [];
+  let position = [];
+  for (let i = 0; i < N; i++) {
+    const row = input[i].split(" ").map(v => +v);
+    map.push(row);
+    if (row.includes(9)) {
+      position = [i, row.indexOf(9)];
+    }
+  }
+  const stomach = [];
+  let size = 2;
+  
+  function findPray(size) {
+    const position = [];
+    for (let i = 0; i < map.length; i++) {
+      for (let j = 0; j < map[i].length; j++) {
+        if (map[i][j] < size) {
+          position.push([i, j]);
+        }
+      }
+    }
+
+    return position;
+  }
+
+  while (findPray(size).length) {
+    const prayPosition = findPray(size);
+    
+  }
+}
+
 solution();
 
 module.exports = solution;
