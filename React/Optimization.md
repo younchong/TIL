@@ -6,6 +6,7 @@
     * memoization uses up memory space on the machine it's being run on and, as such, may lead to unintended effects
     * 최적화 상황이 아닐 때 사용하는 것은 불필요한 props 비교만하게 된다.
   * memo 또는 useMemo같은 최적화하기 전에 변경되지 않는 부분에서 변경되는 부분을 나눌 수 있는 지 우선 살펴보자
+  * useMemo와 useCallback이 사용될 수 있는 대표적인 상황은 useEffect에 해당값이 dependency로 들어가는 경우
   
 
   ## useMemo Hook
