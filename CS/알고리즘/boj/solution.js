@@ -4052,15 +4052,21 @@ function solution() {
 function solution() {
   const input = require("fs").readFileSync("./input.txt").toString().split("\n");
   const N = +input.shift();
+  const visited = Array.from({length: N}, () => new Array(N).fill(false));
   const map = [];
-  let position = [];
+
+  let count = 0;
+  let sharkPosition = [];
+
   for (let i = 0; i < N; i++) {
     const row = input[i].split(" ").map(v => +v);
     map.push(row);
     if (row.includes(9)) {
-      position = [i, row.indexOf(9)];
+      sharkPosition = [i, row.indexOf(9)];
+      visited[sharkPosition[0]][sharkPosition[1]] = true;
     }
   }
+
   const stomach = [];
   let size = 2;
   
@@ -4068,8 +4074,9 @@ function solution() {
     const position = [];
     for (let i = 0; i < map.length; i++) {
       for (let j = 0; j < map[i].length; j++) {
-        if (map[i][j] < size) {
+        if (map[i][j] && map[i][j] < size && !visited[i][j]) {
           position.push([i, j]);
+          visited[i][j] = true;
         }
       }
     }
@@ -4077,11 +4084,65 @@ function solution() {
     return position;
   }
 
-  while (findPray(size).length) {
-    const prayPosition = findPray(size);
+  function getDistance (shark, target, size) {
+    const queue = [[shark[0], shark[1]]];
+    const move = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    let count = 0;
+
+    while (queue.length) {
+      const [qy, qx] = queue.shift();
+
+      for (let i = 0; i < 4; i++) {
+        const [my, mx] = [qy + move[i][0], qx + move[i][1]];
+        if (0 <= my && my < N && 0 <= mx && mx < N && map[my][mx] <= size) {
+          count++;
+          if (my === target[0] && mx === target[1]) {
+            sharkPosition[0] = target[0];
+            sharkPosition[1] = target[1];
+            return count;
+          }
+          queue.push([my, mx]);
+        }
+      }
+
+    }
+
+  }
+
+
+  const prayPosition = findPray(size);
+
+  while (prayPosition.length) {
+    let min = Infinity;
+    let index = null;
+
+    prayPosition.forEach((pray, idx) => {
+      const distance = getDistance(sharkPosition, pray, size);
+      // distance를 구할 때,  고려해야할 것들 위해서 function을 다시 만든다? 그럼 그건 dfs로?
+      // sharkPosition도 먹고 난 이 후에 옮겨져야함.
+      if (min > distance) {
+        min = distance
+        index = idx;
+      }
+    })
+
+    stomach.push(prayPosition.splice(index, 1));
+    count += min;
+
+    if (stomach.length === size) {
+      size++;
+
+      const newPray = findPray(size);
+      prayPosition.push(...newPray);
+    }
     
   }
+
+
+  console.log(count);
+  return count;
 }
+// fail
 
 solution();
 
