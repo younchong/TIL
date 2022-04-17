@@ -41,6 +41,20 @@
 * 불필요한 re-rendering을 줄여서 성능향상에 도움이 된다.
 * Batch가 일어나는 조건은 React에서 event handler내에서 batching이 일어납니다. (browser event가 끝날 때 batching이 일어남)
 * setState 비동기적으로 작동한다 => 순서가 보장되지 않는다. => 한꺼번에 작동된다, batching에 대한 설명
+* event handler내에서도 비동기 처리작업인, setTimeout, promise, async/await에서 사용된다면 batching이 일어나지 않음.
+  * 사용된 곳 기준으로 batching이 안일어남
+  ```
+  const handleClick = async () => {
+    setCounter1(counter1 + 1);
+
+    await fetch("nonexist.com");
+    
+    setCounter2(counter2 + 1);
+    setCounter3(counter3 + 1);
+  }
+  ```
+  => rendering 3회
+* useEffect내에서의 state 업데이트는 effect함수는 DOM업데이트가 끝난 이후에 실행되기 때문에, state 업데이트가 한번에 된다. (batch라고 생각할 수 있는 지 모르겠음)
 
 ## 질문 (헷갈렸던 부분)
 const handleClickAsync = async () => {
