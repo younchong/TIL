@@ -50,5 +50,12 @@
     * ?? 확인해보기
   * 함수형 컴포넌트에서 useSelector를 여러번 호출해서 사용하자.
     * multiple results in an object를 반환하는 큰 하나의 useSelector를 사용하기 보단, 작은 data로 정보를 나눠서 쓰자.
-    * 만약 사용 컴포넌트에서 전체 obj정보를 다쓴다면 하나만 써도 무방하다.
+    * 만약 사용 컴포넌트에서 전체 obj정보를 다쓴다면 하나만 써도 무방하다. (나눠서 사용하지 않아도 됨.)
+    * useSelector는 지정한 값만 받아오고 저장됨.
+      * useSelector(state => state.user), 여기서 user값만 그대로라면 component가 호출되었을 때도, cache된 값 Return해줌.
+      * Redux store를 subscribe하고 있기 때문에, action이 dispatch되면 selector를 호출함.
+        * 이때 이전 값이랑 비교해서 다르면, component를 re-rendering
+    * 그러니까 나눠서 받아야 바뀌지 않은 것들은 cache된 값을 return해서 불필요한 재호출할 필요가 없음
+    * 모아져서 obj에 있으면 하나 업데이트 됐을 때 다같이 업데이트되니까 무조건 다 업데이트 시키니까
+    * 나눠져 있어도 한 컴포넌트 내에서 action dispatch로 다같이 불릴때는 batch가 일어남, React Redux v7부터
   * State에는 Plain JS object를 사용하자.
