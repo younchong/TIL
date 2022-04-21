@@ -4045,7 +4045,6 @@ function solution() {
   console.log(count);
 }
 // fail
-*/
 
 // boj 16236
 
@@ -4143,6 +4142,71 @@ function solution() {
   return count;
 }
 // fail
+
+// boj 1764
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input[0].split(" ").map(v => +v);
+  const people = {};
+  const answer = [];
+  for (let i = 1; i <= N + M; i++) {
+    const person = input[i];
+    
+    if (!people[person]) {
+      people[person] = 1;
+      continue;
+    }
+
+    answer.push(person);
+  }
+
+  answer.sort();
+  console.log(answer.length);
+  answer.forEach(person => console.log(person));
+}
+// pass
+*/
+
+
+//  boj 
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+  const N = input.shift();
+  const table = {};
+  let max = -Infinity;
+  let min = Infinity;
+  let sum = 0;
+  let frequentCount = 0;
+  let frequent;
+
+  for (let i = 0; i < input.length; i++) {
+      const number = input[i];
+      
+      sum += number;
+      max = Math.max(max, number);
+      min = Math.min(min, number);
+      
+      if (!table[number]) table[number] = 1;
+      else {
+        table[number]++;
+      }
+
+      if (frequentCount < table[number]) {
+        frequentCount = table[number];
+        frequent = number;
+      }
+  }
+
+
+  const center = Object.keys(table).sort((a, b) => a - b);
+
+  console.log(parseInt(Math.round(sum / N)));
+  console.log(+center[Math.floor(center.length / 2)]);
+  console.log(frequent);
+  console.log(max - min);
+
+}
+// unsolved;
 
 solution();
 
