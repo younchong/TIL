@@ -16,5 +16,3 @@
 
 * useEffect에서 비동기 처리과정할 때, 값이 불러지지 않은 상태에서 component unmount하게 되면 memory leak이 생길 수 있다. (에러 메시지가 나옴.)
 * 이때 useEffect에서 함수를 반환해서 비동기 처리값이 사용되는 곳에 clean up 해주면 memory leak을 막을 수 있다.
-
-2. 리액트 컴포넌트에서 말하는 Side Effect란 무엇인가?

@@ -20,6 +20,9 @@
       * promise, setTimeout, native event handler등 다른 이벤트에서는 batching이 일어나지 않는다.
     * componentDidUpdate나 setState의 updater을 사용하면 갱신이 적용된 뒤 실행이 되는 것이 보장됨. (updater의 매개변수인 state와 props는 최신값이 보장됨)
   * state는 컴포넌트의 복잡성을 높히고, 예측하기 힘들게 한다. (Component without state is preferable)
+  * 한 컴포넌트내에서 state를 관리할 때, 객체나 배열로 관리할 수도 있고, 나눠서 관리할 수도 있다.
+    * 서로 연관이 있다면, 객체나 배열로 관리하자
+    * 아니라면 나눠서 개별적인 state이름을 지정하고 관리하자.
 
 ## props vs state
   * 컴포넌트 내에서 props는 바뀌면 안되는 값을 전달해주고, state는 유저 이벤트들로 부터 변경될 가능성이 높은 것들을 설정한다.
