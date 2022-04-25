@@ -29,3 +29,10 @@
     * 내부 state는 어떻게 변하는지
     * User Interaction은 어떻게 처리하는지
   * test 구현할때 처음과 끝에 cleanup을 해주어야 한다. (fail시에도) 그렇지 않으면 test가 leaky해지고, 다른 테스트에 영향을 줄수 있고 디버깅하기 힘들어짐.
+
+## Snapshot testing
+
+  * 처음 snapshot 찍어두었을 때랑 이후 테스트하면서 변경되지 않고 처음 상태 그대로임을 테스트하는 장치
+  * 이전에 내가 무언가 새롭게 렌더링으로 달라진 걸 테스트하는 용도로 사용하려했는데 옳지 않은 방법같다.
+  * react testing-library에서는 DOM에 직접 접근하기 보단, render시킨 값에서 getBy~으로 확인하고 싶은 부분을 가져와서 사용하자.
+  
