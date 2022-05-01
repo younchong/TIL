@@ -37,7 +37,6 @@
     * Component사용시 사이에 넣어서 사용할 때, 예약어로 쓸 수 있음
     * <Component> <h1> hi </h1> </Component>
 
-  
 # Batch
 
 * Batch는 state 업데이트를 모아서 한번에 rendering하는 것을 말한다.
@@ -57,7 +56,7 @@
   }
   ```
   => rendering 3회
-* useEffect내에서의 state 업데이트는 effect함수는 DOM업데이트가 끝난 이후에 실행되기 때문에, state 업데이트가 한번에 된다. (batch라고 생각할 수 있는 지 모르겠음)
+* useEffect내에서의 state 업데이트는 effect함수는 DOM업데이트가 끝난 이후에 실행되기 때문에, state 업데이트가 한번에 된다. (batch라고 생각할 수 있는 지 모르겠음 => 수정, batch의 정의에 맞지 않다고 판단하여 아니라고 생각했다. passive effect)
 
 ## 질문 (헷갈렸던 부분)
 const handleClickAsync = async () => {

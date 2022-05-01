@@ -2,12 +2,12 @@
 
   * useEffect를 통해 컴포넌트 렌더링 이후에도 side effect를 표현할 수 있다.
     * useEffect Hook을 이용하여 React에게 컴포넌트가 렌더링 이후에 어떤 일을 수행해야하는 지 말해준다.
-    * useEffect에 전달된 함수는 화면 렌더링이 완료된 후에 수행된다. (기본적으론, dependency 고려하지 않을 때)
+    * useEffect에 전달된 함수는 화면 렌더링이 완료된 후에 수행된다.
   * useEffect는 첫번째 렌더링과 이후의 모든 업데이트에서 수행이 됨.
     * dependency에 따라 달라지기는 하나, 렌더링이 된 후에 useEffect가 수행된다.
     * useEffect가 수행되는 시점은 이미 DOM이 업데이트 되었음을 보장함.
   * useEffect에 넘겨주는 함수를 effect라 함.
-    * effect함수내에서 참조되는 값들은 모두 dependency 내에 있어야 한다.
+    * effect함수내에서 참조되는 값들은 모두 dependency 내에 있어야 한다. (권장)
   * effect가 함수를 반환하면(정리를 위한 함수) React는 반환한 함수를 정리가 필요할 때 실행시킨다. 
     * 반환된 함수가 실행되는 시점은 컴포넌트가 마운트 해제되는 때, 정리를 실행 (UI에서 컴포넌트가 제거하기 전에 수행)
   * 관심사 구분을 하려면 multiple effect 사용 (관심사에 따라 useEffect를 여러개 사용)
