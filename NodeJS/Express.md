@@ -24,3 +24,12 @@
   * app.route()를 사용하면 라우트 경로에 체인 가능한 라우트 핸들러를 작성할 수 있다.
   * app.route().get().post().put()...
   * express.Router는 클래스로, 모듈식 마운팅 가능한 핸들러 작성가능.
+
+# req와 req의 life cycle
+
+  * Node는 HTTP request를 받을 때 req, res object를 만든다.
+  * 각각 http.IncomingMessage, http.ServerResponse의 instance이다.
+  * Node에서는 비동기적인 흐름이 자연스럽다. (여러 요청이 왔을 때, 당연히 비동기적, 각각 scope로 구분)
+  * 어떤 req이든 어디서든 참조하고 있으면, 그 object는 deallocated하지 않는다. (계속 가지고 있음)
+  * express에서는 비동기적으로 작동하는 함수가 동작시키는 callback함수가 req, res object에 참조를 하고 있으면, 그 비동기 함수가 실행을 완료하고 콜백함수가 실행될 때까지 계속 가지고 있는다.
+  * 모든 참조가 scope에서 벗어날때 까지
