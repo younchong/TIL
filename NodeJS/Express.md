@@ -63,3 +63,15 @@
   * passport.deserializeUser가 매 req마다 호출돼서 (passport.session에 의해서), 추가 user 정보를 붙힐 수 있도록 도와줌
   * Local Strategy는 passport.authenticate 미들웨어를 통해서만 실행됨
   * 인증하는 동안에만, passport.serializeUser가 실행돼서 session에 무엇을 저장할지 정함
+
+# module
+
+  * module.exports - Module 시스템을 자동으로 만들어주는 객체, Export하려는 객체를 module.exports에 할당해서 직접 만든 객체가 반환되게 할 수 도 있음.
+  * require()함수는 module.exports를 리턴한다.
+  * exports는 module.exports의 shortcut, 둘 다 같은 객체를 바라본다.
+  * 사용법
+    * module.exports.foo = "bar" (정석)
+    * exports.foo = "bar"
+    * module.exports.foo = function () { console.log("foo) } (constructor function으로 사용할 경우에는 비추, 그렇게 사용할 땐 constructor 하나만 들어가는 것이 가독성이 높기때문)
+    * exports.foo = function() { console.log("foo") }
+  * exports가 객체를 불러오는 것이니까, 거기에 key, value를 넣어준다고 생각하면 된다.
