@@ -4169,44 +4169,88 @@ function solution() {
 
 
 //  boj 
-function solution() {
-  const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
-  const N = input.shift();
-  const table = {};
-  let max = -Infinity;
-  let min = Infinity;
-  let sum = 0;
-  let frequentCount = 0;
-  let frequent;
+// function solution() {
+//   const input = require("fs").readFileSync("./input.txt").toString().split("\n").map(v => +v);
+//   const N = input.shift();
+//   const table = {};
+//   let max = -Infinity;
+//   let min = Infinity;
+//   let sum = 0;
+//   let frequentCount = 0;
+//   let frequent;
 
-  for (let i = 0; i < input.length; i++) {
-      const number = input[i];
+//   for (let i = 0; i < input.length; i++) {
+//       const number = input[i];
       
-      sum += number;
-      max = Math.max(max, number);
-      min = Math.min(min, number);
+//       sum += number;
+//       max = Math.max(max, number);
+//       min = Math.min(min, number);
       
-      if (!table[number]) table[number] = 1;
-      else {
-        table[number]++;
-      }
+//       if (!table[number]) table[number] = 1;
+//       else {
+//         table[number]++;
+//       }
 
-      if (frequentCount < table[number]) {
-        frequentCount = table[number];
-        frequent = number;
-      }
-  }
+//       if (frequentCount < table[number]) {
+//         frequentCount = table[number];
+//         frequent = number;
+//       }
+//   }
 
 
-  const center = Object.keys(table).sort((a, b) => a - b);
+//   const center = Object.keys(table).sort((a, b) => a - b);
 
-  console.log(parseInt(Math.round(sum / N)));
-  console.log(+center[Math.floor(center.length / 2)]);
-  console.log(frequent);
-  console.log(max - min);
+//   console.log(parseInt(Math.round(sum / N)));
+//   console.log(+center[Math.floor(center.length / 2)]);
+//   console.log(frequent);
+//   console.log(max - min);
 
-}
+// }
 // unsolved;
+
+//2206
+function solution() {
+  const input = require("fs").readFileSync("./input.txt").toString().split("\n");
+  const [N, M] = input.shift().split(" ").map(v => +v);
+  const map = input.map(v => v.split("").map(v => +v));
+  const ch = Array.from({length : N}, () => new Array());
+  const dx = [1, 0, -1, 0];
+  const dy = [0, 1, 0, -1];
+  const queue = [];
+  
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < M; j++) {
+      ch[i][j] = new Array(2).fill(0);
+    }
+  }
+  
+  queue.push([0, 0, 0]);
+  ch[0][0][0] = 1;
+  let index = 0;
+
+  while (index !== queue.length) {
+      const [y, x, isBreak] = queue[index];
+      
+      if (y === N - 1 && x === M - 1) {
+          console.log(ch[y][x][isBreak]);
+      }
+      
+      for (let i = 0; i < 4; i++) {
+          const [my, mx] = [y + dy[i], x + dx[i]];
+          
+          if (0 <= my && my < N && 0 <= mx && mx < M) {
+              if (map[my][mx] === 0 && ch[my][mx][isBreak] === 0) {
+                  ch[my][mx][isBreak] = ch[y][x][isBreak] + 1;
+                  queue.push([my, mx, isBreak]);
+              } else if (map[my][mx] === 1 && ch[my][mx][isBreak] === 0) {
+                  ch[my][mx][isBreak + 1] = ch[y][x][isBreak] + 1;
+                  queue.push([my, mx, isBreak + 1]);
+              }
+          }
+      }
+      index++;
+  }
+}
 
 solution();
 
